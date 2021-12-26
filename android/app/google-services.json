@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "41448649028",
+    "project_id": "wce-notice-board",
+    "storage_bucket": "wce-notice-board.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41448649028:android:b2168a897d2019be13e711",
+        "android_client_info": {
+          "package_name": "com.example.wce_notice_board"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41448649028-c2oeo2d13eo4q5tg68kmtlpklvc9o3ct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8sovXxcYvc1wIEVDaDzFGMeYKY8eWvhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41448649028-c2oeo2d13eo4q5tg68kmtlpklvc9o3ct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
