@@ -26,14 +26,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final result = await _firestore
         .collection("users")
         .where('email', isEqualTo: email)
-        .get()
-        .then((data) {
-      print(data);
-      return data.docs.isEmpty;
-    }).catchError((error) {
-      print(error);
-      return false;
-    });
+        .get();
+    print(result);
+    return false;
+    //     .then((data) {
+    //   print(data);
+    //   return data.docs.isEmpty;
+    // }).catchError((error) {
+    //   print(error);
+    //   return false;
+    // });
   }
 
   @override
@@ -115,24 +117,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: RaisedButton(
                         onPressed: () async {
                           print("Hello");
-                          CheckEmail().then((value) {
-                            print(value);
-                            if (value != true) {
-                              final _user = _firestore
-                                  .collection("users")
-                                  .add({
-                                    "email": email,
-                                    "Mobile": Mobile,
-                                    "Password": password,
-                                    "Role": user,
-                                    "date": FieldValue.serverTimestamp(),
-                                  })
-                                  .then((value) => print("User added"))
-                                  .catchError((erroe) => print(erroe));
-                            } else {
-                              print("already registered");
-                            }
-                          }).catchError((error) {});
+                          _firebaseAuth
+                              .createUserWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          )
+                              .then((value) {
+                            print("Hooo");
+                            print(value.user.uid);
+                            _firestore
+                                .collection('users')
+                                .add({
+                                  "uid": value.user.uid,
+                                  "email": email,
+                                  "phoneNumber": Mobile,
+                                  "Role": user,
+                                  "date": FieldValue.serverTimestamp(),
+                                })
+                                .then((value) => print("User added"))
+                                .catchError((erroe) => print(erroe));
+                          }).catchError((error) {
+                            print(error);
+                          });
+                          // await CheckEmail().then((value) {
+                          //
+                          //   // print(value);
+                          //   // if (value == null) {
+                          //   //   final _user = _firestore
+                          //   //       .collection("users")
+                          //   //       .add({
+                          //   //         "email": email,
+                          //   //         "Mobile": Mobile,
+                          //   //         "Password": password,
+                          //   //         "Role": user,
+                          //   //         "date": FieldValue.serverTimestamp(),
+                          //   //       })
+                          //   //       .then((value) => print("User added"))
+                          //   //       .catchError((erroe) => print(erroe));
+                          //   // } else {
+                          //   //   print("already registered");
+                          //   // }
+                          // }).catchError((error) {});
                         },
                         color: Colors.brown,
                         textColor: Colors.white,
