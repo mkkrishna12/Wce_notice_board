@@ -11,8 +11,8 @@ class year {
 
 class yearPage extends StatefulWidget {
   // const yearPage({Key? key}) : super(key: key);
-  final String userType;
-  yearPage({this.userType});
+  final String noticeId;
+  yearPage({this.noticeId});
 
   @override
   State<yearPage> createState() => _yearPageState();
@@ -25,7 +25,6 @@ class _yearPageState extends State<yearPage> {
     year(s: 'Third year', check: false),
     year(s: 'Fourth Year', check: false),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +64,7 @@ class _yearPageState extends State<yearPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return addNotice();
+                      return addNotice(years : [_items[0].check,_items[1].check,_items[2].check,_items[3].check]);
                     }),
                   );
                 },

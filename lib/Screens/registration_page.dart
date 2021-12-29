@@ -172,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
-                                      toNavigate: loginPage(),
+                                      toNavigate: RegistrationScreen(),
                                       message:
                                           'Registeration unsuccessful contact to admin',
                                       icon: Icons.cancel,
@@ -183,7 +183,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 });
                               }).catchError(
                                 (err) {
-                                  // weak password
 
                                   if (err.code == 'weak-password') {
                                     setState(() {
@@ -193,7 +192,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           PopUp(
-                                            toNavigate: loginPage(),
+                                            toNavigate: RegistrationScreen(),
                                         message:
                                             'The password provided is too weak.',
                                         icon: Icons.cancel,
@@ -243,7 +242,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           PopUp(
-                                            toNavigate: loginPage(),
+                                            toNavigate: RegistrationScreen(),
                                         message: 'invalid-email Try Again',
                                         icon: Icons.cancel,
                                         state: false,

@@ -1,15 +1,16 @@
 class noticeForListing {
-  String noticeTitle;
-  String noticeContent;
-  String noticeRegards;
-  DateTime createDateTime;
-  DateTime lastEditDateTime;
-
-
-  noticeForListing(
-      {this.noticeTitle,
-      this.noticeContent,
-      this.createDateTime,
-      this.lastEditDateTime}
-      );
+  String NoticeTitle;
+  String Noticecontent;
+  DateTime NoticeCreated;
+  DateTime NoticeUpdate;
+  String NoticeRegard;
+  String NoticeId;
+  noticeForListing({
+    this.NoticeId,
+    this.NoticeTitle,
+    this.Noticecontent,
+    this.NoticeCreated,
+    this.NoticeUpdate,
+    this.NoticeRegard,
+  });
 }
