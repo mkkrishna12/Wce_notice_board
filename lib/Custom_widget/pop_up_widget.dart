@@ -6,12 +6,17 @@ class PopUp extends StatefulWidget {
   final IconData icon;
   final bool state;
   final Color color;
+  var toNavigate;
+
   @override
   PopUp(
       {@required this.message,
       @required this.icon,
       @required this.state,
-      this.color});
+      this.color,
+        this.toNavigate
+
+      });
 
   @override
   State<PopUp> createState() => _PopUpState();
@@ -51,7 +56,7 @@ class _PopUpState extends State<PopUp> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return loginPage();
+                    return widget.toNavigate;
                   },
                 ),
               );

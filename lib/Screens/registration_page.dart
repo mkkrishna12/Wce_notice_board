@@ -118,6 +118,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => PopUp(
+                                  toNavigate: loginPage(),
                                   message: 'All Fields are Requried',
                                   icon: Icons.cancel,
                                   state: false,
@@ -157,6 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
+                                      toNavigate: loginPage(),
                                       message: 'Successfully Registered',
                                       icon: FontAwesomeIcons.checkCircle,
                                       state: true,
@@ -170,6 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
+                                      toNavigate: loginPage(),
                                       message:
                                           'Registeration unsuccessful contact to admin',
                                       icon: Icons.cancel,
@@ -190,6 +193,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           PopUp(
+                                            toNavigate: loginPage(),
                                         message:
                                             'The password provided is too weak.',
                                         icon: Icons.cancel,
@@ -219,6 +223,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           PopUp(
+                                            toNavigate: loginPage(),
                                         message:
                                             'The account already exists for that email.',
                                         icon: Icons.cancel,
@@ -238,6 +243,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           PopUp(
+                                            toNavigate: loginPage(),
                                         message: 'invalid-email Try Again',
                                         icon: Icons.cancel,
                                         state: false,

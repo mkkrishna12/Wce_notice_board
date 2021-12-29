@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-
+import 'package:wce_notice_board/Screens/Add_notice.dart';
+import 'package:wce_notice_board/Screens/notice_collection.dart';
+import 'package:wce_notice_board/Screens/years.dart';
 import '../Custom_widget/custom_Input_field.dart';
 import 'registration_page.dart';
 
@@ -18,9 +21,11 @@ class _loginPageState extends State<loginPage> {
   String password = null;
   String user = "User";
   String Mobile = null;
-
+  List<String> UserType = ['Admin', 'Student']; // Option 2
+  String selectedUser;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +72,43 @@ class _loginPageState extends State<loginPage> {
                     const SizedBox(
                       height: 15,
                       width: double.infinity,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10.0),
+                          bottomRight: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                          topLeft: Radius.circular(10.0),
+                        ),
+                      ),
+                      height: 60,
+                      width: 250,
+                      // color: Colors.white,
+                      child: Center(
+                        child: DropdownButton(
+                          elevation: 10,
+                          focusColor: Colors.blueGrey,
+                          hint: const Center(
+                            child: Text(
+                              'Please choose a type',
+                            ),
+                          ), // Not necessary for Option 1
+                          value: selectedUser,
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedUser = newValue;
+                            });
+                          },
+                          items: UserType.map((userType) {
+                            return DropdownMenuItem(
+                              child: Text(userType),
+                              value: userType,
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
                     customInputField(
                       fieldIcon: const Icon(
@@ -120,6 +162,7 @@ class _loginPageState extends State<loginPage> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => PopUp(
+                                toNavigate: loginPage(),
                                 message: 'All Fields are Requried',
                                 icon: Icons.cancel,
                                 state: false,
@@ -143,10 +186,18 @@ class _loginPageState extends State<loginPage> {
                               );
                               setState(() {
                                 spinner = false;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return noticeList();
+                                  }),
+                                );
                               });
+
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => PopUp(
+                                  toNavigate: noticeList(),
                                   message: 'Successfully Logged in',
                                   icon: FontAwesomeIcons.checkCircle,
                                   state: true,
@@ -162,11 +213,13 @@ class _loginPageState extends State<loginPage> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
+                                      toNavigate: loginPage(),
                                       message:
                                           'The password provided is Wrong.',
                                       icon: Icons.cancel,
                                       state: false,
                                       color: Colors.red,
+
                                     ),
                                   );
                                 }
@@ -180,6 +233,7 @@ class _loginPageState extends State<loginPage> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
+                                      toNavigate: loginPage(),
                                       message:
                                           'User not found .Please Register',
                                       icon: Icons.cancel,
@@ -198,6 +252,7 @@ class _loginPageState extends State<loginPage> {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) => PopUp(
+                                      toNavigate: loginPage(),
                                       message: 'invalid email Try Again',
                                       icon: Icons.cancel,
                                       state: false,
@@ -208,6 +263,7 @@ class _loginPageState extends State<loginPage> {
                               },
                             );
                           }
+
                         },
                         color: Colors.brown,
                         textColor: Colors.white,
