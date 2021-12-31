@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:wce_notice_board/Custom_widget/year_Class.dart';
-import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
-import 'package:wce_notice_board/Screens/Add_notice.dart';
+import 'package:wce_notice_board/Custom_widget/year_selection.dart';
+import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
 
-class year {
-  String s;
-  bool check;
-  year({this.s, this.check});
-}
+
 
 class yearPage extends StatefulWidget {
   noticeForListing notice;
@@ -30,8 +25,8 @@ class _yearPageState extends State<yearPage> {
   ];
 
   bool _decideWhichDayToEnable(DateTime day) {
-    if ((day.isAfter(DateTime.now().subtract(Duration(days: 1))) &&
-        day.isBefore(DateTime.now().add(Duration(days: 10))))) {
+    if ((day.isAfter(DateTime.now().subtract(const Duration(days: 1))) &&
+        day.isBefore(DateTime.now().add(const Duration(days: 10))))) {
       return true;
     }
     return false;
@@ -58,13 +53,11 @@ class _yearPageState extends State<yearPage> {
       errorInvalidText: 'Enter date in valid range',
 
     );
-    if (picked != null &&
-        picked != selectedDate )
+    if (picked != null && picked != selectedDate ) {
       setState(() {
-
           selectedDate = picked;
-
       });
+    }
   }
 
   @override
@@ -115,8 +108,6 @@ class _yearPageState extends State<yearPage> {
                   .toList(),
             ),
             Row(
-              // mainAxisAlignment: MainAxisAlignment.,
-              // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.all(10.0),
@@ -128,14 +119,14 @@ class _yearPageState extends State<yearPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: RaisedButton(
                     onPressed: () => _selectDate(context, 1), // Refer step 3
                     child: Text(
                       '$selectedDate.toLocal()}'.split(' ')[0],
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     color: Colors.greenAccent,
@@ -143,7 +134,7 @@ class _yearPageState extends State<yearPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Align(
@@ -180,37 +171,4 @@ class _yearPageState extends State<yearPage> {
       ),
     );
   }
-}
-
-class SelectYear extends StatefulWidget {
-  const SelectYear({Key key}) : super(key: key);
-
-  @override
-  _SelectYearState createState() => _SelectYearState();
-}
-
-class _SelectYearState extends State<SelectYear> {
-  final List<year> _items = <year>[
-    year(s: 'First Year', check: false),
-    year(s: 'second Year', check: false),
-    year(s: 'Third year', check: false),
-    year(s: 'Fourth Year', check: false),
-  ];
-  @override
-  Widget build(BuildContext context) => ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(8),
-        children: _items
-            .map(
-              (year item) => CheckboxListTile(
-                title: Text(item.s),
-                value: item.check,
-                onChanged: (bool val) {
-                  setState(() => item.check = val);
-                },
-              ),
-            )
-            .toList(),
-      );
 }

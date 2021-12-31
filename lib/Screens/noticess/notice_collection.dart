@@ -6,11 +6,11 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/Add_notice.dart';
-import 'package:wce_notice_board/Screens/Notice_veiwer.dart';
-import 'package:wce_notice_board/Screens/notice_delete.dart';
-import 'package:wce_notice_board/Screens/notice_modify.dart';
-import 'package:wce_notice_board/Screens/years.dart';
+import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
+import 'package:wce_notice_board/Screens/noticess/Notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_modify.dart';
+import 'package:wce_notice_board/Screens/noticess/years.dart';
 
 class noticeList extends StatefulWidget {
   @override

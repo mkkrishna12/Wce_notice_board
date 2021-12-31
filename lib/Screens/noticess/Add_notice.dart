@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/notice_collection.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -53,6 +53,7 @@ class _addNoticeState extends State<addNotice> {
             onChanged: (value) {
               setState(() {
                 title = value;
+                TextEditingController().value;
               });
             },
           ),
@@ -67,6 +68,7 @@ class _addNoticeState extends State<addNotice> {
             onChanged: (value) {
               setState(() {
                 Notice = value;
+                TextEditingController().value;
               });
             },
           ),
@@ -80,7 +82,8 @@ class _addNoticeState extends State<addNotice> {
             flex: 1,
             onChanged: (value) {
               setState(() {
-                from = value;
+                from =value;
+                TextEditingController().value;
               });
             },
           ),

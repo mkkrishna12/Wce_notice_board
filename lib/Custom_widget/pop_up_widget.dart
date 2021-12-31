@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Screens/login_page.dart';
+import 'package:wce_notice_board/Screens/Autharisation/login_page.dart';
 
 class PopUp extends StatefulWidget {
   final String message;

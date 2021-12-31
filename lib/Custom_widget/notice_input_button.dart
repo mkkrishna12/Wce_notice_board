@@ -46,6 +46,9 @@ class _noticeInputState extends State<noticeInput> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: 10000,
+
               showCursor: true,
               textDirection: TextDirection.ltr,
               controller:_controller,
