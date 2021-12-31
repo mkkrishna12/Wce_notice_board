@@ -61,9 +61,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/wce-logo.png',
-                              // width: 80,
-                              // height: 80,
+                              'assets/images/logo.png',
+                              width: 150,
+                              height: 150,
                             ),
                           )),
                       const SizedBox(

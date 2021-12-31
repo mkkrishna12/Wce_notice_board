@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
-import 'package:wce_notice_board/Screens/noticess/years.dart';
+import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 import '../../constants.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

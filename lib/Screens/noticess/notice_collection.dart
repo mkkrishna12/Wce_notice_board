@@ -10,7 +10,7 @@ import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/Notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_modify.dart';
-import 'package:wce_notice_board/Screens/noticess/years.dart';
+import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 
 class noticeList extends StatefulWidget {
   @override
@@ -29,7 +29,6 @@ class _noticeListState extends State<noticeList> {
   bool admin = false;
   List<noticeForListing> notes = [];
   void getVal() async {
-    print("hye mk");
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     _fireStore
@@ -38,7 +37,6 @@ class _noticeListState extends State<noticeList> {
         .get()
         .then((element) {
       setState(() {
-        // spinner = true;
         admin = element['Role'] == 'admin';
       });
     });

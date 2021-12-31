@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
-import 'package:wce_notice_board/Screens/noticess/years.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_collection_students.dart';
+import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
+import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
 import '../../Custom_widget/custom_Input_field.dart';
 import 'registration_page.dart';
 
@@ -21,8 +23,8 @@ class _loginPageState extends State<loginPage> {
   String password = null;
 
   String Mobile = null;
-  List<String> UserType = ['Admin', 'Student']; // Option 2
   String selectedUser;
+  bool admin = false;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -33,219 +35,234 @@ class _loginPageState extends State<loginPage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.blue,
-        child: Stack(
-          children: <Widget>[
-            const Align(
-              alignment: Alignment.bottomRight,
-              widthFactor: 0.6,
-              heightFactor: 0.4,
-              child: Material(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(200),
-                ),
-                color: Color.fromRGBO(255, 255, 255, 0.4),
-                child: SizedBox(
-                  width: 400,
-                  height: 400,
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              const Align(
+                alignment: Alignment.bottomRight,
+                widthFactor: 0.3,
+                heightFactor: 0.2,
+                child: Material(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(200),
+                  ),
+                  color: Color.fromRGBO(255, 255, 255, 0.4),
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                  ),
                 ),
               ),
-            ),
-            Center(
-              child: Container(
-                width: 400,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Material(
+              Center(
+                child: Container(
+                  width: 400,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Material(
                         color: Colors.blue,
                         elevation: 10.0,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(50.0)),
+                            const BorderRadius.all(Radius.circular(20.0)),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.asset(
-                            'assets/images/wce-logo.png',
-                            // width: 80,
-                            // height: 80,
+                            'assets/images/logo.png',
+                            width: 140,
+                            height: 140,
                           ),
-                        )),
-                    const SizedBox(
-                      height: 15,
-                      width: double.infinity,
-                    ),
-                    customInputField(
-                      fieldIcon: const Icon(
-                        Icons.person,
-                        color: Colors.white,
+                        ),
                       ),
-                      hintText: 'Enter email',
-                      onChanged: (value) {
-                        setState(() {
-                          email = value;
-                        });
-                      },
-                    ),
-                    customInputField(
-                      fieldIcon: const Icon(Icons.lock, color: Colors.white),
-                      hintText: 'Enter Password',
-                      onChanged: (value) {
-                        setState(() {
-                          password = value;
-                        });
-                      },
-                    ),
-                    Container(
-                      height: 40,
-                      width: 150,
-                      child: RaisedButton(
-                        onPressed: () async {
+                      const SizedBox(
+                        height: 15,
+                        width: double.infinity,
+                      ),
+                      customInputField(
+                        fieldIcon: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        hintText: 'Enter email',
+                        onChanged: (value) {
                           setState(() {
-                            spinner = true;
+                            email = value;
                           });
-                          if (email == null || password == null) {
+                        },
+                      ),
+                      customInputField(
+                        fieldIcon: const Icon(Icons.lock, color: Colors.white),
+                        hintText: 'Enter Password',
+                        onChanged: (value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
+                      ),
+                      Container(
+                        height: 40,
+                        width: 150,
+                        child: RaisedButton(
+                          onPressed: () async {
                             setState(() {
-                              spinner = false;
+                              spinner = true;
                             });
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => PopUp(
-                                toNavigate: loginPage(),
-                                message: 'All Fields are Requried',
-                                icon: Icons.cancel,
-                                state: false,
-                                color: Colors.red,
-                              ),
-                            );
-                          } else {
-                            _firebaseAuth
-                                .signInWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            )
-                                .then((value) {
+                            if (email == null || password == null) {
                               setState(() {
                                 spinner = false;
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        noticeList(),
-                                  ),
-                                  (route) => false,
-                                );
                               });
-
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => PopUp(
-                                  toNavigate:
-                                      noticeList(UserType: selectedUser),
-                                  message: 'Successfully Logged in',
-                                  icon: FontAwesomeIcons.checkCircle,
-                                  state: true,
-                                  color: Colors.green,
+                                  toNavigate: loginPage(),
+                                  message: 'All Fields are Requried',
+                                  icon: Icons.cancel,
+                                  state: false,
+                                  color: Colors.red,
                                 ),
                               );
-                            }).catchError(
-                              (err) {
-                                if (err.code == 'wrong-password') {
-                                  setState(() {
-                                    spinner = false;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => PopUp(
-                                      toNavigate: loginPage(),
-                                      message:
-                                          'The password provided is Wrong.',
-                                      icon: Icons.cancel,
-                                      state: false,
-                                      color: Colors.red,
+                            } else {
+                              _fireStore
+                                  .collection('users')
+                                  .doc(_firebaseAuth.currentUser.uid)
+                                  .get()
+                                  .then((element) {
+                                setState(() {
+                                  admin = element['Role'] == 'admin';
+                                });
+                              });
+                              _firebaseAuth
+                                  .signInWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )
+                                  .then((value) {
+                                setState(() {
+                                  spinner = false;
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          (admin == true)
+                                              ? noticeList()
+                                              : YearPageStudents(),
                                     ),
+                                    (route) => false,
                                   );
-                                }
+                                });
 
-                                // email already in use
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => PopUp(
+                                    toNavigate: (admin == true)
+                                        ? noticeList()
+                                        : YearPageStudents(),
+                                    message: 'Successfully Logged in',
+                                    icon: FontAwesomeIcons.checkCircle,
+                                    state: true,
+                                    color: Colors.green,
+                                  ),
+                                );
+                              }).catchError(
+                                (err) {
+                                  if (err.code == 'wrong-password') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => PopUp(
+                                        toNavigate: loginPage(),
+                                        message:
+                                            'The password provided is Wrong.',
+                                        icon: Icons.cancel,
+                                        state: false,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
 
-                                else if (err.code == 'user-not-found') {
-                                  setState(() {
-                                    spinner = false;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => PopUp(
-                                      toNavigate: loginPage(),
-                                      message:
-                                          'User not found .Please Register',
-                                      icon: Icons.cancel,
-                                      state: true,
-                                      color: Colors.red,
-                                    ),
-                                  );
-                                }
+                                  // email already in use
 
-                                // **invalid-email**:
+                                  else if (err.code == 'user-not-found') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => PopUp(
+                                        toNavigate: loginPage(),
+                                        message:
+                                            'User not found .Please Register',
+                                        icon: Icons.cancel,
+                                        state: true,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
 
-                                else if (err.code == 'invalid-email') {
-                                  setState(() {
-                                    spinner = false;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => PopUp(
-                                      toNavigate: loginPage(),
-                                      message: 'invalid email Try Again',
-                                      icon: Icons.cancel,
-                                      state: false,
-                                      color: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
-                            );
-                          }
-                        },
-                        color: Colors.brown,
-                        textColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        child: const Text(
-                          'Login ',
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'New To Wce notice board',
-                        ),
-                        const SizedBox(width: 15.0),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const RegistrationScreen();
-                            }));
+                                  // **invalid-email**:
+
+                                  else if (err.code == 'invalid-email') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => PopUp(
+                                        toNavigate: loginPage(),
+                                        message: 'invalid email Try Again',
+                                        icon: Icons.cancel,
+                                        state: false,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            }
                           },
+                          color: Colors.brown,
+                          textColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: const Text(
-                            'Register',
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.greenAccent,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            'Login ',
+                            style: TextStyle(fontSize: 20.0),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'New To Wce notice board',
+                          ),
+                          const SizedBox(width: 15.0),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const RegistrationScreen();
+                              }));
+                            },
+                            child: const Text(
+                              'Register',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.greenAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
