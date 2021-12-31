@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
+import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/Add_notice.dart';
 import 'package:wce_notice_board/Screens/Notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notice_delete.dart';
@@ -41,31 +42,48 @@ class _noticeListState extends State<noticeList> {
         admin = element['Role'] == 'admin';
       });
     });
-    _fireStore.collection('Notices').snapshots().listen((QuerySnapshot value) {
-      setState(() {
-        notes = [];
-        value.docs.forEach((element) {
-          DateTime val = element['NoticeCreated'].toDate();
-          DateTime val1 = element['NoticeUpdated'].toDate();
-          noticeForListing mk = noticeForListing(
-            NoticeTitle: element['NoticeTitle'],
-            Noticecontent: element['Noticecontent'],
-            NoticeCreated: val,
-            NoticeUpdate: val1,
-            NoticeEndDate: element['NoticeEndDate'],
-            NoticeRegard: element['NoticeRegards'],
-            NoticeId: element.id,
-            FacultyId: element['FacultyId'],
-            ty: element['ThirdYear'],
-            fy: element['FirstYear'],
-            sy: element['SecondYear'],
-            btech: element['LastYear'],
-          );
-          notes.add(mk);
+    try{
+      _fireStore.collection('Notices').snapshots().listen((QuerySnapshot value) {
+        setState(() {
+          notes = [];
+          value.docs.forEach((element) {
+            DateTime val = element['NoticeCreated'].toDate();
+            DateTime val1 = element['NoticeUpdated'].toDate();
+            noticeForListing mk = noticeForListing(
+              NoticeTitle: element['NoticeTitle'],
+              Noticecontent: element['Noticecontent'],
+              NoticeCreated: val,
+              NoticeUpdate: val1,
+              NoticeEndDate: element['NoticeEndDate'].toDate(),
+              NoticeRegard: element['NoticeRegards'],
+              NoticeId: element.id,
+              FacultyId: element['FacultyId'],
+              ty: element['ThirdYear'],
+              fy: element['FirstYear'],
+              sy: element['SecondYear'],
+              btech: element['LastYear'],
+            );
+            notes.add(mk);
+          });
+          spinner = false;
         });
-        spinner = false;
       });
-    });
+    } catch(e){
+      spinner = false;
+      print(e);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => PopUp(
+          toNavigate: null,
+          message: 'Somthing went wrong try after some time',
+          icon: Icons.cancel,
+          state: false,
+          color: Colors.red,
+        ),
+      );
+
+    }
+
   }
 
   @override
