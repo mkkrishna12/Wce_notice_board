@@ -19,7 +19,7 @@ class _loginPageState extends State<loginPage> {
   String email = null;
   bool spinner = false;
   String password = null;
-  String user = "User";
+
   String Mobile = null;
   List<String> UserType = ['Admin', 'Student']; // Option 2
   String selectedUser;
@@ -73,43 +73,7 @@ class _loginPageState extends State<loginPage> {
                       height: 15,
                       width: double.infinity,
                     ),
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10.0),
-                          bottomRight: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                          topLeft: Radius.circular(10.0),
-                        ),
-                      ),
-                      height: 60,
-                      width: 250,
-                      // color: Colors.white,
-                      child: Center(
-                        child: DropdownButton(
-                          elevation: 10,
-                          focusColor: Colors.blueGrey,
-                          hint: const Center(
-                            child: Text(
-                              'Please choose a type',
-                            ),
-                          ), // Not necessary for Option 1
-                          value: selectedUser,
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedUser = newValue;
-                            });
-                          },
-                          items: UserType.map((userType) {
-                            return DropdownMenuItem(
-                              child: Text(userType),
-                              value: userType,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
+
                     customInputField(
                       fieldIcon: const Icon(
                         Icons.person,
@@ -131,22 +95,6 @@ class _loginPageState extends State<loginPage> {
                         });
                       },
                     ),
-                    // Container(
-                    //   height: 40,
-                    //   width: 150,
-                    //   child: RaisedButton(
-                    //     onPressed: () {},
-                    //     color: Colors.brown,
-                    //     textColor: Colors.white,
-                    //     shape: const RoundedRectangleBorder(
-                    //         borderRadius:
-                    //             BorderRadius.all(Radius.circular(10.0))),
-                    //     child: const Text(
-                    //       'Login',
-                    //       style: TextStyle(fontSize: 20.0),
-                    //     ),
-                    //   ),
-                    // ),
                     Container(
                       height: 40,
                       width: 150,
@@ -176,20 +124,14 @@ class _loginPageState extends State<loginPage> {
                               password: password,
                             )
                                 .then((value) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return loginPage();
-                                  },
-                                ),
-                              );
                               setState(() {
                                 spinner = false;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) {
-                                    return noticeList();
+                                    return noticeList(
+                                      UserType: selectedUser,
+                                    );
                                   }),
                                 );
                               });
@@ -197,7 +139,8 @@ class _loginPageState extends State<loginPage> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => PopUp(
-                                  toNavigate: noticeList(),
+                                  toNavigate:
+                                      noticeList(UserType: selectedUser),
                                   message: 'Successfully Logged in',
                                   icon: FontAwesomeIcons.checkCircle,
                                   state: true,
@@ -219,7 +162,6 @@ class _loginPageState extends State<loginPage> {
                                       icon: Icons.cancel,
                                       state: false,
                                       color: Colors.red,
-
                                     ),
                                   );
                                 }
@@ -263,7 +205,6 @@ class _loginPageState extends State<loginPage> {
                               },
                             );
                           }
-
                         },
                         color: Colors.brown,
                         textColor: Colors.white,

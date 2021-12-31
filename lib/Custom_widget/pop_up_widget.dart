@@ -41,7 +41,7 @@ class _PopUpState extends State<PopUp> {
           ),
           Text(
             widget.message,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
@@ -64,7 +64,7 @@ class _PopUpState extends State<PopUp> {
               Navigator.of(context).pop();
             }
           },
-          child: Text(
+          child: const Text(
             'Close',
             style: TextStyle(
               fontSize: 15.0,

@@ -6,31 +6,45 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Screens/Add_notice.dart';
+import 'package:wce_notice_board/Screens/Notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notice_modify.dart';
 import 'package:wce_notice_board/Screens/years.dart';
 
 class noticeList extends StatefulWidget {
   @override
+  String UserType;
+  noticeList({this.UserType});
   _noticeListState createState() => _noticeListState();
 }
 
 class _noticeListState extends State<noticeList> {
   NotesServices get service => GetIt.I<NotesServices>();
   var collection;
-  bool spinner = true;
+  String selectedUser;
+  bool spinner = false;
   String head;
   var cnt = 0;
+  bool admin = false;
   List<noticeForListing> notes = [];
   void getVal() async {
+    print("hye mk");
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    // spinner=true;
-    print("hi mk");
+    _fireStore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((element) {
+      setState(() {
+        // spinner = true;
+        admin = element['Role'] == 'admin';
+      });
+    });
     _fireStore.collection('Notices').snapshots().listen((QuerySnapshot value) {
       setState(() {
+        notes = [];
         value.docs.forEach((element) {
-          print(element.id);
           DateTime val = element['NoticeCreated'].toDate();
           DateTime val1 = element['NoticeUpdated'].toDate();
           noticeForListing mk = noticeForListing(
@@ -38,8 +52,15 @@ class _noticeListState extends State<noticeList> {
             Noticecontent: element['Noticecontent'],
             NoticeCreated: val,
             NoticeUpdate: val1,
+            NoticeEndDate: element['NoticeEndDate'],
             NoticeRegard: element['NoticeRegards'],
-            NoticeId: element.id          );
+            NoticeId: element.id,
+            FacultyId: element['FacultyId'],
+            ty: element['ThirdYear'],
+            fy: element['FirstYear'],
+            sy: element['SecondYear'],
+            btech: element['LastYear'],
+          );
           notes.add(mk);
         });
         spinner = false;
@@ -50,83 +71,91 @@ class _noticeListState extends State<noticeList> {
   @override
   void initState() {
     super.initState();
+    notes = [];
     getVal();
-    // print(collection);
   }
 
   Widget build(BuildContext context) {
+    getVal();
     return ModalProgressHUD(
-        inAsyncCall: spinner,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Center(
-              child: Text(
-                'List of Notes',
-              ),
+      inAsyncCall: spinner,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Center(
+            child: Text(
+              'List of Notes',
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => yearPage(noticeId: null,),
+        ),
+        floatingActionButton: (admin == true)
+            ? FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => yearPage(
+                        notice: null,
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.add,
+                ),
+              )
+            : null,
+        body: ListView.separated(
+            itemBuilder: (_, index) {
+              return Dismissible(
+                key: ValueKey(notes[index].NoticeTitle),
+                direction: DismissDirection.startToEnd,
+                onDismissed: (direction) {},
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (_) => noteDelete(),
+                  );
+                },
+                background: Container(
+                  color: Colors.red,
+                  padding: EdgeInsets.only(left: 16),
+                  child: const Align(
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                    alignment: Alignment.centerLeft,
+                  ),
+                ),
+                child: ListTile(
+                  title: Text(
+                    notes[index].NoticeTitle,
+                    // notes[index].noticeContent,
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  subtitle: Text('Last edited ${notes[index].NoticeCreated}'),
+                  onTap: () {
+                    // getVal();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return noticeViewer(
+                          notice: notes[index],
+                        );
+                      }),
+                    );
+                  },
                 ),
               );
             },
-            child: const Icon(
-              Icons.add,
-            ),
-          ),
-          body: ListView.separated(
-              itemBuilder: (_, index) {
-                return Dismissible(
-                  key: ValueKey(notes[index].NoticeTitle),
-                  direction: DismissDirection.startToEnd,
-                  onDismissed: (direction) {},
-                  confirmDismiss: (direction) async {
-                    return await showDialog(
-                      context: context,
-                      builder: (_) => noteDelete(),
-                    );
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    padding: EdgeInsets.only(left: 16),
-                    child: const Align(
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                      alignment: Alignment.centerLeft,
-                    ),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      notes[index].NoticeTitle,
-                      // notes[index].noticeContent,
-                      style: const TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    subtitle: Text('Last edited ${notes[index].NoticeCreated}'),
-                    onTap: () {
-                      // getVal();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return ;
-                        }),
-                      );
-                    },
-                  ),
-                );
-              },
-              separatorBuilder: (_, __) => const Divider(
-                    height: 1,
-                    color: Colors.green,
-                  ),
-              itemCount: notes.length),
-        ));
+            separatorBuilder: (_, __) => const Divider(
+                  height: 1,
+                  color: Colors.green,
+                ),
+            itemCount: notes.length),
+      ),
+    );
   }
 }
