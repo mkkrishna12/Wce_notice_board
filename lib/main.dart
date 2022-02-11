@@ -4,12 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
-
 void main() async {
   GetIt.instance.registerLazySingleton(() => NotesServices());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: LoginPage(),
   ));
 }

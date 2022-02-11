@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
+
 import '../../Custom_widget/custom_input_field.dart';
 import 'registration_page.dart';
 
@@ -16,13 +17,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String email ;
-  bool spinner ;
-  String password ;
+  String email;
+  bool spinner;
+  String password;
   String mobile;
   String selectedUser;
   bool admin = false;
-  
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -146,8 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           (admin == true)
-                                              ? NoticeList()
-                                              : YearPageStudents(),
+                                              ? const NoticeList()
+                                              : const YearPageStudents(),
                                     ),
                                     (route) => false,
                                   );
@@ -157,8 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                                   context: context,
                                   builder: (BuildContext context) => PopUp(
                                     toNavigate: (admin == true)
-                                        ? NoticeList()
-                                        : YearPageStudents(),
+                                        ? const NoticeList()
+                                        : const YearPageStudents(),
                                     message: 'Successfully Logged in',
                                     icon: FontAwesomeIcons.checkCircle,
                                     state: true,
@@ -173,7 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => const PopUp(
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
                                         toNavigate: LoginPage(),
                                         message:
                                             'The password provided is Wrong.',
@@ -192,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => const PopUp(
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
                                         toNavigate: LoginPage(),
                                         message:
                                             'User not found .Please Register',
@@ -211,7 +214,8 @@ class _LoginPageState extends State<LoginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => const PopUp(
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
                                         toNavigate: LoginPage(),
                                         message: 'invalid email Try Again',
                                         icon: Icons.cancel,

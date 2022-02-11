@@ -15,7 +15,7 @@ class NoticeForStudents extends StatefulWidget {
 
 class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
-  bool spinner =true;
+  bool spinner = true;
 
   void getVal() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -24,11 +24,12 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
         .get()
-        .then((element) {
-
-    });
-    try{
-      _fireStore.collection('Notices').snapshots().listen((QuerySnapshot value) {
+        .then((element) {});
+    try {
+      _fireStore
+          .collection('Notices')
+          .snapshots()
+          .listen((QuerySnapshot value) {
         setState(() {
           value.docs.forEach((element) {
             DateTime val = element['NoticeCreated'].toDate();
@@ -36,34 +37,34 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
             NoticeForListing mk = NoticeForListing(
               noticeTitle: element['NoticeTitle'],
               noticeContent: element['Noticecontent'],
-              NoticeCreated: val,
-              NoticeUpdate: val1,
-              NoticeEndDate: element['NoticeEndDate'].toDate(),
-              NoticeRegard: element['NoticeRegards'],
-              NoticeId: element.id,
+              noticeCreated: val,
+              noticeUpdate: val1,
+              noticeEndDate: element['NoticeEndDate'].toDate(),
+              noticeRegard: element['NoticeRegards'],
+              noticeId: element.id,
               FacultyId: element['FacultyId'],
               ty: element['ThirdYear'],
               fy: element['FirstYear'],
               sy: element['SecondYear'],
               btech: element['LastYear'],
             );
-            if(widget.selectedYear == 'First Year'){
-              if(element['FirstYear'] == true){
+            if (widget.selectedYear == 'First Year') {
+              if (element['FirstYear'] == true) {
                 notes.add(mk);
               }
             }
-            if(widget.selectedYear == 'Second Year'){
-              if(element['SecondYear'] == true){
+            if (widget.selectedYear == 'Second Year') {
+              if (element['SecondYear'] == true) {
                 notes.add(mk);
               }
             }
-            if(widget.selectedYear == 'Third Year'){
-              if(element['ThirdYear'] == true){
+            if (widget.selectedYear == 'Third Year') {
+              if (element['ThirdYear'] == true) {
                 notes.add(mk);
               }
             }
-            if(widget.selectedYear == 'Fourth Year'){
-              if(element['LastYear'] == true){
+            if (widget.selectedYear == 'Fourth Year') {
+              if (element['LastYear'] == true) {
                 notes.add(mk);
               }
             }
@@ -71,7 +72,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
           spinner = false;
         });
       });
-    } catch(e){
+    } catch (e) {
       spinner = false;
 
       showDialog(
@@ -84,9 +85,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
           color: Colors.red,
         ),
       );
-
     }
-
   }
 
   @override
@@ -94,47 +93,59 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
     super.initState();
     getVal();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        title:  Text(
-          'Wce Notice Board ${notes.length}${widget.selectedYear}',
-          style: const TextStyle(
+        title: const Text(
+          'Wce Notice Board',
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
           ),
         ),
       ),
-      body: ListView.separated(
+      body: Container(
+        color: Colors.black26,
+        child: ListView.builder(
           itemBuilder: (_, index) {
-            return ListTile(
-              title: Text(
-                notes[index].noticeTitle,
-                style: const TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.black,
-                ),
-              ),
-              subtitle: Text('Last edited ${notes[index].NoticeCreated}'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return NoticeViewer(
-                      notice: notes[index],
-                    );
-                  }),
-                );
-              },
-            );
+            return (notes.isNotEmpty)
+                ? Card(
+                    elevation: 5.0,
+                    child: ListTile(
+                      title: Text(
+                        notes[index].noticeTitle,
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                      subtitle: Text(
+                          'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return NoticeViewer(
+                              notice: notes[index],
+                            );
+                          }),
+                        );
+                      },
+                      //TODO change color when user see notification
+                      trailing: const CircleAvatar(
+                        backgroundColor: Colors.blue,
+                        radius: 5.0,
+                      ),
+                    ),
+                  )
+                : const Center(child: Text('No Notice Available'));
           },
-          separatorBuilder: (_, __) => const Divider(
-            height: 1,
-            color: Colors.green,
-          ),
-          itemCount: notes.length),
+          itemCount: notes.length,
+        ),
+      ),
     );
   }
 }

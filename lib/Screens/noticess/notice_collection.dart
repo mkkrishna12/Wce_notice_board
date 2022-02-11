@@ -6,15 +6,14 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 
 class NoticeList extends StatefulWidget {
   final String userType;
-  const NoticeList({Key key ,this.userType}) : super(key: key);
+  const NoticeList({Key key, this.userType}) : super(key: key);
   @override
-
   _NoticeListState createState() => _NoticeListState();
 }
 
@@ -52,11 +51,11 @@ class _NoticeListState extends State<NoticeList> {
             NoticeForListing mk = NoticeForListing(
               noticeTitle: element['NoticeTitle'],
               noticeContent: element['Noticecontent'],
-              NoticeCreated: val,
-              NoticeUpdate: val1,
-              NoticeEndDate: element['NoticeEndDate'].toDate(),
-              NoticeRegard: element['NoticeRegards'],
-              NoticeId: element.id,
+              noticeCreated: val,
+              noticeUpdate: val1,
+              noticeEndDate: element['NoticeEndDate'].toDate(),
+              noticeRegard: element['NoticeRegards'],
+              noticeId: element.id,
               FacultyId: element['FacultyId'],
               ty: element['ThirdYear'],
               fy: element['FirstYear'],
@@ -120,57 +119,60 @@ class _NoticeListState extends State<NoticeList> {
                 ),
               )
             : null,
-        body: ListView.separated(
+        body: ListView.builder(
             itemBuilder: (_, index) {
-              return Dismissible(
-                key: ValueKey(notes[index].noticeTitle),
-                direction: DismissDirection.startToEnd,
-                onDismissed: (direction) {},
-                confirmDismiss: (direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (_) => NoteDelete(),
-                  );
-                },
-                background: Container(
-                  color: Colors.red,
-                  padding: const EdgeInsets.only(left: 16),
-                  child: const Align(
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                    alignment: Alignment.centerLeft,
-                  ),
-                ),
-                child: ListTile(
-                  title: Text(
-                    notes[index].noticeTitle,
-                    // notes[index].noticeContent,
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                  subtitle: Text('Last edited ${notes[index].NoticeCreated}'),
-                  onTap: () {
-                    // getVal();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return NoticeViewer(
-                          notice: notes[index],
+              //TODO add functionality to delete notice to admin
+              return (notes.isEmpty)
+                  ? Dismissible(
+                      key: ValueKey(notes[index].noticeTitle),
+                      direction: DismissDirection.startToEnd,
+                      onDismissed: (direction) {},
+                      confirmDismiss: (direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (_) => const NoteDelete(),
                         );
-                      }),
-                    );
-                  },
-                ),
-              );
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        padding: const EdgeInsets.only(left: 16),
+                        child: const Align(
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          alignment: Alignment.centerLeft,
+                        ),
+                      ),
+                      child: Card(
+                        elevation: 5.0,
+                        child: ListTile(
+                          title: Text(
+                            notes[index].noticeTitle,
+                            // notes[index].noticeContent,
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(
+                              'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                          onTap: () {
+                            // getVal();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return NoticeViewer(
+                                  notice: notes[index],
+                                );
+                              }),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : const Center(child: Text('No Notice Available'));
             },
-            separatorBuilder: (_, __) => const Divider(
-                  height: 1,
-                  color: Colors.green,
-                ),
             itemCount: notes.length),
       ),
     );

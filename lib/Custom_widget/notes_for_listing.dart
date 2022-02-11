@@ -3,21 +3,21 @@
 class NoticeForListing {
   String noticeTitle;
   String noticeContent;
-  DateTime NoticeCreated;
-  DateTime NoticeUpdate;
-  DateTime NoticeEndDate;
-  String NoticeRegard;
-  String NoticeId;
+  DateTime noticeCreated;
+  DateTime noticeUpdate;
+  DateTime noticeEndDate;
+  String noticeRegard;
+  String noticeId;
   String FacultyId;
-  bool fy,sy,ty,btech;
+  bool fy, sy, ty, btech;
   NoticeForListing({
-    this.NoticeEndDate,
-    this.NoticeId,
+    this.noticeEndDate,
+    this.noticeId,
     this.noticeTitle,
     this.noticeContent,
-    this.NoticeCreated,
-    this.NoticeUpdate,
-    this.NoticeRegard,
+    this.noticeCreated,
+    this.noticeUpdate,
+    this.noticeRegard,
     this.FacultyId,
     this.ty,
     this.fy,

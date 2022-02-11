@@ -32,8 +32,8 @@ class _AddNoticeState extends State<AddNotice> {
     super.initState();
     title = (widget.notice == null) ? null : widget.notice.noticeTitle;
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
-    from = (widget.notice == null) ? null : widget.notice.NoticeRegard;
-    dateNow = (widget.notice == null) ? null : widget.notice.NoticeCreated;
+    from = (widget.notice == null) ? null : widget.notice.noticeRegard;
+    dateNow = (widget.notice == null) ? null : widget.notice.noticeCreated;
     firebaseUser = _firebaseAuth.currentUser;
   }
 
@@ -123,14 +123,14 @@ class _AddNoticeState extends State<AddNotice> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => NoticeList(),
+                          builder: (BuildContext context) => const NoticeList(),
                         ),
                         (route) => false,
                       );
 
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => PopUp(
+                        builder: (BuildContext context) => const PopUp(
                           toNavigate: NoticeList(
                             userType: 'admin',
                           ),
@@ -155,7 +155,7 @@ class _AddNoticeState extends State<AddNotice> {
                   } else {
                     _fireStore
                         .collection("Notices")
-                        .doc(widget.notice.NoticeId)
+                        .doc(widget.notice.noticeId)
                         .update({
                           "FacultyId": firebaseUser.uid,
                           "NoticeTitle": title,
@@ -173,7 +173,7 @@ class _AddNoticeState extends State<AddNotice> {
                         })
                         .then((value) => showDialog(
                               context: context,
-                              builder: (BuildContext context) => PopUp(
+                              builder: (BuildContext context) => const PopUp(
                                 toNavigate: NoticeList(userType: 'Admin'),
                                 message: 'Notice Updated',
                                 icon: Icons.check,
