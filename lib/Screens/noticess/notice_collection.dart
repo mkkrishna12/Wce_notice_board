@@ -6,10 +6,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/Notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_modify.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 
 class noticeList extends StatefulWidget {
@@ -40,8 +38,11 @@ class _noticeListState extends State<noticeList> {
         admin = element['Role'] == 'admin';
       });
     });
-    try{
-      _fireStore.collection('Notices').snapshots().listen((QuerySnapshot value) {
+    try {
+      _fireStore
+          .collection('Notices')
+          .snapshots()
+          .listen((QuerySnapshot value) {
         setState(() {
           notes = [];
           value.docs.forEach((element) {
@@ -66,7 +67,7 @@ class _noticeListState extends State<noticeList> {
           spinner = false;
         });
       });
-    } catch(e){
+    } catch (e) {
       spinner = false;
       print(e);
       showDialog(
@@ -79,9 +80,7 @@ class _noticeListState extends State<noticeList> {
           color: Colors.red,
         ),
       );
-
     }
-
   }
 
   @override

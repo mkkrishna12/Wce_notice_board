@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
-import 'package:wce_notice_board/Custom_widget/year_selection.dart';
-import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection_students.dart';
 
 class YearPageStudents extends StatefulWidget {
@@ -22,12 +19,14 @@ class _YearPageStudentsState extends State<YearPageStudents> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
-        onTap: ()
-        {
-          Navigator.push(context, MaterialPageRoute(builder: (context){
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
               //add route
-            return noticeForStudents( selectedYear:_items[index]);
-          }),);
+              return noticeForStudents(selectedYear: _items[index]);
+            }),
+          );
         },
         title: Text(_items[index]),
       ),

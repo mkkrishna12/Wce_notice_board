@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/year_selection.dart';
-import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
+import 'package:wce_notice_board/Screens/noticess/add_notice.dart';
 
 
 
@@ -144,12 +144,12 @@ class _yearPageState extends State<yearPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return addNotice(years: [
+                      return AddNotice(years: [
                         _items[0].check,
                         _items[1].check,
                         _items[2].check,
                         _items[3].check
-                      ], notice: widget.notice,EndDate: selectedDate,);
+                      ], notice: widget.notice,endDate: selectedDate,);
                     }),
                   );
                 },
