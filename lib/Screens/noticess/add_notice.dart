@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
@@ -9,29 +9,30 @@ import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
-class addNotice extends StatefulWidget {
-  addNotice({this.years, this.notice, this.EndDate});
+class AddNotice extends StatefulWidget {
+  const AddNotice({Key key, this.years, this.notice, this.endDate})
+      : super(key: key);
   final List<bool> years;
-  noticeForListing notice;
-  DateTime EndDate;
+  final noticeForListing notice;
+  final DateTime endDate;
   @override
-  _addNoticeState createState() => _addNoticeState();
+  _AddNoticeState createState() => _AddNoticeState();
 }
 
-class _addNoticeState extends State<addNotice> {
-  var firebaseUser;
+class _AddNoticeState extends State<AddNotice> {
+  dynamic firebaseUser;
   String title;
-  String Notice;
+  String notice;
   String from;
-  DateTime DateNow;
+  DateTime dateNow;
 
   @override
   void initState() {
     super.initState();
     title = (widget.notice == null) ? null : widget.notice.NoticeTitle;
-    Notice = (widget.notice == null) ? null : widget.notice.Noticecontent;
+    notice = (widget.notice == null) ? null : widget.notice.Noticecontent;
     from = (widget.notice == null) ? null : widget.notice.NoticeRegard;
-    DateNow = (widget.notice == null) ? null : widget.notice.NoticeCreated;
+    dateNow = (widget.notice == null) ? null : widget.notice.NoticeCreated;
     firebaseUser = _firebaseAuth.currentUser;
   }
 
@@ -62,12 +63,12 @@ class _addNoticeState extends State<addNotice> {
             width: double.infinity,
           ),
           noticeInput(
-            initialValue: Notice,
+            initialValue: notice,
             hintText: 'Enter notice',
             flex: 5,
             onChanged: (value) {
               setState(() {
-                Notice = value;
+                notice = value;
                 TextEditingController().value;
               });
             },
@@ -82,7 +83,7 @@ class _addNoticeState extends State<addNotice> {
             flex: 1,
             onChanged: (value) {
               setState(() {
-                from =value;
+                from = value;
                 TextEditingController().value;
               });
             },
@@ -97,20 +98,22 @@ class _addNoticeState extends State<addNotice> {
               color: Colors.blue,
               height: 30.0,
               width: double.infinity,
-              child: FlatButton(
-                child: Text('Add Notice'),
+              child: ElevatedButton(
+                child: const Text(
+                  'Add Notice',
+                ),
                 onPressed: () {
                   if (widget.notice == null) {
                     _fireStore.collection("Notices").add({
                       "FacultyId": firebaseUser.uid,
                       "NoticeTitle": title,
-                      "Noticecontent": Notice,
+                      "Noticecontent": notice,
                       "NoticeRegards": from,
-                      "NoticeCreated": (DateNow == null)
+                      "NoticeCreated": (dateNow == null)
                           ? FieldValue.serverTimestamp()
-                          : DateNow,
+                          : dateNow,
                       "NoticeUpdated": FieldValue.serverTimestamp(),
-                      "NoticeEndDate": widget.EndDate,
+                      "NoticeEndDate": widget.endDate,
                       "FirstYear": widget.years[0],
                       "SecondYear": widget.years[1],
                       "ThirdYear": widget.years[2],
@@ -121,7 +124,7 @@ class _addNoticeState extends State<addNotice> {
                         MaterialPageRoute(
                           builder: (BuildContext context) => noticeList(),
                         ),
-                            (route) => false,
+                        (route) => false,
                       );
 
                       showDialog(
@@ -155,13 +158,13 @@ class _addNoticeState extends State<addNotice> {
                         .update({
                           "FacultyId": firebaseUser.uid,
                           "NoticeTitle": title,
-                          "Noticecontent": Notice,
+                          "Noticecontent": notice,
                           "NoticeRegards": from,
-                          "NoticeCreated": (DateNow == null)
+                          "NoticeCreated": (dateNow == null)
                               ? FieldValue.serverTimestamp()
-                              : DateNow,
+                              : dateNow,
                           "NoticeUpdated": FieldValue.serverTimestamp(),
-                          "NoticeEndDate": widget.EndDate,
+                          "NoticeEndDate": widget.endDate,
                           "FirstYear": widget.years[0],
                           "SecondYear": widget.years[1],
                           "ThirdYear": widget.years[2],

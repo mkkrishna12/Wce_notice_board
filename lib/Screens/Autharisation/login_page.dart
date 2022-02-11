@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/Add_notice.dart';
+import 'package:wce_notice_board/Screens/noticess/add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection_students.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
