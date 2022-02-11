@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-
-class customInputField extends StatefulWidget {
-  customInputField({Key key, this.fieldIcon, this.hintText, this.onChanged})
+// this is customised widget for taking input from user
+class CustomInputField extends StatefulWidget {
+  const CustomInputField({Key key, this.fieldIcon, this.hintText, this.onChanged})
       : super(key: key);
-  Icon fieldIcon;
-  String hintText;
-  Function onChanged;
+  final Icon fieldIcon;
+  final String hintText;
+  final Function onChanged;
 
   @override
-  State<customInputField> createState() => _customInputFieldState();
+  State<CustomInputField> createState() => _CustomInputFieldState();
 }
 
-class _customInputFieldState extends State<customInputField> {
+class _CustomInputFieldState extends State<CustomInputField> {
   bool secure = false;
 
   @override
@@ -19,7 +19,7 @@ class _customInputFieldState extends State<customInputField> {
     if (widget.hintText == 'Enter Password') {
       secure = true;
     }
-    return Container(
+    return SizedBox(
       width: 250,
       child: Material(
           elevation: 5.0,

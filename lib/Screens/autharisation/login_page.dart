@@ -1,30 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/add_notice.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_collection_students.dart';
-import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
-import '../../Custom_widget/custom_Input_field.dart';
+import '../../Custom_widget/custom_input_field.dart';
 import 'registration_page.dart';
 
-class loginPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key key}) : super(key: key);
+
   @override
-  State<loginPage> createState() => _loginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _loginPageState extends State<loginPage> {
-  String email = null;
-  bool spinner = false;
-  String password = null;
-
-  String Mobile = null;
+class _LoginPageState extends State<LoginPage> {
+  String email ;
+  bool spinner ;
+  String password ;
+  String mobile;
   String selectedUser;
   bool admin = false;
+  
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -54,7 +52,7 @@ class _loginPageState extends State<loginPage> {
                 ),
               ),
               Center(
-                child: Container(
+                child: SizedBox(
                   width: 400,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -77,7 +75,7 @@ class _loginPageState extends State<loginPage> {
                         height: 15,
                         width: double.infinity,
                       ),
-                      customInputField(
+                      CustomInputField(
                         fieldIcon: const Icon(
                           Icons.person,
                           color: Colors.white,
@@ -89,7 +87,7 @@ class _loginPageState extends State<loginPage> {
                           });
                         },
                       ),
-                      customInputField(
+                      CustomInputField(
                         fieldIcon: const Icon(Icons.lock, color: Colors.white),
                         hintText: 'Enter Password',
                         onChanged: (value) {
@@ -98,23 +96,26 @@ class _loginPageState extends State<loginPage> {
                           });
                         },
                       ),
-                      Container(
+                      SizedBox(
                         height: 40,
                         width: 150,
+                        //TODO WE have to change the buttonds to elevated
                         child: RaisedButton(
                           onPressed: () async {
+                            //spinner for the verification
                             setState(() {
                               spinner = true;
                             });
+                            //check email and password
                             if (email == null || password == null) {
                               setState(() {
                                 spinner = false;
                               });
                               showDialog(
                                 context: context,
-                                builder: (BuildContext context) => PopUp(
-                                  toNavigate: loginPage(),
-                                  message: 'All Fields are Requried',
+                                builder: (BuildContext context) => const PopUp(
+                                  toNavigate: LoginPage(),
+                                  message: 'All Fields are Required',
                                   icon: Icons.cancel,
                                   state: false,
                                   color: Colors.red,
@@ -127,6 +128,7 @@ class _loginPageState extends State<loginPage> {
                                   .get()
                                   .then((element) {
                                 setState(() {
+                                  //to check the user admin or not
                                   admin = element['Role'] == 'admin';
                                 });
                               });
@@ -138,23 +140,24 @@ class _loginPageState extends State<loginPage> {
                                   .then((value) {
                                 setState(() {
                                   spinner = false;
+                                  //if user student then redirect to year otherwise notice list to see or edit or add
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           (admin == true)
-                                              ? noticeList()
+                                              ? NoticeList()
                                               : YearPageStudents(),
                                     ),
                                     (route) => false,
                                   );
                                 });
-
+                                //show successful login
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) => PopUp(
                                     toNavigate: (admin == true)
-                                        ? noticeList()
+                                        ? NoticeList()
                                         : YearPageStudents(),
                                     message: 'Successfully Logged in',
                                     icon: FontAwesomeIcons.checkCircle,
@@ -170,8 +173,8 @@ class _loginPageState extends State<loginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => PopUp(
-                                        toNavigate: loginPage(),
+                                      builder: (BuildContext context) => const PopUp(
+                                        toNavigate: LoginPage(),
                                         message:
                                             'The password provided is Wrong.',
                                         icon: Icons.cancel,
@@ -189,8 +192,8 @@ class _loginPageState extends State<loginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => PopUp(
-                                        toNavigate: loginPage(),
+                                      builder: (BuildContext context) => const PopUp(
+                                        toNavigate: LoginPage(),
                                         message:
                                             'User not found .Please Register',
                                         icon: Icons.cancel,
@@ -208,8 +211,8 @@ class _loginPageState extends State<loginPage> {
                                     });
                                     showDialog(
                                       context: context,
-                                      builder: (BuildContext context) => PopUp(
-                                        toNavigate: loginPage(),
+                                      builder: (BuildContext context) => const PopUp(
+                                        toNavigate: LoginPage(),
                                         message: 'invalid email Try Again',
                                         icon: Icons.cancel,
                                         state: false,
@@ -232,6 +235,7 @@ class _loginPageState extends State<loginPage> {
                           ),
                         ),
                       ),
+                      //Option for the new user ot registration
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

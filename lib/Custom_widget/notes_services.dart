@@ -1,6 +1,6 @@
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 class NotesServices{
-  List<noticeForListing> getnotesList()
+  List<NoticeForListing> getnotesList()
   {
 
    return  [

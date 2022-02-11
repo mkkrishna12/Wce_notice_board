@@ -3,19 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/Notice_veiwer.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
 
-class noticeForStudents extends StatefulWidget {
-  String selectedYear;
-  noticeForStudents({this.selectedYear});
+class NoticeForStudents extends StatefulWidget {
+  final String selectedYear;
+  const NoticeForStudents({Key key, this.selectedYear}) : super(key: key);
 
   @override
-  _noticeForStudentsState createState() => _noticeForStudentsState();
+  _NoticeForStudentsState createState() => _NoticeForStudentsState();
 }
 
-class _noticeForStudentsState extends State<noticeForStudents> {
-  List<noticeForListing> notes = [];
+class _NoticeForStudentsState extends State<NoticeForStudents> {
+  List<NoticeForListing> notes = [];
   bool spinner =true;
 
   void getVal() async {
@@ -34,9 +33,9 @@ class _noticeForStudentsState extends State<noticeForStudents> {
           value.docs.forEach((element) {
             DateTime val = element['NoticeCreated'].toDate();
             DateTime val1 = element['NoticeUpdated'].toDate();
-            noticeForListing mk = noticeForListing(
-              NoticeTitle: element['NoticeTitle'],
-              Noticecontent: element['Noticecontent'],
+            NoticeForListing mk = NoticeForListing(
+              noticeTitle: element['NoticeTitle'],
+              noticeContent: element['Noticecontent'],
               NoticeCreated: val,
               NoticeUpdate: val1,
               NoticeEndDate: element['NoticeEndDate'].toDate(),
@@ -74,10 +73,10 @@ class _noticeForStudentsState extends State<noticeForStudents> {
       });
     } catch(e){
       spinner = false;
-      print(e);
+
       showDialog(
         context: context,
-        builder: (BuildContext context) => PopUp(
+        builder: (BuildContext context) => const PopUp(
           toNavigate: null,
           message: 'Somthing went wrong try after some time',
           icon: Icons.cancel,
@@ -112,7 +111,7 @@ class _noticeForStudentsState extends State<noticeForStudents> {
           itemBuilder: (_, index) {
             return ListTile(
               title: Text(
-                notes[index].NoticeTitle,
+                notes[index].noticeTitle,
                 style: const TextStyle(
                   fontSize: 15.0,
                   color: Colors.black,
@@ -123,7 +122,7 @@ class _noticeForStudentsState extends State<noticeForStudents> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return noticeViewer(
+                    return NoticeViewer(
                       notice: notes[index],
                     );
                   }),

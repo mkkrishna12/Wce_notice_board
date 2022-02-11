@@ -6,26 +6,27 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/Notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 
-class noticeList extends StatefulWidget {
+class NoticeList extends StatefulWidget {
+  final String userType;
+  const NoticeList({Key key ,this.userType}) : super(key: key);
   @override
-  String UserType;
-  noticeList({this.UserType});
-  _noticeListState createState() => _noticeListState();
+
+  _NoticeListState createState() => _NoticeListState();
 }
 
-class _noticeListState extends State<noticeList> {
+class _NoticeListState extends State<NoticeList> {
   NotesServices get service => GetIt.I<NotesServices>();
-  var collection;
+  dynamic collection;
   String selectedUser;
   bool spinner = false;
   String head;
   var cnt = 0;
   bool admin = false;
-  List<noticeForListing> notes = [];
+  List<NoticeForListing> notes = [];
   void getVal() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -48,9 +49,9 @@ class _noticeListState extends State<noticeList> {
           value.docs.forEach((element) {
             DateTime val = element['NoticeCreated'].toDate();
             DateTime val1 = element['NoticeUpdated'].toDate();
-            noticeForListing mk = noticeForListing(
-              NoticeTitle: element['NoticeTitle'],
-              Noticecontent: element['Noticecontent'],
+            NoticeForListing mk = NoticeForListing(
+              noticeTitle: element['NoticeTitle'],
+              noticeContent: element['Noticecontent'],
               NoticeCreated: val,
               NoticeUpdate: val1,
               NoticeEndDate: element['NoticeEndDate'].toDate(),
@@ -69,10 +70,10 @@ class _noticeListState extends State<noticeList> {
       });
     } catch (e) {
       spinner = false;
-      print(e);
+
       showDialog(
         context: context,
-        builder: (BuildContext context) => PopUp(
+        builder: (BuildContext context) => const PopUp(
           toNavigate: null,
           message: 'Somthing went wrong try after some time',
           icon: Icons.cancel,
@@ -90,6 +91,7 @@ class _noticeListState extends State<noticeList> {
     getVal();
   }
 
+  @override
   Widget build(BuildContext context) {
     getVal();
     return ModalProgressHUD(
@@ -107,7 +109,7 @@ class _noticeListState extends State<noticeList> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => yearPage(
+                      builder: (context) => const YearPage(
                         notice: null,
                       ),
                     ),
@@ -121,18 +123,18 @@ class _noticeListState extends State<noticeList> {
         body: ListView.separated(
             itemBuilder: (_, index) {
               return Dismissible(
-                key: ValueKey(notes[index].NoticeTitle),
+                key: ValueKey(notes[index].noticeTitle),
                 direction: DismissDirection.startToEnd,
                 onDismissed: (direction) {},
                 confirmDismiss: (direction) async {
                   return await showDialog(
                     context: context,
-                    builder: (_) => noteDelete(),
+                    builder: (_) => NoteDelete(),
                   );
                 },
                 background: Container(
                   color: Colors.red,
-                  padding: EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 16),
                   child: const Align(
                     child: Icon(
                       Icons.delete,
@@ -143,7 +145,7 @@ class _noticeListState extends State<noticeList> {
                 ),
                 child: ListTile(
                   title: Text(
-                    notes[index].NoticeTitle,
+                    notes[index].noticeTitle,
                     // notes[index].noticeContent,
                     style: const TextStyle(
                       fontSize: 15.0,
@@ -156,7 +158,7 @@ class _noticeListState extends State<noticeList> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return noticeViewer(
+                        return NoticeViewer(
                           notice: notes[index],
                         );
                       }),

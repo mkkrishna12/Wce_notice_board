@@ -1,9 +1,7 @@
+// this page is for year selection for the user
+
 import 'package:flutter/material.dart';
-class year {
-  String s;
-  bool check;
-  year({this.s, this.check});
-}
+import 'package:wce_notice_board/constants.dart';
 
 class SelectYear extends StatefulWidget {
   const SelectYear({Key key}) : super(key: key);
@@ -13,20 +11,15 @@ class SelectYear extends StatefulWidget {
 }
 
 class _SelectYearState extends State<SelectYear> {
-  final List<year> _items = <year>[
-    year(s: 'First Year', check: false),
-    year(s: 'second Year', check: false),
-    year(s: 'Third year', check: false),
-    year(s: 'Fourth Year', check: false),
-  ];
+
   @override
   Widget build(BuildContext context) => ListView(
     scrollDirection: Axis.vertical,
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    children: _items
+    children: yearsList
         .map(
-          (year item) => CheckboxListTile(
+          (Year item) => CheckboxListTile(
         title: Text(item.s),
         value: item.check,
         onChanged: (bool val) {

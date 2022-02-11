@@ -6,6 +6,7 @@ import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 
+// Page for to add notice
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -13,7 +14,7 @@ class AddNotice extends StatefulWidget {
   const AddNotice({Key key, this.years, this.notice, this.endDate})
       : super(key: key);
   final List<bool> years;
-  final noticeForListing notice;
+  final NoticeForListing notice;
   final DateTime endDate;
   @override
   _AddNoticeState createState() => _AddNoticeState();
@@ -29,8 +30,8 @@ class _AddNoticeState extends State<AddNotice> {
   @override
   void initState() {
     super.initState();
-    title = (widget.notice == null) ? null : widget.notice.NoticeTitle;
-    notice = (widget.notice == null) ? null : widget.notice.Noticecontent;
+    title = (widget.notice == null) ? null : widget.notice.noticeTitle;
+    notice = (widget.notice == null) ? null : widget.notice.noticeContent;
     from = (widget.notice == null) ? null : widget.notice.NoticeRegard;
     dateNow = (widget.notice == null) ? null : widget.notice.NoticeCreated;
     firebaseUser = _firebaseAuth.currentUser;
@@ -47,7 +48,7 @@ class _AddNoticeState extends State<AddNotice> {
       ),
       body: Column(
         children: [
-          noticeInput(
+          NoticeInput(
             initialValue: title,
             hintText: 'Enter title for notice',
             flex: 1,
@@ -62,7 +63,7 @@ class _AddNoticeState extends State<AddNotice> {
             height: 10.0,
             width: double.infinity,
           ),
-          noticeInput(
+          NoticeInput(
             initialValue: notice,
             hintText: 'Enter notice',
             flex: 5,
@@ -77,7 +78,7 @@ class _AddNoticeState extends State<AddNotice> {
             height: 10.0,
             width: double.infinity,
           ),
-          noticeInput(
+          NoticeInput(
             initialValue: from,
             hintText: 'Enter faculty or branch',
             flex: 1,
@@ -122,7 +123,7 @@ class _AddNoticeState extends State<AddNotice> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => noticeList(),
+                          builder: (BuildContext context) => NoticeList(),
                         ),
                         (route) => false,
                       );
@@ -130,8 +131,8 @@ class _AddNoticeState extends State<AddNotice> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => PopUp(
-                          toNavigate: noticeList(
-                            UserType: 'admin',
+                          toNavigate: NoticeList(
+                            userType: 'admin',
                           ),
                           message: 'Notice Added',
                           icon: Icons.check,
@@ -142,7 +143,7 @@ class _AddNoticeState extends State<AddNotice> {
                     }).catchError((onError) {
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => PopUp(
+                        builder: (BuildContext context) => const PopUp(
                           toNavigate: null,
                           message: 'Something went Wrong. Please try again...',
                           icon: Icons.cancel,
@@ -173,7 +174,7 @@ class _AddNoticeState extends State<AddNotice> {
                         .then((value) => showDialog(
                               context: context,
                               builder: (BuildContext context) => PopUp(
-                                toNavigate: noticeList(UserType: 'Admin'),
+                                toNavigate: NoticeList(userType: 'Admin'),
                                 message: 'Notice Updated',
                                 icon: Icons.check,
                                 state: true,
@@ -183,7 +184,7 @@ class _AddNoticeState extends State<AddNotice> {
                         .catchError((onError) {
                           showDialog(
                             context: context,
-                            builder: (BuildContext context) => PopUp(
+                            builder: (BuildContext context) => const PopUp(
                               toNavigate: null,
                               message:
                                   'Something went Wrong. Please try again...',

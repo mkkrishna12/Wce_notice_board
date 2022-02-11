@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Screens/Autharisation/login_page.dart';
-
+//This page is for showing any alert
 class PopUp extends StatefulWidget {
   final String message;
   final IconData icon;
   final bool state;
   final Color color;
-  var toNavigate;
+  final Widget toNavigate;
 
   @override
-  PopUp(
+  const PopUp(
       {@required this.message,
       @required this.icon,
       @required this.state,
       this.color,
-        this.toNavigate
-
+        this.toNavigate,
       });
 
   @override
@@ -26,27 +24,33 @@ class _PopUpState extends State<PopUp> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-              child: Icon(
-            widget.icon,
-                color: widget.color,
-                size: 60.0,
-          )),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Text(
-            widget.message,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+      content: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.blueGrey
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+                child: Icon(
+                  widget.icon,
+                  color: widget.color,
+                  size: 60.0,
+            ),),
+            const SizedBox(
+              height: 10.0,
             ),
-          ),
-        ],
+            Text(
+              widget.message,
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
       actions: [
         GestureDetector(

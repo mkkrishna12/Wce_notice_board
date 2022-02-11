@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class noteModify extends StatelessWidget {
+class NoteModify extends StatelessWidget {
   // const noteModify({Key? key}) : super(key: key);
   final String noteId;
-  noteModify({ this.noteId='\0'});
+  const NoteModify({Key key,  this.noteId = "0"}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
 
-        title: Text(noteId=='\0' ? 'Create Note' : 'Edit Note'),
+        title: Text(noteId=='0' ? 'Create Note' : 'Edit Note'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -17,21 +17,21 @@ class noteModify extends StatelessWidget {
           children: [
             TextField(
               onChanged: (value) {},
-              decoration: const InputDecoration(hintText: 'Note title'),
+              decoration: const InputDecoration(hintText: 'Note title',),
             ),
             const SizedBox(
               height: 8,
             ),
             TextField(
               onChanged: (value) {},
-              decoration: const InputDecoration(hintText: 'Note content'),
+              decoration: const InputDecoration(hintText: 'Note content',),
             ),
-            Container(
+            SizedBox(
               height: 35.0,
               width: double.infinity,
-              child: RaisedButton(
+              child: ElevatedButton(
 
-                child: Text('Submit'),
+                child: const Text('Submit',),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

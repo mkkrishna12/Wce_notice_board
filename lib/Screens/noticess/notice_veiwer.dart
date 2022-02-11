@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
@@ -6,27 +6,25 @@ import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
 import '../../constants.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
-class noticeViewer extends StatefulWidget {
-  // const noticeViewer({Key? key}) : super(key: key);
-  noticeForListing notice;
+class NoticeViewer extends StatefulWidget {
+  final NoticeForListing notice;
 
-  noticeViewer({Key key, this.notice}) : super(key: key);
+  const NoticeViewer({Key key, this.notice}) : super(key: key);
 
   @override
-  _noticeViewerState createState() => _noticeViewerState();
+  _NoticeViewerState createState() => _NoticeViewerState();
 }
 
-class _noticeViewerState extends State<noticeViewer> {
-  var firebaseUser;
-  var userRole;
+class _NoticeViewerState extends State<NoticeViewer> {
+  dynamic firebaseUser;
+  dynamic userRole;
   @override
   void initState() {
     super.initState();
     firebaseUser = _firebaseAuth.currentUser.uid;
   }
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +45,7 @@ class _noticeViewerState extends State<noticeViewer> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return yearPage(notice: widget.notice,);
+                            return YearPage(notice: widget.notice,);
                           },
                         ),
                       );
@@ -78,7 +76,7 @@ class _noticeViewerState extends State<noticeViewer> {
               ),
               child: Center(
                 child: Text(
-                  widget.notice.NoticeTitle,
+                  widget.notice.noticeTitle,
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
@@ -86,7 +84,7 @@ class _noticeViewerState extends State<noticeViewer> {
             Container(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                widget.notice.Noticecontent,
+                widget.notice.noticeContent,
               ),
             ),
             Container(

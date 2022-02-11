@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import '../../Custom_widget/custom_Input_field.dart';
+import '../../Custom_widget/custom_input_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'login_page.dart';
@@ -15,11 +15,11 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String email = null;
-  bool spinner = false;
-  String password = null;
+  String email ;
+  bool spinner ;
+  String password ;
   String user = "User";
-  String Mobile = null;
+  String mobile ;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -34,21 +34,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           color: Colors.blue,
           child: Stack(
             children: <Widget>[
-              Align(
+              const Align(
                 alignment: Alignment.bottomRight,
                 widthFactor: 0.6,
                 heightFactor: 0.4,
                 child: Material(
-                  borderRadius: const BorderRadius.all(Radius.circular(200)),
-                  color: const Color.fromRGBO(255, 255, 255, 0.4),
-                  child: Container(
+                  borderRadius:  BorderRadius.all(Radius.circular(200)),
+                  color: Color.fromRGBO(255, 255, 255, 0.4),
+                  child: SizedBox(
                     width: 400,
                     height: 400,
                   ),
                 ),
               ),
               Center(
-                child: Container(
+                child: SizedBox(
                   width: 400,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +57,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           color: Colors.blue,
                           elevation: 10.0,
                           borderRadius:
-                              BorderRadius.all(Radius.circular(50.0)),
+                              const BorderRadius.all(Radius.circular(50.0)),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Image.asset(
@@ -70,28 +70,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         height: 15,
                         width: double.infinity,
                       ),
-                      customInputField(
+                      CustomInputField(
                         fieldIcon:
                             const Icon(Icons.person, color: Colors.white),
                         hintText: 'Enter college email id ',
                         onChanged: (value) {
                           setState(() {
                             email = value;
-                            print(email);
+
                           });
                         },
                       ),
-                      customInputField(
+                      CustomInputField(
                         fieldIcon:
                             const Icon(Icons.phone, color: Colors.white),
                         hintText: 'Enter Mobile Number',
                         onChanged: (value) {
                           setState(() {
-                            Mobile = value;
+                            mobile = value;
                           });
                         },
                       ),
-                      customInputField(
+                      CustomInputField(
                         fieldIcon:
                             const Icon(Icons.lock, color: Colors.white),
                         hintText: 'Enter Password',
@@ -101,9 +101,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           });
                         },
                       ),
-                      Container(
+                      SizedBox(
                         height: 40,
                         width: 150,
+                        //TODO change to elevated button
                         child: RaisedButton(
                           onPressed: () async {
                             setState(() {
@@ -111,14 +112,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                             if (email == null ||
                                 password == null ||
-                                Mobile == null) {
+                                mobile == null) {
                               setState(() {
                                 spinner = false;
                               });
                               showDialog(
                                 context: context,
-                                builder: (BuildContext context) => PopUp(
-                                  toNavigate: loginPage(),
+                                builder: (BuildContext context) => const PopUp(
+                                  toNavigate: LoginPage(),
                                   message: 'All Fields are Requried',
                                   icon: Icons.cancel,
                                   state: false,
@@ -132,15 +133,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 password: password,
                               )
                                   .then((value) {
-                                print("Hooo");
-                                print(value.user.uid);
                                 _fireStore
                                     .collection('users')
                                     .doc(value.user.uid)
                                     .set({
                                   "uid": value.user.uid,
                                   "email": email,
-                                  "phoneNumber": Mobile,
+                                  "phoneNumber": mobile,
                                   "Role": 'student',
                                   "date": FieldValue.serverTimestamp(),
                                 }).then((value) {
@@ -148,7 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return loginPage();
+                                        return const LoginPage();
                                       },
                                     ),
                                   );
@@ -157,8 +156,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) => PopUp(
-                                      toNavigate: loginPage(),
+                                    builder: (BuildContext context) => const PopUp(
+                                      toNavigate: LoginPage(),
                                       message: 'Successfully Registered',
                                       icon: FontAwesomeIcons.checkCircle,
                                       state: true,
@@ -171,7 +170,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) => PopUp(
+                                    builder: (BuildContext context) => const PopUp(
                                       toNavigate: RegistrationScreen(),
                                       message:
                                           'Registeration unsuccessful contact to admin',
@@ -191,7 +190,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          PopUp(
+                                          const PopUp(
                                             toNavigate: RegistrationScreen(),
                                         message:
                                             'The password provided is too weak.',
@@ -200,7 +199,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         color: Colors.red,
                                       ),
                                     );
-                                    print('');
                                   }
 
                                   // email already in use
@@ -211,7 +209,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) {
-                                          return loginPage();
+                                          return const LoginPage();
                                         },
                                       ),
                                     );
@@ -221,8 +219,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          PopUp(
-                                            toNavigate: loginPage(),
+                                          const PopUp(
+                                            toNavigate: LoginPage(),
                                         message:
                                             'The account already exists for that email.',
                                         icon: Icons.cancel,
@@ -241,7 +239,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          PopUp(
+                                          const PopUp(
                                             toNavigate: RegistrationScreen(),
                                         message: 'invalid-email Try Again',
                                         icon: Icons.cancel,
@@ -278,7 +276,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return loginPage();
+                                return const LoginPage();
                               }));
                             },
                             child: const Text(
@@ -303,101 +301,3 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 }
-
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:modal_progress_hud/modal_progress_hud.dart';
-//
-// import '../Custom_widget/RoundedButton.dart';
-//
-// const kTextFieldDecoration = InputDecoration(
-//   hintText: 'Enter a value',
-//   hintStyle: TextStyle(color: Colors.grey),
-//   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-//   border: OutlineInputBorder(
-//     borderRadius: BorderRadius.all(Radius.circular(32.0)),
-//   ),
-//   enabledBorder: OutlineInputBorder(
-//     borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-//     borderRadius: BorderRadius.all(Radius.circular(32.0)),
-//   ),
-//   focusedBorder: OutlineInputBorder(
-//     borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-//     borderRadius: BorderRadius.all(Radius.circular(32.0)),
-//   ),
-// );
-//
-// class RegistrationScreen extends StatefulWidget {
-//   @override
-//   _RegistrationScreenState createState() => _RegistrationScreenState();
-// }
-//
-// class _RegistrationScreenState extends State<RegistrationScreen> {
-//   final _auth = FirebaseAuth.instance;
-//   String email;
-//   String password;
-//   bool showSpinner = false;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: ModalProgressHUD(
-//         inAsyncCall: showSpinner,
-//         child: Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 24.0),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             crossAxisAlignment: CrossAxisAlignment.stretch,
-//             children: <Widget>[
-//               TextField(
-//                   keyboardType: TextInputType.emailAddress,
-//                   textAlign: TextAlign.center,
-//                   onChanged: (value) {
-//                     email = value;
-//                     //Do something with the user input.
-//                   },
-//                   decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Enter your email')),
-//               SizedBox(
-//                 height: 8.0,
-//               ),
-//               TextField(
-//                   obscureText: true,
-//                   textAlign: TextAlign.center,
-//                   onChanged: (value) {
-//                     password = value;
-//                     //Do something with the user input.
-//                   },
-//                   decoration: kTextFieldDecoration.copyWith(
-//                       hintText: 'Enter your Password')),
-//               SizedBox(
-//                 height: 24.0,
-//               ),
-//               RoundedButton(
-//                 colour: Colors.blueAccent,
-//                 title: 'Register',
-//                 onPressed: () async {
-//                   setState(() {
-//                     showSpinner = true;
-//                   });
-//                   try {
-//                     final newUser = await _auth.createUserWithEmailAndPassword(
-//                         email: email, password: password);
-//                     if (newUser != null) {
-//                       Navigator.pushNamed(context, 'home_screen');
-//                     }
-//                   } catch (e) {
-//                     print(e);
-//                   }
-//                   setState(() {
-//                     showSpinner = false;
-//                   });
-//                 },
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

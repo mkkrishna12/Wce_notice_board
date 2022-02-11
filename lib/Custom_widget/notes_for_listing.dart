@@ -1,6 +1,8 @@
-class noticeForListing {
-  String NoticeTitle;
-  String Noticecontent;
+// ignore_for_file: non_constant_identifier_names
+
+class NoticeForListing {
+  String noticeTitle;
+  String noticeContent;
   DateTime NoticeCreated;
   DateTime NoticeUpdate;
   DateTime NoticeEndDate;
@@ -8,11 +10,11 @@ class noticeForListing {
   String NoticeId;
   String FacultyId;
   bool fy,sy,ty,btech;
-  noticeForListing({
+  NoticeForListing({
     this.NoticeEndDate,
     this.NoticeId,
-    this.NoticeTitle,
-    this.Noticecontent,
+    this.noticeTitle,
+    this.noticeContent,
     this.NoticeCreated,
     this.NoticeUpdate,
     this.NoticeRegard,

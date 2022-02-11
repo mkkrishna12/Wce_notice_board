@@ -1,23 +1,22 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+//This is for taking input from admin to add notice
 
-class noticeInput extends StatefulWidget {
-  // const notice_input({Key? key}) : super(key: key);
-  noticeInput({this.hintText, this.onChanged, this.flex,this.initialValue});
-  String hintText;
-  Function onChanged;
-  int flex;
-  String initialValue=null;
+class NoticeInput extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
+  const NoticeInput({this.hintText, this.onChanged, this.flex,this.initialValue});
+  final String hintText;
+  final Function onChanged;
+  final int flex;           // We will require more space for notice content
+  final String initialValue ; // if we are editing exiting then we have to show previous data
   @override
-  _noticeInputState createState() => _noticeInputState();
+  _NoticeInputState createState() => _NoticeInputState();
 }
 
-class _noticeInputState extends State<noticeInput> {
+class _NoticeInputState extends State<NoticeInput> {
   TextEditingController _controller;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller= (widget.initialValue!=null)? TextEditingController(text: widget.initialValue):null;
   }
@@ -30,7 +29,7 @@ class _noticeInputState extends State<noticeInput> {
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         color: Colors.grey,
         child: Container(
-          margin: EdgeInsets.fromLTRB(2.0, 0, 2.0, 0),
+          margin: const EdgeInsets.fromLTRB(2.0, 0, 2.0, 0),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(

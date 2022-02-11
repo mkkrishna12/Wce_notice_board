@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-
+//This is customised button
 class RoundedButton extends StatelessWidget {
-  RoundedButton({this.colour, this.title, this.onPressed});
+  const RoundedButton({this.colour, this.title, this.onPressed});
   final Color colour;
   final String title;
-  final onPressed;
+  final Function onPressed;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0,),
       child: Material(
         elevation: 5.0,
         color: colour,
@@ -20,7 +20,7 @@ class RoundedButton extends StatelessWidget {
           height: 42.0,
           child: Text(
             title,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white,),
           ),
         ),
       ),
