@@ -70,12 +70,17 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      margin: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.09),
-                      child: Image.asset("assets/images/logo.png"),
+                    SizedBox(
+                      child: Hero(
+                        tag: 'logo',
+                        child: Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.09),
+                          child: Image.asset("assets/images/logo.png"),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 24,
