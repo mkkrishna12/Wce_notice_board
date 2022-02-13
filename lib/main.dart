@@ -8,7 +8,7 @@ void main() async {
   GetIt.instance.registerLazySingleton(() => NotesServices());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
     home: LoginPage(),
   ));
 }

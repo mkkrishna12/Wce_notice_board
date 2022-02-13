@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import '../../Custom_widget/custom_input_field.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import './../../styles/app_colors.dart';
+import './../../widgets/custom_button.dart';
+import './../../widgets/custom_formfield.dart';
+import './../../widgets/custom_header.dart';
+import './../../widgets/custom_richtext.dart';
 import 'login_page.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -15,104 +20,147 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String email ;
-  bool spinner ;
-  String password ;
+  final _mobile = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool spinner = false;
   String user = "User";
-  String mobile ;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  String get mobile => _mobile.text.trim();
+  String get email => _emailController.text.trim();
+  String get password => _passwordController.text.trim();
 
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: spinner,
       child: Scaffold(
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.blue,
-          child: Stack(
-            children: <Widget>[
-              const Align(
-                alignment: Alignment.bottomRight,
-                widthFactor: 0.6,
-                heightFactor: 0.4,
-                child: Material(
-                  borderRadius:  BorderRadius.all(Radius.circular(200)),
-                  color: Color.fromRGBO(255, 255, 255, 0.4),
-                  child: SizedBox(
-                    width: 400,
-                    height: 400,
-                  ),
-                ),
-              ),
-              Center(
-                child: SizedBox(
-                  width: 400,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Material(
-                          color: Colors.blue,
-                          elevation: 10.0,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              width: 150,
-                              height: 150,
+        body: SafeArea(
+            child: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: AppColors.blue,
+            ),
+            CustomHeader(
+                text: 'Sign Up.',
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()));
+                }),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.08,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.9,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    color: AppColors.whiteshade,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(32),
+                        topRight: Radius.circular(32))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.09),
+                      child: Image.asset("assets/images/logo.png"),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomFormField(
+                      headingText: "Mobile Number",
+                      hintText: "Mobile Number",
+                      obsecureText: false,
+                      suffixIcon: const SizedBox(),
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.text,
+                      controller: _mobile,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomFormField(
+                      headingText: "Email",
+                      hintText: "Email",
+                      obsecureText: false,
+                      suffixIcon: const SizedBox(),
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.emailAddress,
+                      controller: _emailController,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomFormField(
+                      maxLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.text,
+                      controller: _passwordController,
+                      headingText: "Password",
+                      hintText: "At least 8 Character",
+                      obsecureText: true,
+                      suffixIcon: IconButton(
+                          icon: const Icon(Icons.visibility), onPressed: () {}),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    AuthButton(
+                      onTap: () async {
+                        setState(() {
+                          spinner = true;
+                        });
+                        if (email == null ||
+                            password == null ||
+                            mobile == null) {
+                          setState(() {
+                            spinner = false;
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => const PopUp(
+                              toNavigate: LoginPage(),
+                              message: 'All Fields are Requried',
+                              icon: Icons.cancel,
+                              state: false,
+                              color: Colors.red,
                             ),
-                          )),
-                      const SizedBox(
-                        height: 15,
-                        width: double.infinity,
-                      ),
-                      CustomInputField(
-                        fieldIcon:
-                            const Icon(Icons.person, color: Colors.white),
-                        hintText: 'Enter college email id ',
-                        onChanged: (value) {
-                          setState(() {
-                            email = value;
-
-                          });
-                        },
-                      ),
-                      CustomInputField(
-                        fieldIcon:
-                            const Icon(Icons.phone, color: Colors.white),
-                        hintText: 'Enter Mobile Number',
-                        onChanged: (value) {
-                          setState(() {
-                            mobile = value;
-                          });
-                        },
-                      ),
-                      CustomInputField(
-                        fieldIcon:
-                            const Icon(Icons.lock, color: Colors.white),
-                        hintText: 'Enter Password',
-                        onChanged: (value) {
-                          setState(() {
-                            password = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 40,
-                        width: 150,
-                        //TODO change to elevated button
-                        child: RaisedButton(
-                          onPressed: () async {
-                            setState(() {
-                              spinner = true;
-                            });
-                            if (email == null ||
-                                password == null ||
-                                mobile == null) {
+                          );
+                        } else {
+                          _firebaseAuth
+                              .createUserWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          )
+                              .then((value) {
+                            _fireStore
+                                .collection('users')
+                                .doc(value.user.uid)
+                                .set({
+                              "uid": value.user.uid,
+                              "email": email,
+                              "phoneNumber": mobile,
+                              "Role": 'student',
+                              "date": FieldValue.serverTimestamp(),
+                            }).then((value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const LoginPage();
+                                  },
+                                ),
+                              );
                               setState(() {
                                 spinner = false;
                               });
@@ -120,183 +168,116 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 context: context,
                                 builder: (BuildContext context) => const PopUp(
                                   toNavigate: LoginPage(),
-                                  message: 'All Fields are Requried',
+                                  message: 'Successfully Registered',
+                                  icon: FontAwesomeIcons.checkCircle,
+                                  state: true,
+                                  color: Colors.green,
+                                ),
+                              );
+                            }).catchError((err) {
+                              setState(() {
+                                spinner = false;
+                              });
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => const PopUp(
+                                  toNavigate: RegistrationScreen(),
+                                  message:
+                                      'Registeration unsuccessful contact to admin',
                                   icon: Icons.cancel,
                                   state: false,
                                   color: Colors.red,
                                 ),
                               );
-                            } else {
-                              _firebaseAuth
-                                  .createUserWithEmailAndPassword(
-                                email: email,
-                                password: password,
-                              )
-                                  .then((value) {
-                                _fireStore
-                                    .collection('users')
-                                    .doc(value.user.uid)
-                                    .set({
-                                  "uid": value.user.uid,
-                                  "email": email,
-                                  "phoneNumber": mobile,
-                                  "Role": 'student',
-                                  "date": FieldValue.serverTimestamp(),
-                                }).then((value) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return const LoginPage();
-                                      },
-                                    ),
-                                  );
-                                  setState(() {
-                                    spinner = false;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => const PopUp(
-                                      toNavigate: LoginPage(),
-                                      message: 'Successfully Registered',
-                                      icon: FontAwesomeIcons.checkCircle,
-                                      state: true,
-                                      color: Colors.green,
-                                    ),
-                                  );
-                                }).catchError((err) {
-                                  setState(() {
-                                    spinner = false;
-                                  });
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => const PopUp(
-                                      toNavigate: RegistrationScreen(),
-                                      message:
-                                          'Registeration unsuccessful contact to admin',
-                                      icon: Icons.cancel,
-                                      state: false,
-                                      color: Colors.red,
-                                    ),
-                                  );
+                            });
+                          }).catchError(
+                            (err) {
+                              if (err.code == 'weak-password') {
+                                setState(() {
+                                  spinner = false;
                                 });
-                              }).catchError(
-                                (err) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      const PopUp(
+                                    toNavigate: RegistrationScreen(),
+                                    message:
+                                        'The password provided is too weak.',
+                                    icon: Icons.cancel,
+                                    state: false,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
 
-                                  if (err.code == 'weak-password') {
-                                    setState(() {
-                                      spinner = false;
-                                    });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                            toNavigate: RegistrationScreen(),
-                                        message:
-                                            'The password provided is too weak.',
-                                        icon: Icons.cancel,
-                                        state: false,
-                                        color: Colors.red,
-                                      ),
-                                    );
-                                  }
+                              // email already in use
 
-                                  // email already in use
+                              else if (err.code == 'email-already-in-use') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const LoginPage();
+                                    },
+                                  ),
+                                );
+                                setState(() {
+                                  spinner = false;
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      const PopUp(
+                                    toNavigate: LoginPage(),
+                                    message:
+                                        'The account already exists for that email.',
+                                    icon: Icons.cancel,
+                                    state: true,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
 
-                                  else if (err.code ==
-                                      'email-already-in-use') {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return const LoginPage();
-                                        },
-                                      ),
-                                    );
-                                    setState(() {
-                                      spinner = false;
-                                    });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                            toNavigate: LoginPage(),
-                                        message:
-                                            'The account already exists for that email.',
-                                        icon: Icons.cancel,
-                                        state: true,
-                                        color: Colors.red,
-                                      ),
-                                    );
-                                  }
+                              // **invalid-email**:
 
-                                  // **invalid-email**:
-
-                                  else if (err.code == 'invalid-email') {
-                                    setState(() {
-                                      spinner = false;
-                                    });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                            toNavigate: RegistrationScreen(),
-                                        message: 'invalid-email Try Again',
-                                        icon: Icons.cancel,
-                                        state: false,
-                                        color: Colors.red,
-                                      ),
-                                    );
-                                  }
-                                },
-                              );
-                            }
-                          },
-                          color: Colors.brown,
-                          textColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                          child: const Text(
-                            'Registration',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Already Have a Account ',
-                          ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const LoginPage();
-                              }));
+                              else if (err.code == 'invalid-email') {
+                                setState(() {
+                                  spinner = false;
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      const PopUp(
+                                    toNavigate: RegistrationScreen(),
+                                    message: 'invalid-email Try Again',
+                                    icon: Icons.cancel,
+                                    state: false,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
                             },
-                            child: const Text(
-                              'Sign in',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.greenAccent,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          );
+                        }
+                      },
+                      text: 'Sign Up',
+                    ),
+                    CustomRichText(
+                      discription: 'Already Have an account? ',
+                      text: 'Log In here',
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
+                      },
+                    )
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        )),
       ),
     );
   }
