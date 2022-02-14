@@ -11,7 +11,6 @@ import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
 import './../../widgets/custom_header.dart';
-import './../../widgets/custom_richtext.dart';
 import 'registration_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,9 +25,13 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool spinner = false;
   String mobile;
-  String selectedUser;
+  String selectedUser = 'select user';
   bool admin = false;
-
+  List<String> userType = [
+    'select user',
+    'Admin',
+    'Student',
+  ];
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -79,6 +82,45 @@ class _LoginPageState extends State<LoginPage> {
                           margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width * 0.09),
                           child: Image.asset("assets/images/logo.png"),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Container(
+                        width: 200,
+                        margin: const EdgeInsets.only(
+                            top: 10.0, right: 10.0, left: 10.0),
+                        decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                width: 1.0, style: BorderStyle.solid),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                          ),
+                        ),
+                        child: Center(
+                          child: DropdownButton(
+                            // Initial Value
+                            value: selectedUser,
+
+                            // Down Arrow Icon
+                            icon: const Icon(Icons.keyboard_arrow_down),
+
+                            // Array list of items
+                            items: userType.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(items),
+                              );
+                            }).toList(),
+                            // After selecting the desired option,it will
+                            // change button value to selected value
+                            onChanged: (String newValue) {
+                              setState(() {
+                                selectedUser = newValue;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -133,8 +175,21 @@ class _LoginPageState extends State<LoginPage> {
                         setState(() {
                           spinner = true;
                         });
-                        //check email and password
-                        if (email == null || password == null) {
+                        if (selectedUser == 'select user') {
+                          setState(() {
+                            spinner = false;
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => const PopUp(
+                              toNavigate: LoginPage(),
+                              message: 'Select valid user',
+                              icon: Icons.cancel,
+                              state: false,
+                              color: Colors.red,
+                            ),
+                          );
+                        } else if (email == null || password == null) {
                           setState(() {
                             spinner = false;
                           });
@@ -254,17 +309,17 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       text: 'Sign In',
                     ),
-                    CustomRichText(
-                      discription: "Don't already Have an account? ",
-                      text: "Sign Up",
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const RegistrationScreen()));
-                      },
-                    ),
+                    // CustomRichText(
+                    //   discription: "Don't already Have an account? ",
+                    //   text: "Sign Up",
+                    //   onTap: () {
+                    //     Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const RegistrationScreen()));
+                    //   },
+                    // ),
                   ],
                 ),
               ),
