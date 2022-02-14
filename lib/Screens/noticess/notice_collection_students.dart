@@ -20,11 +20,11 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   void getVal() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    _fireStore
-        .collection('users')
-        .doc(_firebaseAuth.currentUser.uid)
-        .get()
-        .then((element) {});
+    // _fireStore
+    //     .collection('users')
+    //     .doc(_firebaseAuth.currentUser.uid)
+    //     .get()
+    //     .then((element) {});
     try {
       _fireStore
           .collection('Notices')

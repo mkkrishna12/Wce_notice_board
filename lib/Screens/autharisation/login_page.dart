@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:html/parser.dart';
+import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
@@ -10,8 +14,6 @@ import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
-import './../../widgets/custom_header.dart';
-import 'registration_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -37,6 +39,38 @@ class _LoginPageState extends State<LoginPage> {
 
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
+  parseData(var res) {
+    var document = parse(res.body);
+    print(parse(res.body));
+    // print(document.getElementsByClassName("usertext")[0].innerHtml);
+    //declaring a list of String to hold all the data.
+    // List<String> data = [];
+    //
+    // data.add(document.getElementsByClassName("usertext")[0].innerHtml);
+    //
+    // //declaring variable for temp since we will be using it multiple places
+    // var temp = document.getElementsByClassName("temp")[0];
+    // data.add(temp.innerHtml.substring(0, temp.innerHtml.indexOf("<span>")));
+    // data.add(temp
+    //     .getElementsByTagName("small")[0]
+    //     .innerHtml
+    //     .replaceAll(RegExp("[(|)|℃]"), ""));
+    //
+    // //We can also do document.getElementsByTagName("td") but I am just being more specific here.
+    // var rows =
+    //     document.getElementsByTagName("table")[0].getElementsByTagName("td");
+    //
+    // //Map elememt to its innerHtml,  because we gonna need it.
+    // //Iterate over all the table-data and store it in the data list
+    // rows.map((e) => e.innerHtml).forEach((element) {
+    //   if (element != "-") {
+    //     data.add(element);
+    //   }
+    // });
+    //
+    // //print the data to console.
+    // print(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +80,20 @@ class _LoginPageState extends State<LoginPage> {
         body: SafeArea(
             child: Stack(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.blue,
-            ),
-            CustomHeader(
-              text: 'Log In.',
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegistrationScreen()));
-              },
-            ),
+            // Container(
+            //   height: MediaQuery.of(context).size.height,
+            //   width: MediaQuery.of(context).size.width,
+            //   color: AppColors.blue,
+            // ),
+            // CustomHeader(
+            //   text: 'Log In.',
+            //   onTap: () {
+            //     Navigator.pushReplacement(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => const RegistrationScreen()));
+            //   },
+            // ),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.08,
               child: Container(
@@ -189,122 +223,177 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.red,
                             ),
                           );
-                        } else if (email == null || password == null) {
-                          setState(() {
-                            spinner = false;
-                          });
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => const PopUp(
-                              toNavigate: LoginPage(),
-                              message: 'All Fields are Required',
-                              icon: Icons.cancel,
-                              state: false,
-                              color: Colors.red,
-                            ),
-                          );
                         } else {
-                          _firebaseAuth
-                              .signInWithEmailAndPassword(
-                            email: email,
-                            password: password,
-                          )
-                              .then((value) {
-                            _fireStore
-                                .collection('users')
-                                .doc(_firebaseAuth.currentUser.uid)
-                                .get()
-                                .then((element) {
+                          if (selectedUser == 'Admin') {
+                            if (email == null || password == null) {
                               setState(() {
-                                //to check the user admin or not
-                                admin = element['Role'] == 'admin';
+                                spinner = false;
                               });
-                            });
-                            setState(() {
-                              spinner = false;
-                              //if user student then redirect to year otherwise notice list to see or edit or add
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      (admin == true)
-                                          ? const NoticeList()
-                                          : const YearPageStudents(),
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => const PopUp(
+                                  toNavigate: LoginPage(),
+                                  message: 'All Fields are Required',
+                                  icon: Icons.cancel,
+                                  state: false,
+                                  color: Colors.red,
                                 ),
-                                (route) => false,
                               );
-                            });
-                            //show successful login
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => PopUp(
-                                toNavigate: (admin == true)
-                                    ? const NoticeList()
-                                    : const YearPageStudents(),
-                                message: 'Successfully Logged in',
-                                icon: FontAwesomeIcons.checkCircle,
-                                state: true,
-                                color: Colors.green,
-                              ),
-                            );
-                          }).catchError(
-                            (err) {
-                              if (err.code == 'wrong-password') {
+                            } else {
+                              _firebaseAuth
+                                  .signInWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              )
+                                  .then((value) {
+                                _fireStore
+                                    .collection('users')
+                                    .doc(_firebaseAuth.currentUser.uid)
+                                    .get()
+                                    .then((element) {
+                                  setState(() {
+                                    //to check the user admin or not
+                                    admin = element['Role'] == 'admin';
+                                  });
+                                });
                                 setState(() {
                                   spinner = false;
+                                  //if user student then redirect to year otherwise notice list to see or edit or add
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          (admin == true)
+                                              ? const NoticeList()
+                                              : const YearPageStudents(),
+                                    ),
+                                    (route) => false,
+                                  );
                                 });
+                                //show successful login
                                 showDialog(
                                   context: context,
-                                  builder: (BuildContext context) =>
-                                      const PopUp(
-                                    toNavigate: LoginPage(),
-                                    message: 'The password provided is Wrong.',
-                                    icon: Icons.cancel,
-                                    state: false,
-                                    color: Colors.red,
-                                  ),
-                                );
-                              }
-
-                              // email already in use
-
-                              else if (err.code == 'user-not-found') {
-                                setState(() {
-                                  spinner = false;
-                                });
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      const PopUp(
-                                    toNavigate: LoginPage(),
-                                    message: 'User not found .Please Register',
-                                    icon: Icons.cancel,
+                                  builder: (BuildContext context) => PopUp(
+                                    toNavigate: (admin == true)
+                                        ? const NoticeList()
+                                        : const YearPageStudents(),
+                                    message: 'Successfully Logged in',
+                                    icon: FontAwesomeIcons.checkCircle,
                                     state: true,
-                                    color: Colors.red,
+                                    color: Colors.green,
                                   ),
                                 );
-                              }
+                              }).catchError(
+                                (err) {
+                                  if (err.code == 'wrong-password') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
+                                        toNavigate: LoginPage(),
+                                        message:
+                                            'The password provided is Wrong.',
+                                        icon: Icons.cancel,
+                                        state: false,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
 
-                              // **invalid-email**:
+                                  // email already in use
 
-                              else if (err.code == 'invalid-email') {
-                                setState(() {
-                                  spinner = false;
-                                });
+                                  else if (err.code == 'user-not-found') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
+                                        toNavigate: LoginPage(),
+                                        message:
+                                            'User not found .Please Register',
+                                        icon: Icons.cancel,
+                                        state: true,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
+
+                                  // **invalid-email**:
+
+                                  else if (err.code == 'invalid-email') {
+                                    setState(() {
+                                      spinner = false;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          const PopUp(
+                                        toNavigate: LoginPage(),
+                                        message: 'invalid email Try Again',
+                                        icon: Icons.cancel,
+                                        state: false,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          } else {
+                            http.post(
+                                Uri.parse(
+                                    'http://115.247.20.236/moodle/login/token.php?service=moodle_mobile_app&moodlewsrestformat=json'),
+                                body: {
+                                  'username': email,
+                                  'password': password
+                                }).then((var response) {
+                              print(response.body);
+                              dynamic userToken = jsonDecode(response.body);
+                              if (userToken['error'] != null) {
+                                print(userToken['error']);
                                 showDialog(
                                   context: context,
-                                  builder: (BuildContext context) =>
-                                      const PopUp(
-                                    toNavigate: LoginPage(),
-                                    message: 'invalid email Try Again',
+                                  builder: (BuildContext context) => PopUp(
+                                    toNavigate: null,
+                                    message: userToken['error'],
                                     icon: Icons.cancel,
                                     state: false,
                                     color: Colors.red,
                                   ),
                                 );
+                                setState(() {
+                                  spinner = false;
+                                });
+                              } else {
+                                http.post(
+                                    Uri.parse(
+                                        'http://115.247.20.236/moodle/webservice/rest/server.php?wsfunction=core_webservice_get_site_info&moodlewsrestformat=json'),
+                                    body: {
+                                      'wstoken': userToken['token']
+                                    }).then((var value) {
+                                  // print(value.body);
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          (admin == true)
+                                              ? const NoticeList()
+                                              : const YearPageStudents(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                  setState(() {
+                                    spinner = false;
+                                  });
+                                });
                               }
-                            },
-                          );
+                            });
+                          }
                         }
                       },
                       text: 'Sign In',

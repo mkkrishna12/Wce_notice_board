@@ -22,7 +22,11 @@ class _NoticeViewerState extends State<NoticeViewer> {
   @override
   void initState() {
     super.initState();
-    firebaseUser = _firebaseAuth.currentUser.uid;
+    if (_firebaseAuth.currentUser == null) {
+      firebaseUser = null;
+    } else {
+      firebaseUser = _firebaseAuth.currentUser.uid;
+    }
   }
 
   @override
