@@ -28,7 +28,7 @@ class _PopUpState extends State<PopUp> {
     return AlertDialog(
       content: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0), color: Colors.blueGrey),
+            borderRadius: BorderRadius.circular(10.0), color: Colors.white),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,

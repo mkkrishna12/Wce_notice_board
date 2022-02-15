@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
@@ -39,38 +38,6 @@ class _LoginPageState extends State<LoginPage> {
 
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
-  parseData(var res) {
-    var document = parse(res.body);
-    print(parse(res.body));
-    // print(document.getElementsByClassName("usertext")[0].innerHtml);
-    //declaring a list of String to hold all the data.
-    // List<String> data = [];
-    //
-    // data.add(document.getElementsByClassName("usertext")[0].innerHtml);
-    //
-    // //declaring variable for temp since we will be using it multiple places
-    // var temp = document.getElementsByClassName("temp")[0];
-    // data.add(temp.innerHtml.substring(0, temp.innerHtml.indexOf("<span>")));
-    // data.add(temp
-    //     .getElementsByTagName("small")[0]
-    //     .innerHtml
-    //     .replaceAll(RegExp("[(|)|℃]"), ""));
-    //
-    // //We can also do document.getElementsByTagName("td") but I am just being more specific here.
-    // var rows =
-    //     document.getElementsByTagName("table")[0].getElementsByTagName("td");
-    //
-    // //Map elememt to its innerHtml,  because we gonna need it.
-    // //Iterate over all the table-data and store it in the data list
-    // rows.map((e) => e.innerHtml).forEach((element) {
-    //   if (element != "-") {
-    //     data.add(element);
-    //   }
-    // });
-    //
-    // //print the data to console.
-    // print(data);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,30 +47,17 @@ class _LoginPageState extends State<LoginPage> {
         body: SafeArea(
             child: Stack(
           children: [
-            // Container(
-            //   height: MediaQuery.of(context).size.height,
-            //   width: MediaQuery.of(context).size.width,
-            //   color: AppColors.blue,
-            // ),
-            // CustomHeader(
-            //   text: 'Log In.',
-            //   onTap: () {
-            //     Navigator.pushReplacement(
-            //         context,
-            //         MaterialPageRoute(
-            //             builder: (context) => const RegistrationScreen()));
-            //   },
-            // ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.08,
+            SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.9,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
-                    color: AppColors.whiteshade,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40))),
+                  color: AppColors.whiteshade,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,23 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                           icon: const Icon(Icons.visibility), onPressed: () {}),
                       controller: _passwordController,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                  color: AppColors.blue.withOpacity(0.7),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ],
+                    const SizedBox(
+                      height: 30,
                     ),
                     AuthButton(
                       onTap: () async {
@@ -255,34 +194,34 @@ class _LoginPageState extends State<LoginPage> {
                                     //to check the user admin or not
                                     admin = element['Role'] == 'admin';
                                   });
-                                });
-                                setState(() {
-                                  spinner = false;
-                                  //if user student then redirect to year otherwise notice list to see or edit or add
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          (admin == true)
-                                              ? const NoticeList()
-                                              : const YearPageStudents(),
+                                  setState(() {
+                                    spinner = false;
+                                    //if user student then redirect to year otherwise notice list to see or edit or add
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            (admin == true)
+                                                ? const NoticeList()
+                                                : const YearPageStudents(),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  });
+                                  //show successful login
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => PopUp(
+                                      toNavigate: (admin == true)
+                                          ? const NoticeList()
+                                          : const YearPageStudents(),
+                                      message: 'Successfully Logged in',
+                                      icon: FontAwesomeIcons.checkCircle,
+                                      state: true,
+                                      color: Colors.green,
                                     ),
-                                    (route) => false,
                                   );
                                 });
-                                //show successful login
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => PopUp(
-                                    toNavigate: (admin == true)
-                                        ? const NoticeList()
-                                        : const YearPageStudents(),
-                                    message: 'Successfully Logged in',
-                                    icon: FontAwesomeIcons.checkCircle,
-                                    state: true,
-                                    color: Colors.green,
-                                  ),
-                                );
                               }).catchError(
                                 (err) {
                                   if (err.code == 'wrong-password') {
@@ -345,6 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                           } else {
+                            await FirebaseAuth.instance.signOut();
                             http.post(
                                 Uri.parse(
                                     'http://115.247.20.236/moodle/login/token.php?service=moodle_mobile_app&moodlewsrestformat=json'),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -60,8 +62,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+    // if (_firebaseAuth.currentUser != null) {
+    //   _fireStore
+    //       .collection('users')
+    //       .doc(_firebaseAuth.currentUser.uid)
+    //       .get()
+    //       .then((element) {
+    //     Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (BuildContext context) => (element['Role'] == 'admin')
+    //             ? const NoticeList()
+    //             : const YearPageStudents(),
+    //       ),
+    //       (route) => false,
+    //     );
+    //   });
+    // } else {
     startTimer();
+    // }
   }
 
   @override

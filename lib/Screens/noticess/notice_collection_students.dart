@@ -16,15 +16,10 @@ class NoticeForStudents extends StatefulWidget {
 class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
   bool spinner = true;
-
-  void getVal() async {
+  Future<void> getVal() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    // _fireStore
-    //     .collection('users')
-    //     .doc(_firebaseAuth.currentUser.uid)
-    //     .get()
-    //     .then((element) {});
+    notes = [];
     try {
       _fireStore
           .collection('Notices')
@@ -109,41 +104,44 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
       ),
       body: Container(
         color: Colors.black26,
-        child: ListView.builder(
-          itemBuilder: (_, index) {
-            return (notes.isNotEmpty)
-                ? Card(
-                    elevation: 5.0,
-                    child: ListTile(
-                      title: Text(
-                        notes[index].noticeTitle,
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.black,
+        child: RefreshIndicator(
+          onRefresh: getVal,
+          child: ListView.builder(
+            itemBuilder: (_, index) {
+              return (notes.isNotEmpty)
+                  ? Card(
+                      elevation: 5.0,
+                      child: ListTile(
+                        title: Text(
+                          notes[index].noticeTitle,
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                            'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return NoticeViewer(
+                                notice: notes[index],
+                              );
+                            }),
+                          );
+                        },
+                        //TODO change color when user see notification
+                        trailing: const CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 5.0,
                         ),
                       ),
-                      subtitle: Text(
-                          'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return NoticeViewer(
-                              notice: notes[index],
-                            );
-                          }),
-                        );
-                      },
-                      //TODO change color when user see notification
-                      trailing: const CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 5.0,
-                      ),
-                    ),
-                  )
-                : const Center(child: Text('No Notice Available'));
-          },
-          itemCount: notes.length,
+                    )
+                  : const Center(child: Text('No Notice Available'));
+            },
+            itemCount: notes.length,
+          ),
         ),
       ),
     );

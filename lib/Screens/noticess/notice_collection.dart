@@ -26,7 +26,8 @@ class _NoticeListState extends State<NoticeList> {
   var cnt = 0;
   bool admin = false;
   List<NoticeForListing> notes = [];
-  void getVal() async {
+  Future<void> getVal() async {
+    // notes = [];
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     _fireStore
@@ -62,7 +63,9 @@ class _NoticeListState extends State<NoticeList> {
               sy: element['SecondYear'],
               btech: element['LastYear'],
             );
-            notes.add(mk);
+            if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
+              notes.add(mk);
+            }
           });
           spinner = false;
         });
@@ -119,61 +122,68 @@ class _NoticeListState extends State<NoticeList> {
                 ),
               )
             : null,
-        body: ListView.builder(
-            itemBuilder: (_, index) {
-              //TODO add functionality to delete notice to admin
-              return (notes.isEmpty)
-                  ? Dismissible(
-                      key: ValueKey(notes[index].noticeTitle),
-                      direction: DismissDirection.startToEnd,
-                      onDismissed: (direction) {},
-                      confirmDismiss: (direction) async {
-                        return await showDialog(
-                          context: context,
-                          builder: (_) => const NoteDelete(),
-                        );
-                      },
-                      background: Container(
-                        color: Colors.red,
-                        padding: const EdgeInsets.only(left: 16),
-                        child: const Align(
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      child: Card(
-                        elevation: 5.0,
-                        child: ListTile(
-                          title: Text(
-                            notes[index].noticeTitle,
-                            // notes[index].noticeContent,
-                            style: const TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black,
+        body: RefreshIndicator(
+          onRefresh: getVal,
+          child: ListView.builder(
+              itemBuilder: (_, index) {
+                //TODO add functionality to delete notice to admin
+                return (notes.length != 0)
+                    ? Dismissible(
+                        key: ValueKey(notes[index].noticeTitle),
+                        direction: DismissDirection.startToEnd,
+                        onDismissed: (direction) {
+                          setState(() {
+                            notes.removeAt(index);
+                          });
+                        },
+                        confirmDismiss: (direction) async {
+                          return await showDialog(
+                            context: context,
+                            builder: (_) => NoteDelete(notes[index].noticeId),
+                          );
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          padding: const EdgeInsets.only(left: 16),
+                          child: const Align(
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
                             ),
+                            alignment: Alignment.centerLeft,
                           ),
-                          subtitle: Text(
-                              'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
-                          onTap: () {
-                            // getVal();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return NoticeViewer(
-                                  notice: notes[index],
-                                );
-                              }),
-                            );
-                          },
                         ),
-                      ),
-                    )
-                  : const Center(child: Text('No Notice Available'));
-            },
-            itemCount: notes.length),
+                        child: Card(
+                          elevation: 5.0,
+                          child: ListTile(
+                            title: Text(
+                              notes[index].noticeTitle,
+                              // notes[index].noticeContent,
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            subtitle: Text(
+                                'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                            onTap: () {
+                              // getVal();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return NoticeViewer(
+                                    notice: notes[index],
+                                  );
+                                }),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : const Center(child: Text('No Notice Available'));
+              },
+              itemCount: notes.length),
+        ),
       ),
     );
   }

@@ -16,7 +16,7 @@ class AuthButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.05,
+        height: 50.0,
         margin: const EdgeInsets.only(left: 20, right: 20),
         decoration: const BoxDecoration(
             color: AppColors.blue,
