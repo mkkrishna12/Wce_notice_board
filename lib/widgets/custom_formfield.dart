@@ -55,6 +55,7 @@ class CustomFormField extends StatelessWidget {
               textInputAction: textInputAction,
               keyboardType: textInputType,
               obscureText: obsecureText,
+              cursorColor: Colors.blue,
               decoration: InputDecoration(
                   hintText: hintText,
                   hintStyle: KTextStyle.textFieldHintStyle,

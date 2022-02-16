@@ -19,13 +19,13 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   Future<void> getVal() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    notes = [];
     try {
       _fireStore
           .collection('Notices')
           .snapshots()
           .listen((QuerySnapshot value) {
         setState(() {
+          notes = [];
           value.docs.forEach((element) {
             DateTime val = element['NoticeCreated'].toDate();
             DateTime val1 = element['NoticeUpdated'].toDate();
@@ -90,6 +90,12 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -105,11 +111,13 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
       body: Container(
         color: Colors.black26,
         child: RefreshIndicator(
-          onRefresh: getVal,
-          child: ListView.builder(
-            itemBuilder: (_, index) {
-              return (notes.isNotEmpty)
-                  ? Card(
+          onRefresh: () {
+            return getVal();
+          },
+          child: (notes.isNotEmpty)
+              ? ListView.builder(
+                  itemBuilder: (_, index) {
+                    return Card(
                       elevation: 5.0,
                       child: ListTile(
                         title: Text(
@@ -137,11 +145,11 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                           radius: 5.0,
                         ),
                       ),
-                    )
-                  : const Center(child: Text('No Notice Available'));
-            },
-            itemCount: notes.length,
-          ),
+                    );
+                  },
+                  itemCount: notes.length,
+                )
+              : const Center(child: Text('No Notice Available')),
         ),
       ),
     );

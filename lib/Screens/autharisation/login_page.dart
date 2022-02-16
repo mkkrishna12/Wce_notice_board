@@ -9,6 +9,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
+import 'package:wce_notice_board/styles/text_styles.dart';
 
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
@@ -35,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   ];
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-
+  bool obSecureController = true;
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
 
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: SafeArea(
             child: Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             SingleChildScrollView(
               child: Container(
@@ -59,13 +61,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       child: Hero(
                         tag: 'logo',
                         child: Container(
-                          height: 200,
+                          height: MediaQuery.of(context).size.height * 0.35,
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width * 0.09),
@@ -73,51 +76,74 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        width: 200,
-                        margin: const EdgeInsets.only(
-                            top: 10.0, right: 10.0, left: 10.0),
-                        decoration: const ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 1.0, style: BorderStyle.solid),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 10.0,
+                            right: 10.0,
+                            left: 10.0,
+                          ),
+                          child: const Text(
+                            'Select User',
+                            style: KTextStyle.textFieldHeading,
                           ),
                         ),
-                        child: Center(
-                          child: DropdownButton(
-                            // Initial Value
-                            value: selectedUser,
-
-                            // Down Arrow Icon
-                            icon: const Icon(Icons.keyboard_arrow_down),
-
-                            // Array list of items
-                            items: userType.map((String items) {
-                              return DropdownMenuItem(
-                                value: items,
-                                child: Text(items),
-                              );
-                            }).toList(),
-                            // After selecting the desired option,it will
-                            // change button value to selected value
-                            onChanged: (String newValue) {
-                              setState(() {
-                                selectedUser = newValue;
-                              });
-                            },
+                        Container(
+                          width: 200,
+                          margin: const EdgeInsets.only(
+                            top: 10.0,
+                            right: 10.0,
+                            left: 10.0,
                           ),
-                        ),
-                      ),
+                          decoration: const ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1.0, style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                          ),
+                          child: Center(
+                            child: DropdownButton(
+                              // Initial Value
+                              value: selectedUser,
+
+                              // Down Arrow Icon
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              // Array list of items
+                              items: userType.map((String items) {
+                                return DropdownMenuItem(
+                                  alignment: AlignmentDirectional.centerStart,
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              // After selecting the desired option,it will
+                              // change button value to selected value
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  selectedUser = newValue;
+                                });
+                              },
+                            ),
+                          ),
+                        )
+                      ],
                     ),
+                    // Center(
+                    //   child:,
+                    // ),
                     const SizedBox(
                       height: 24,
                     ),
                     CustomFormField(
-                      headingText: "Email",
-                      hintText: "Email",
+                      headingText: selectedUser == 'Admin' ? 'Email' : "PRN",
+                      hintText: selectedUser == 'Admin'
+                          ? "Enter Email"
+                          : "Enter Your College PRN",
                       obsecureText: false,
                       suffixIcon: const SizedBox(),
                       controller: _emailController,
@@ -133,10 +159,20 @@ class _LoginPageState extends State<LoginPage> {
                       maxLines: 1,
                       textInputAction: TextInputAction.done,
                       textInputType: TextInputType.text,
-                      hintText: "At least 8 Character",
-                      obsecureText: true,
+                      hintText: selectedUser == 'Admin'
+                          ? "At least 8 Character"
+                          : "Enter Moodle Password",
+                      obsecureText: obSecureController,
                       suffixIcon: IconButton(
-                          icon: const Icon(Icons.visibility), onPressed: () {}),
+                          color: obSecureController == true
+                              ? Colors.grey
+                              : Colors.blue,
+                          icon: const Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              obSecureController = !obSecureController;
+                            });
+                          }),
                       controller: _passwordController,
                     ),
                     const SizedBox(
