@@ -23,10 +23,10 @@ class AddNotice extends StatefulWidget {
 
 class _AddNoticeState extends State<AddNotice> {
   dynamic firebaseUser;
-  String title;
-  String notice;
-  String from;
-  DateTime dateNow;
+  String title = "";
+  String notice = "";
+  String from = "";
+  DateTime dateNow = DateTime.now();
 
   @override
   void initState() {
@@ -50,58 +50,60 @@ class _AddNoticeState extends State<AddNotice> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: spinner,
-        child: Column(
-          children: [
-            NoticeInput(
-              initialValue: title,
-              hintText: 'Enter title for notice',
-              flex: 1,
-              onChanged: (value) {
-                setState(() {
-                  title = value;
-                  TextEditingController().value;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 10.0,
-              width: double.infinity,
-            ),
-            NoticeInput(
-              initialValue: notice,
-              hintText: 'Enter notice',
-              flex: 5,
-              onChanged: (value) {
-                setState(() {
-                  notice = value;
-                  TextEditingController().value;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 10.0,
-              width: double.infinity,
-            ),
-            NoticeInput(
-              initialValue: from,
-              hintText: 'Enter faculty or branch',
-              flex: 1,
-              onChanged: (value) {
-                setState(() {
-                  from = value;
-                  TextEditingController().value;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 10.0,
-              width: double.infinity,
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              NoticeInput(
+                initialValue: title,
+                hintText: 'Enter title for notice',
+                flex: 0.1,
+                onChanged: (value) {
+                  if (!mounted) return;
+                  setState(() {
+                    title = value;
+                    TextEditingController().value;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10.0,
+                width: double.infinity,
+              ),
+              NoticeInput(
+                initialValue: notice,
+                hintText: 'Enter notice',
+                flex: 0.53,
+                onChanged: (value) {
+                  if (!mounted) return;
+                  setState(() {
+                    notice = value;
+                    TextEditingController().value;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10.0,
+                width: double.infinity,
+              ),
+              NoticeInput(
+                initialValue: from,
+                hintText: 'Enter faculty or branch',
+                flex: 0.1,
+                onChanged: (value) {
+                  if (!mounted) return;
+                  setState(() {
+                    from = value;
+                    TextEditingController().value;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 10.0,
+                width: double.infinity,
+              ),
+              Container(
                 color: Colors.blue,
-                height: 30.0,
+                height: MediaQuery.of(context).size.height * 0.1,
                 width: double.infinity,
                 child: ElevatedButton(
                   child: const Text(
@@ -205,9 +207,9 @@ class _AddNoticeState extends State<AddNotice> {
                     }
                   },
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
