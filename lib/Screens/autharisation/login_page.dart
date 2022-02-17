@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 40,
                         width: 150,
-                        //TODO WE have to change the buttonds to elevated
+                        //TODO WE have to change the buttons to elevated
                         child: RaisedButton(
                           onPressed: () async {
                             //spinner for the verification
@@ -146,8 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           (admin == true)
-                                              ? NoticeList()
-                                              : YearPageStudents(),
+                                              ? const NoticeList()
+                                              : const YearPageStudents(),
                                     ),
                                     (route) => false,
                                   );
@@ -157,8 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                                   context: context,
                                   builder: (BuildContext context) => PopUp(
                                     toNavigate: (admin == true)
-                                        ? NoticeList()
-                                        : YearPageStudents(),
+                                        ? const NoticeList()
+                                        : const YearPageStudents(),
                                     message: 'Successfully Logged in',
                                     icon: FontAwesomeIcons.checkCircle,
                                     state: true,
