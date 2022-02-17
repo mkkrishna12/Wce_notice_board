@@ -34,6 +34,7 @@ class _NoticeListState extends State<NoticeList> {
         .doc(_firebaseAuth.currentUser.uid)
         .get()
         .then((element) {
+      if (!mounted) return;
       setState(() {
         admin = element['Role'] == 'admin';
       });
@@ -43,6 +44,7 @@ class _NoticeListState extends State<NoticeList> {
           .collection('Notices')
           .snapshots()
           .listen((QuerySnapshot value) {
+        if (!mounted) return;
         setState(() {
           notes = [];
           value.docs.forEach((element) {
@@ -131,6 +133,7 @@ class _NoticeListState extends State<NoticeList> {
                         key: ValueKey(notes[index].noticeTitle),
                         direction: DismissDirection.startToEnd,
                         onDismissed: (direction) {
+                          if (!mounted) return;
                           setState(() {
                             notes.removeAt(index);
                           });

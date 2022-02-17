@@ -1,13 +1,14 @@
-
 import 'package:flutter/material.dart';
 //This is for taking input field for admin to add notice
 
 class NoticeInput extends StatefulWidget {
+
    const NoticeInput({Key key, this.hintText, this.onChanged, this.flex,this.initialValue}) : super(key: key);
   final String hintText;    //Text that will be shown in button
   final Function onChanged; //This function for getting changes i.e text added by admin
-  final int flex;           // We will require more space for notice content
+  final double flex;           // We will require more space for notice content
   final String initialValue ; // if we are editing exiting then we have to show previous data
+
   @override
   _NoticeInputState createState() => _NoticeInputState();
 }
@@ -17,12 +18,17 @@ class _NoticeInputState extends State<NoticeInput> {
   @override
   void initState() {
     super.initState();
-    _controller= (widget.initialValue!=null)? TextEditingController(text: widget.initialValue):null;
+    _controller = (widget.initialValue != null)
+        ? TextEditingController(text: widget.initialValue)
+        : null;
   }
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: widget.flex,      // we give the flex according to us
+          // we give the flex according to us
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * widget.flex,
       child: Material(
         elevation: 5.0,
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
@@ -39,17 +45,16 @@ class _NoticeInputState extends State<NoticeInput> {
             ),
           ),
           width: double.infinity,
-
           height: 60,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               keyboardType: TextInputType.multiline,
-              maxLines: 100000,
+              maxLines: 1000000,
 
               showCursor: true,
               textDirection: TextDirection.ltr,
-              controller:_controller,
+              controller: _controller,
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 border: InputBorder.none,
