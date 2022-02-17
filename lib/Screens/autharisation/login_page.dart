@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,21 +14,24 @@ import 'package:wce_notice_board/styles/text_styles.dart';
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
+// this widget for Login of the user and admin
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool spinner = false;
-  String mobile;
-  String selectedUser = 'select user';
-  bool admin = false;
+  final _emailController =
+      TextEditingController(); //To get the email or the prn entered by the user
+  final _passwordController =
+      TextEditingController(); // to get the password by the user
+
+  bool spinner = false; //Spinner will be handle by using this variable
+  String selectedUser =
+      'select user'; //This variable is used for the selection of user
+  bool admin = false; //To check the admin or not
   List<String> userType = [
     'select user',
     'Admin',
@@ -55,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: MediaQuery.of(context).size.height * 0.9,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
-                  color: AppColors.whiteshade,
+                  color: AppColors.whiteShade,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
@@ -79,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           margin: const EdgeInsets.only(
@@ -321,6 +322,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                           } else {
+                            //Todo 1 api calls
                             await FirebaseAuth.instance.signOut();
                             http.post(
                                 Uri.parse(
@@ -329,10 +331,8 @@ class _LoginPageState extends State<LoginPage> {
                                   'username': email,
                                   'password': password
                                 }).then((var response) {
-                              print(response.body);
                               dynamic userToken = jsonDecode(response.body);
                               if (userToken['error'] != null) {
-                                print(userToken['error']);
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) => PopUp(

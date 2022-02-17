@@ -44,7 +44,7 @@ class CustomFormField extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
           decoration: BoxDecoration(
-            color: AppColors.grayshade,
+            color: AppColors.grayShade,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(

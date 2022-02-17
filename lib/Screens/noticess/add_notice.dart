@@ -7,26 +7,28 @@ import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
 
-// Page for to add notice
+// widget  to add notice and update notice for admin
+
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
 class AddNotice extends StatefulWidget {
   const AddNotice({Key key, this.years, this.notice, this.endDate})
       : super(key: key);
-  final List<bool> years;
-  final NoticeForListing notice;
-  final DateTime endDate;
+  final List<bool> years;   //This is required to add data in the database
+  final NoticeForListing notice;  //If we want update existing notice
+  final DateTime endDate;         //This will be end date of notice
+
   @override
   _AddNoticeState createState() => _AddNoticeState();
 }
 
 class _AddNoticeState extends State<AddNotice> {
-  dynamic firebaseUser;
-  String title = "";
-  String notice = "";
-  String from = "";
-  DateTime dateNow = DateTime.now();
+  dynamic firebaseUser;     //instance of the user from the database
+  String title;             //Title of the notice
+  String notice;            //Notice Content
+  String from ;             //Notice Regard
+  DateTime dateNow=DateTime.now();        //end date of the notice
 
   @override
   void initState() {
@@ -106,9 +108,11 @@ class _AddNoticeState extends State<AddNotice> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: const Text(
+                  child: (widget.notice == null)?const Text(
                     'Add Notice',
-                  ),
+                  ): const Text(
+                    'Update Notice',
+    ),
                   onPressed: () {
                     if (!mounted) return;
                     setState(() {

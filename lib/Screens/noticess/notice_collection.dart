@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
-import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_delete.dart';
 import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
+//TODO make same notice collection file for both admin and students
 
 class NoticeList extends StatefulWidget {
   final String userType;
@@ -18,7 +18,6 @@ class NoticeList extends StatefulWidget {
 }
 
 class _NoticeListState extends State<NoticeList> {
-  NotesServices get service => GetIt.I<NotesServices>();
   dynamic unsubscribe;
   String selectedUser;
   bool spinner = false;

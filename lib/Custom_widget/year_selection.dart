@@ -1,17 +1,14 @@
-// this page is for year selection for the user
-
+// this widget is for year selection for the user so that he will get the all notice for respective year
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/constants.dart';
+import 'package:wce_notice_board/utils/constants.dart';
 
 class SelectYear extends StatefulWidget {
   const SelectYear({Key key}) : super(key: key);
-
   @override
   _SelectYearState createState() => _SelectYearState();
 }
 
 class _SelectYearState extends State<SelectYear> {
-
   @override
   Widget build(BuildContext context) => ListView(
     scrollDirection: Axis.vertical,
@@ -26,7 +23,6 @@ class _SelectYearState extends State<SelectYear> {
           setState(() => item.check = val);
         },
       ),
-    )
-        .toList(),
+    ).toList(),
   );
 }

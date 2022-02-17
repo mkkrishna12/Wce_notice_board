@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Screens/noticess/add_notice.dart';
 import 'package:wce_notice_board/constants.dart';
+import 'package:wce_notice_board/utils/constants.dart';
 //On this page we can add and edit the year and the date for deleting the notice
 
 class YearPage extends StatefulWidget {
@@ -61,6 +62,13 @@ class _YearPageState extends State<YearPage> {
         Year(s: 'Fourth Year', check: widget.notice.btech),
       ];
       selectedDate = widget.notice.noticeEndDate;
+    }else{
+      yearsList = <Year>[
+        Year(s: 'First Year', check: false),
+        Year(s: 'second Year', check: false),
+        Year(s: 'Third year', check: false),
+        Year(s: 'Fourth Year', check: false),
+      ];
     }
     // _selectDate(context);
   }

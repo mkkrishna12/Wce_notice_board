@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-//This is customised button
+//This widget is customised button
 class RoundedButton extends StatelessWidget {
   const RoundedButton({Key key, this.colour, this.title, this.onPressed})
       : super(key: key);
-  final Color colour;
-  final String title;
-  final Function onPressed;
+  final Color colour;     // Background color of the button
+  final String title;     //Button title
+  final Function onPressed; //The Function that will will be invoked after pressing the button
   @override
   Widget build(BuildContext context) {
     return Padding(
