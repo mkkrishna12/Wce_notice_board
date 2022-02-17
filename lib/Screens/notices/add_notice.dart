@@ -120,6 +120,7 @@ class _AddNoticeState extends State<AddNotice> {
                     setState(() {
                       spinner = true;
                     });
+                    final Map<String, dynamic> isSeen = {};
                     if (widget.notice == null) {
                       _fireStore.collection("Notices").add({
                         "FacultyId": firebaseUser.uid,
@@ -135,6 +136,9 @@ class _AddNoticeState extends State<AddNotice> {
                         "SecondYear": widget.years[1],
                         "ThirdYear": widget.years[2],
                         "LastYear": widget.years[3],
+                        "isSeen": isSeen,
+                        "isPersonalised": false,
+                        "isPersonalisedArray": [""]
                       }).then((value) {
                         spinner = false;
                         Navigator.pushAndRemoveUntil(
@@ -194,6 +198,9 @@ class _AddNoticeState extends State<AddNotice> {
                             "SecondYear": widget.years[1],
                             "ThirdYear": widget.years[2],
                             "LastYear": widget.years[3],
+                            "isSeen": isSeen,
+                            "isPersonalised": false,
+                            "isPersonalisedArray": [""]
                           })
                           .then((value) => showDialog(
                                 context: context,

@@ -4,6 +4,8 @@ import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 
+import '../../main.dart';
+
 class NoticeForStudents extends StatefulWidget {
   final String selectedYear;
   const NoticeForStudents({Key key, this.selectedYear}) : super(key: key);
@@ -15,7 +17,9 @@ class NoticeForStudents extends StatefulWidget {
 class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
   bool spinner = true;
+  var prn;
   Future<void> getVal() async {
+    prn = await storage.read(key: "username");
     // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     try {
@@ -41,6 +45,9 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
               fy: element['FirstYear'],
               sy: element['SecondYear'],
               btech: element['LastYear'],
+              isSeen: element['isSeen'],
+              isPersonalised: element['isPersonalised'],
+              isPersonalisedArray: element['isPersonalisedArray'],
             );
             if (widget.selectedYear == 'First Year') {
               if (element['FirstYear'] == true) {
@@ -139,8 +146,11 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                           );
                         },
                         //TODO change color when user see notification
-                        trailing: const CircleAvatar(
-                          backgroundColor: Colors.blue,
+                        trailing: CircleAvatar(
+                          backgroundColor: (notes[index].isSeen[prn] != null &&
+                                  notes[index].isSeen[prn] == true)
+                              ? Colors.white
+                              : Colors.blue,
                           radius: 5.0,
                         ),
                       ),

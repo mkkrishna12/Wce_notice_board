@@ -11,10 +11,11 @@ import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
 
-//TODO Krushna = add snack bar for all show dialog except delete
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
+//TODO Krushna = add snack bar for all show dialog except delete
+import '../../main.dart';
 // this widget for Login of the user and admin
 
 class LoginPage extends StatefulWidget {
@@ -355,7 +356,13 @@ class _LoginPageState extends State<LoginPage> {
                                     body: {
                                       'wstoken': userToken['token']
                                     }).then((var value) {
-                                  // print(value.body);
+                                  // print(json.decode(value.body));
+                                  storage.write(
+                                      key: "username",
+                                      value:
+                                          json.decode(value.body)["username"]);
+                                  storage.write(
+                                      key: "token", value: userToken['token']);
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(

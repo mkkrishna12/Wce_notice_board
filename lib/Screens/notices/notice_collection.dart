@@ -7,6 +7,8 @@ import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notices/years_admin.dart';
+
+import '../../main.dart';
 //TODO make same notice collection file for both admin and students
 
 class NoticeList extends StatefulWidget {
@@ -24,8 +26,10 @@ class _NoticeListState extends State<NoticeList> {
   String head;
   var cnt = 0;
   bool admin = false;
+  var prn;
   List<NoticeForListing> notes = [];
   Future<void> getVal() async {
+    prn = await storage.read(key: "username");
     // notes = [];
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -65,6 +69,9 @@ class _NoticeListState extends State<NoticeList> {
               fy: element['FirstYear'],
               sy: element['SecondYear'],
               btech: element['LastYear'],
+              isSeen: element['isSeen'],
+              isPersonalised: element['isPersonalised'],
+              isPersonalisedArray: element['isPersonalisedArray'],
             );
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
               notes.add(mk);

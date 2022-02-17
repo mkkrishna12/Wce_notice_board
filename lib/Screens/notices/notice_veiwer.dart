@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
@@ -5,7 +6,10 @@ import 'package:wce_notice_board/Screens/notices/years_admin.dart';
 // import 'package:wce_notice_board/utils/../constants.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 
+import '../../main.dart';
+
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
 class NoticeViewer extends StatefulWidget {
   final NoticeForListing notice;
@@ -19,15 +23,38 @@ class NoticeViewer extends StatefulWidget {
 class _NoticeViewerState extends State<NoticeViewer> {
   dynamic firebaseUser;
   dynamic userRole;
+  void getCall() async {
+    // print(await storage.read(key: "username"));
+    var prn = await storage.read(key: "username");
+    if (prn != null && widget.notice.isSeen != null) {
+      final Map<String, dynamic> isSeen = widget.notice.isSeen;
+      isSeen[prn] = true;
+      await _fireStore
+          .collection("Notices")
+          .doc(widget.notice.noticeId)
+          .update({"isSeen": isSeen});
+    }
+  }
+
   @override
   void initState() {
+    if (!mounted) return;
     super.initState();
+    // print();
     if (_firebaseAuth.currentUser == null) {
+      getCall();
       firebaseUser = null;
     } else {
       firebaseUser = _firebaseAuth.currentUser.uid;
     }
   }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   getCall();
+  // }
 
   @override
   Widget build(BuildContext context) {
