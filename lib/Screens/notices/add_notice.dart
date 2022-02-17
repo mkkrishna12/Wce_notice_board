@@ -5,7 +5,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
+import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 
 // widget  to add notice and update notice for admin
 
@@ -15,20 +15,20 @@ FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 class AddNotice extends StatefulWidget {
   const AddNotice({Key key, this.years, this.notice, this.endDate})
       : super(key: key);
-  final List<bool> years;   //This is required to add data in the database
-  final NoticeForListing notice;  //If we want update existing notice
-  final DateTime endDate;         //This will be end date of notice
+  final List<bool> years; //This is required to add data in the database
+  final NoticeForListing notice; //If we want update existing notice
+  final DateTime endDate; //This will be end date of notice
 
   @override
   _AddNoticeState createState() => _AddNoticeState();
 }
 
 class _AddNoticeState extends State<AddNotice> {
-  dynamic firebaseUser;     //instance of the user from the database
-  String title;             //Title of the notice
-  String notice;            //Notice Content
-  String from ;             //Notice Regard
-  DateTime dateNow=DateTime.now();        //end date of the notice
+  dynamic firebaseUser; //instance of the user from the database
+  String title; //Title of the notice
+  String notice; //Notice Content
+  String from; //Notice Regard
+  DateTime dateNow = DateTime.now(); //end date of the notice
 
   @override
   void initState() {
@@ -108,11 +108,13 @@ class _AddNoticeState extends State<AddNotice> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 width: double.infinity,
                 child: ElevatedButton(
-                  child: (widget.notice == null)?const Text(
-                    'Add Notice',
-                  ): const Text(
-                    'Update Notice',
-    ),
+                  child: (widget.notice == null)
+                      ? const Text(
+                          'Add Notice',
+                        )
+                      : const Text(
+                          'Update Notice',
+                        ),
                   onPressed: () {
                     if (!mounted) return;
                     setState(() {
@@ -139,7 +141,7 @@ class _AddNoticeState extends State<AddNotice> {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const NoticeList(),
+                                const NoticeList(isAdded: true),
                           ),
                           (route) => false,
                         );
@@ -149,6 +151,7 @@ class _AddNoticeState extends State<AddNotice> {
                           builder: (BuildContext context) => const PopUp(
                             toNavigate: NoticeList(
                               userType: 'admin',
+                              isAdded: true,
                             ),
                             message: 'Notice Added',
                             icon: Icons.check,
@@ -195,7 +198,10 @@ class _AddNoticeState extends State<AddNotice> {
                           .then((value) => showDialog(
                                 context: context,
                                 builder: (BuildContext context) => const PopUp(
-                                  toNavigate: NoticeList(userType: 'Admin'),
+                                  toNavigate: NoticeList(
+                                    userType: 'Admin',
+                                    isAdded: true,
+                                  ),
                                   message: 'Notice Updated',
                                   icon: Icons.check,
                                   state: true,

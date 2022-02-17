@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 
 class NoticeForStudents extends StatefulWidget {
   final String selectedYear;
@@ -17,7 +16,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
   bool spinner = true;
   Future<void> getVal() async {
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     try {
       _fireStore

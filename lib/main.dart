@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
-import 'Screens/noticess/notice_collection.dart';
-import 'Screens/noticess/years_page_students.dart';
+import 'Screens/notices/notice_collection.dart';
+import 'Screens/notices/years_page_students.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,7 +76,9 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => (element['Role'] == 'admin')
-                ? const NoticeList()
+                ? const NoticeList(
+                    isAdded: false,
+                  )
                 : const YearPageStudents(),
           ),
           (route) => false,

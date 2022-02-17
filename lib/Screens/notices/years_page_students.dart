@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_collection_students.dart';
+import 'package:wce_notice_board/Screens/notices/notice_collection_students.dart';
 //This page is for student so that they can select specific year for them to see notice
 
 class YearPageStudents extends StatefulWidget {

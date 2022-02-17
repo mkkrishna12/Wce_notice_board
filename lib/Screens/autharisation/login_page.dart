@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/noticess/notice_collection.dart';
-import 'package:wce_notice_board/Screens/noticess/years_page_students.dart';
+import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
+import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
 
 //TODO Krushna = add snack bar for all show dialog except delete
@@ -240,7 +241,8 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             (admin == true)
-                                                ? const NoticeList()
+                                                ? const NoticeList(
+                                                    isAdded: false)
                                                 : const YearPageStudents(),
                                       ),
                                       (route) => false,
