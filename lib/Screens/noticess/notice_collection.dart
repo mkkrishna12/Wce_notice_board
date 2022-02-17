@@ -19,7 +19,7 @@ class NoticeList extends StatefulWidget {
 
 class _NoticeListState extends State<NoticeList> {
   NotesServices get service => GetIt.I<NotesServices>();
-  dynamic collection;
+  dynamic unsubscribe;
   String selectedUser;
   bool spinner = false;
   String head;
@@ -40,6 +40,7 @@ class _NoticeListState extends State<NoticeList> {
         admin = element['Role'] == 'admin';
       });
     });
+    if (!mounted) return;
     try {
       _fireStore
           .collection('Notices')
@@ -48,7 +49,8 @@ class _NoticeListState extends State<NoticeList> {
         if (!mounted) return;
         setState(() {
           notes = [];
-          value.docs.forEach((element) {
+          for (var element in value.docs) {
+            if (element['NoticeCreated'] == null) break;
             DateTime val = element['NoticeCreated'].toDate();
             DateTime val1 = element['NoticeUpdated'].toDate();
             NoticeForListing mk = NoticeForListing(
@@ -68,7 +70,7 @@ class _NoticeListState extends State<NoticeList> {
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
               notes.add(mk);
             }
-          });
+          }
           spinner = false;
         });
       });

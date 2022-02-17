@@ -8,6 +8,9 @@ import 'package:get_it/get_it.dart';
 import 'package:wce_notice_board/Custom_widget/notes_services.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
+import 'Screens/noticess/notice_collection.dart';
+import 'Screens/noticess/years_page_students.dart';
+
 void main() async {
   GetIt.instance.registerLazySingleton(() => NotesServices());
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,25 +69,25 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    // if (_firebaseAuth.currentUser != null) {
-    //   _fireStore
-    //       .collection('users')
-    //       .doc(_firebaseAuth.currentUser.uid)
-    //       .get()
-    //       .then((element) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (BuildContext context) => (element['Role'] == 'admin')
-    //             ? const NoticeList()
-    //             : const YearPageStudents(),
-    //       ),
-    //       (route) => false,
-    //     );
-    //   });
-    // } else {
-    startTimer();
-    // }
+    if (_firebaseAuth.currentUser != null) {
+      _fireStore
+          .collection('users')
+          .doc(_firebaseAuth.currentUser.uid)
+          .get()
+          .then((element) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => (element['Role'] == 'admin')
+                ? const NoticeList()
+                : const YearPageStudents(),
+          ),
+          (route) => false,
+        );
+      });
+    } else {
+      startTimer();
+    }
   }
 
   @override

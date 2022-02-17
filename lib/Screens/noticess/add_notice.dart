@@ -110,7 +110,10 @@ class _AddNoticeState extends State<AddNotice> {
                     'Add Notice',
                   ),
                   onPressed: () {
-                    spinner = true;
+                    if (!mounted) return;
+                    setState(() {
+                      spinner = true;
+                    });
                     if (widget.notice == null) {
                       _fireStore.collection("Notices").add({
                         "FacultyId": firebaseUser.uid,
@@ -150,6 +153,10 @@ class _AddNoticeState extends State<AddNotice> {
                           ),
                         );
                       }).catchError((onError) {
+                        if (!mounted) return;
+                        setState(() {
+                          spinner = false;
+                        });
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => const PopUp(
@@ -192,6 +199,10 @@ class _AddNoticeState extends State<AddNotice> {
                                 ),
                               ))
                           .catchError((onError) {
+                            if (!mounted) return;
+                            setState(() {
+                              spinner = true;
+                            });
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => const PopUp(
