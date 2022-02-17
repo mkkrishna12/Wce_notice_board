@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Screens/noticess/add_notice.dart';
 import 'package:wce_notice_board/constants.dart';
+import 'package:wce_notice_board/utils/constants.dart';
 //On this page we can add and edit the year and the date for deleting the notice
 
 class YearPage extends StatefulWidget {
-
   final NoticeForListing notice;
 
   const YearPage({Key key, this.notice}) : super(key: key);
@@ -16,7 +16,6 @@ class YearPage extends StatefulWidget {
 
 class _YearPageState extends State<YearPage> {
   DateTime selectedDate = DateTime.now();
-
 
   bool _decideWhichDayToEnable(DateTime day) {
     if ((day.isAfter(DateTime.now().subtract(const Duration(days: 1))) &&
@@ -29,14 +28,13 @@ class _YearPageState extends State<YearPage> {
   _selectDate(BuildContext context, int select) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate:
-           selectedDate, // Refer step 1
+      initialDate: selectedDate, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
     showDatePicker(
       context: context,
-      initialDate: selectedDate ,
+      initialDate: selectedDate,
       firstDate: DateTime(2021), // Required
       lastDate: DateTime(2025), // Required
       selectableDayPredicate: _decideWhichDayToEnable,
@@ -45,11 +43,10 @@ class _YearPageState extends State<YearPage> {
       confirmText: 'Book',
       errorFormatText: 'Enter valid date',
       errorInvalidText: 'Enter date in valid range',
-
     );
-    if (picked != null && picked != selectedDate ) {
+    if (picked != null && picked != selectedDate) {
       setState(() {
-          selectedDate = picked;
+        selectedDate = picked;
       });
     }
   }
@@ -64,7 +61,14 @@ class _YearPageState extends State<YearPage> {
         Year(s: 'Third year', check: widget.notice.ty),
         Year(s: 'Fourth Year', check: widget.notice.btech),
       ];
-      selectedDate = widget.notice.NoticeEndDate;
+      selectedDate = widget.notice.noticeEndDate;
+    }else{
+      yearsList = <Year>[
+        Year(s: 'First Year', check: false),
+        Year(s: 'second Year', check: false),
+        Year(s: 'Third year', check: false),
+        Year(s: 'Fourth Year', check: false),
+      ];
     }
     // _selectDate(context);
   }
@@ -112,7 +116,9 @@ class _YearPageState extends State<YearPage> {
                   ),
                 ),
               ),
-              const SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
@@ -123,8 +129,8 @@ class _YearPageState extends State<YearPage> {
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.greenAccent,),
-
+                    primary: Colors.greenAccent,
+                  ),
                 ),
               ),
             ],
@@ -139,17 +145,22 @@ class _YearPageState extends State<YearPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return AddNotice(years: [
-                      yearsList[0].check,
-                      yearsList[1].check,
-                      yearsList[2].check,
-                      yearsList[3].check
-                    ], notice: widget.notice,endDate: selectedDate,);
+                    return AddNotice(
+                      years: [
+                        yearsList[0].check,
+                        yearsList[1].check,
+                        yearsList[2].check,
+                        yearsList[3].check
+                      ],
+                      notice: widget.notice,
+                      endDate: selectedDate,
+                    );
                   }),
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.greenAccent,),
+                primary: Colors.greenAccent,
+              ),
               child: const Text(
                 'Update',
                 style: TextStyle(

@@ -1,8 +1,9 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Screens/noticess/years_admin.dart';
+import 'package:wce_notice_board/utils/constants.dart';
+
 import '../../constants.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -22,8 +23,13 @@ class _NoticeViewerState extends State<NoticeViewer> {
   @override
   void initState() {
     super.initState();
-    firebaseUser = _firebaseAuth.currentUser.uid;
+    if (_firebaseAuth.currentUser == null) {
+      firebaseUser = null;
+    } else {
+      firebaseUser = _firebaseAuth.currentUser.uid;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +51,9 @@ class _NoticeViewerState extends State<NoticeViewer> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return YearPage(notice: widget.notice,);
+                            return YearPage(
+                              notice: widget.notice,
+                            );
                           },
                         ),
                       );
@@ -62,44 +70,74 @@ class _NoticeViewerState extends State<NoticeViewer> {
               ]
             : null,
       ),
-      body: InteractiveViewer(
-        panEnabled: false,
-        boundaryMargin: const EdgeInsets.all(80),
-        minScale: 0.5,
-        maxScale: 4,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(
-                bottom: 20,
-              ),
-              child: Center(
-                child: Text(
-                  widget.notice.noticeTitle,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-            Container(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: InteractiveViewer(
+            panEnabled: false,
+            boundaryMargin: const EdgeInsets.all(80),
+            minScale: 1,
+            maxScale: 4,
+            child: Container(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
-                widget.notice.noticeContent,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  widget.notice.NoticeRegard,
-                  style: const TextStyle(
-                    color: Colors.black,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      bottom: 15,
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.notice.noticeTitle,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 5,
+                        ),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            '${widget.notice.noticeCreated.day}/${widget.notice.noticeCreated.month}/${widget.notice.noticeCreated.year}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 10.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      widget.notice.noticeContent,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        'Regards \n${widget.notice.noticeRegard}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

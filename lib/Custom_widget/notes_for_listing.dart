@@ -2,22 +2,22 @@
 // Class is created for the information related to the notice will entered or viewed by user
 class NoticeForListing {
   String noticeTitle;     //Title of notice
-  String noticeContent;   //The content to be entered
-  DateTime NoticeCreated; //Date of Creation
-  DateTime NoticeUpdate;  //Date of last modification
-  DateTime NoticeEndDate; //Notice will be displayed till this date
-  String NoticeRegard;    //The Faculty name who has entered notice
-  String NoticeId;        //Notice id generated in database
+  String noticeContent;    //The content to be entered
+  DateTime noticeCreated; //Date of Creation
+  DateTime noticeUpdate;  //Date of last modification
+  DateTime noticeEndDate; //Notice will be displayed till this date
+  String noticeRegard;    //The Faculty name who has entered notice
+  String noticeId;        //Notice id generated in database
   String FacultyId;       //Faculty id generated in database
-  bool fy,sy,ty,btech;    //the notes will be shown selex=cte
+  bool fy, sy, ty, btech; //the notes will be shown selecte
   NoticeForListing({
-    this.NoticeEndDate,
-    this.NoticeId,
+    this.noticeEndDate,
+    this.noticeId,
     this.noticeTitle,
     this.noticeContent,
-    this.NoticeCreated,
-    this.NoticeUpdate,
-    this.NoticeRegard,
+    this.noticeCreated,
+    this.noticeUpdate,
+    this.noticeRegard,
     this.FacultyId,
     this.ty,
     this.fy,

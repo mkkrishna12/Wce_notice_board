@@ -13,12 +13,12 @@ class CustomInputField extends StatefulWidget {
 }
 
 class _CustomInputFieldState extends State<CustomInputField> {
-  bool secure = false;        // we can use it to make our text obsecure i.e user cannot see it after entering
+  bool secure = false;        // we can use it to make our text obscure i.e user cannot see it after entering
 
   @override
   Widget build(BuildContext context) {
     if (widget.hintText == 'Enter Password') {
-      secure = true;                  // we will change the true to make text obsecure
+      secure = true;                  // we will change the true to make text obscure
     }
     return SizedBox(
       width: 250,
@@ -31,7 +31,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: widget.fieldIcon,
+                child: widget.fieldIcon,      //here we will use the icon that we have sent
               ),
               Expanded(
                 child: Container(
@@ -39,7 +39,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(10.0),
-                        bottomRight: Radius.circular(10.0)),
+                        bottomRight: Radius.circular(10.0),),
                   ),
                   width: 200,
                   height: 60,
