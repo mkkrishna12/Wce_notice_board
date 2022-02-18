@@ -9,7 +9,7 @@ import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notices/years_admin.dart';
 
 import '../../main.dart';
-//TODO make same notice collection file for both admin and students
+//TODO make same notice collection file for both admin and students - done
 
 class NoticeList extends StatefulWidget {
   final String userType;
@@ -138,7 +138,7 @@ class _NoticeListState extends State<NoticeList> {
           onRefresh: getVal,
           child: ListView.builder(
               itemBuilder: (_, index) {
-                //TODO add functionality to delete notice to admin
+                //TODO add functionality to delete notice to admin - done
                 return (notes.length != 0)
                     ? Dismissible(
                         key: ValueKey(notes[index].noticeTitle),

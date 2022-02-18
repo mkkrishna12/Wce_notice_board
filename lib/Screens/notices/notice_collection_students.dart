@@ -97,7 +97,6 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -145,7 +144,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                             }),
                           );
                         },
-                        //TODO change color when user see notification
+                        //  change color when user see notification done
                         trailing: CircleAvatar(
                           backgroundColor: (notes[index].isSeen[prn] != null &&
                                   notes[index].isSeen[prn] == true)
