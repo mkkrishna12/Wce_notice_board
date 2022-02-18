@@ -15,9 +15,6 @@ const storage = FlutterSecureStorage();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // runApp(const MaterialApp(
-  //   home: LoginPage(),
-  // ));
   runApp(const MyApp());
 }
 

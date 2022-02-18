@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +9,10 @@ import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
-
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
-//TODO Krushna = add snack bar for all show dialog except delete
-import '../../main.dart';
+import '../../main.dart';         // To store prn and token in local we have used storage is flutter secure storage
 // this widget for Login of the user and admin
 
 class LoginPage extends StatefulWidget {
@@ -29,25 +26,41 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController(); //To get the email or the prn entered by the user
   final _passwordController =
       TextEditingController(); // to get the password by the user
-
+  SnackBar snackBar ;         // Snack to show the error or any message
   bool spinner = false; //Spinner will be handle by using this variable
   String selectedUser =
-      'select user'; //This variable is used for the selection of user
+      'Student'; //This variable is used for the selection of user
   bool admin = false; //To check the admin or not
   List<String> userType = [
-    'select user',
-    'Admin',
+    // 'select user',
     'Student',
+    'Admin',
   ];
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   bool obSecureController = true;
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
-
+  //To update the content in snackbar we used this function
+  void setContent(String content)
+  {
+    snackBar =  SnackBar(
+      elevation: 6.0,
+      backgroundColor: const Color(0xFF97170E,),
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        content,
+        style:const  TextStyle(color: Colors.white,),
+      ),
+    );
+    return ;
+  }
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      progressIndicator: const CircularProgressIndicator(color: Colors.blue,),
+      // color: Colors.blue,
       inAsyncCall: spinner,
       child: Scaffold(
         body: SafeArea(
@@ -191,33 +204,18 @@ class _LoginPageState extends State<LoginPage> {
                         if (selectedUser == 'select user') {
                           setState(() {
                             spinner = false;
+                            setContent('Select Valid User');
                           });
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => const PopUp(
-                              toNavigate: LoginPage(),
-                              message: 'Select valid user',
-                              icon: Icons.cancel,
-                              state: false,
-                              color: Colors.red,
-                            ),
-                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                         } else {
                           if (selectedUser == 'Admin') {
-                            if (email == null || password == null) {
+                            if (email.isEmpty || password.isEmpty) {
                               setState(() {
                                 spinner = false;
+                                setContent('All Fields are required');
                               });
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => const PopUp(
-                                  toNavigate: LoginPage(),
-                                  message: 'All Fields are Required',
-                                  icon: Icons.cancel,
-                                  state: false,
-                                  color: Colors.red,
-                                ),
-                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             } else {
                               _firebaseAuth
                                   .signInWithEmailAndPassword(
@@ -268,19 +266,9 @@ class _LoginPageState extends State<LoginPage> {
                                   if (err.code == 'wrong-password') {
                                     setState(() {
                                       spinner = false;
+                                      setContent('The Password provided is Wrong');
                                     });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                        toNavigate: LoginPage(),
-                                        message:
-                                            'The password provided is Wrong.',
-                                        icon: Icons.cancel,
-                                        state: false,
-                                        color: Colors.red,
-                                      ),
-                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   }
 
                                   // email already in use
@@ -288,19 +276,9 @@ class _LoginPageState extends State<LoginPage> {
                                   else if (err.code == 'user-not-found') {
                                     setState(() {
                                       spinner = false;
+                                      setContent('User Not Found');
                                     });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                        toNavigate: LoginPage(),
-                                        message:
-                                            'User not found .Please Register',
-                                        icon: Icons.cancel,
-                                        state: true,
-                                        color: Colors.red,
-                                      ),
-                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   }
 
                                   // **invalid-email**:
@@ -308,18 +286,10 @@ class _LoginPageState extends State<LoginPage> {
                                   else if (err.code == 'invalid-email') {
                                     setState(() {
                                       spinner = false;
+                                      setContent('Invalid Email');
                                     });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const PopUp(
-                                        toNavigate: LoginPage(),
-                                        message: 'invalid email Try Again',
-                                        icon: Icons.cancel,
-                                        state: false,
-                                        color: Colors.red,
-                                      ),
-                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                                   }
                                 },
                               );
@@ -336,19 +306,12 @@ class _LoginPageState extends State<LoginPage> {
                                 }).then((var response) {
                               dynamic userToken = jsonDecode(response.body);
                               if (userToken['error'] != null) {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => PopUp(
-                                    toNavigate: null,
-                                    message: userToken['error'],
-                                    icon: Icons.cancel,
-                                    state: false,
-                                    color: Colors.red,
-                                  ),
-                                );
                                 setState(() {
                                   spinner = false;
+                                  setContent(userToken['error']);
                                 });
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                               } else {
                                 http.post(
                                     Uri.parse(
@@ -356,7 +319,6 @@ class _LoginPageState extends State<LoginPage> {
                                     body: {
                                       'wstoken': userToken['token']
                                     }).then((var value) {
-                                  // print(json.decode(value.body));
                                   storage.write(
                                       key: "username",
                                       value:
