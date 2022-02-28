@@ -28,7 +28,7 @@ class _AddNoticeState extends State<AddNotice> {
   String notice; //Notice Content
   String from; //Notice Regard
   DateTime dateNow = DateTime.now(); //end date of the notice
-  SnackBar snackBar ;
+  SnackBar snackBar;
   @override
   void initState() {
     super.initState();
@@ -40,24 +40,27 @@ class _AddNoticeState extends State<AddNotice> {
   }
 
   bool spinner = false;
-  void setContent(String content)
-  {
-    snackBar =  SnackBar(
+  void setContent(String content) {
+    snackBar = SnackBar(
       elevation: 6.0,
-      backgroundColor: const Color(0xFF97170E,),
+      backgroundColor: const Color(
+        0xFF97170E,
+      ),
       behavior: SnackBarBehavior.floating,
       content: Text(
         content,
-        style:const  TextStyle(color: Colors.white,),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
-    return ;
+    return;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         title: Text(
           (widget.notice == null) ? 'Create Notice..' : 'Update Notice..',
         ),
@@ -165,16 +168,15 @@ class _AddNoticeState extends State<AddNotice> {
                         );
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
                       }).catchError((onError) {
                         if (!mounted) return;
                         setState(() {
                           spinner = false;
-                          setContent('Something went Wrong. Please try again...');
+                          setContent(
+                              'Something went Wrong. Please try again...');
                         });
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
                       });
                     } else {
                       //We will call this when we want to update the notice
@@ -183,45 +185,45 @@ class _AddNoticeState extends State<AddNotice> {
                           .collection("Notices")
                           .doc(widget.notice.noticeId)
                           .update({
-                            "FacultyId": firebaseUser.uid,
-                            "NoticeTitle": title,
-                            "Noticecontent": notice,
-                            "NoticeRegards": from,
-                            "NoticeCreated": (dateNow == null)
-                                ? FieldValue.serverTimestamp()
-                                : dateNow,
-                            "NoticeUpdated": FieldValue.serverTimestamp(),
-                            "NoticeEndDate": widget.endDate,
-                            "FirstYear": widget.years[0],
-                            "SecondYear": widget.years[1],
-                            "ThirdYear": widget.years[2],
-                            "LastYear": widget.years[3],
-                            "isSeen": isSeen,
-                            "isPersonalised": false,
-                            "isPersonalisedArray": [""]
-                          })
-                          .then((value)
-                      {spinner = false;
-                          setContent('Notice Updated');
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const NoticeList(isAdded: true),
-                        ),
-                            (route) => false,
-                      );
+                        "FacultyId": firebaseUser.uid,
+                        "NoticeTitle": title,
+                        "Noticecontent": notice,
+                        "NoticeRegards": from,
+                        "NoticeCreated": (dateNow == null)
+                            ? FieldValue.serverTimestamp()
+                            : dateNow,
+                        "NoticeUpdated": FieldValue.serverTimestamp(),
+                        "NoticeEndDate": widget.endDate,
+                        "FirstYear": widget.years[0],
+                        "SecondYear": widget.years[1],
+                        "ThirdYear": widget.years[2],
+                        "LastYear": widget.years[3],
+                        "isSeen": isSeen,
+                        "isPersonalised": false,
+                        "isPersonalisedArray": [""]
+                      }).then((value) {
+                        spinner = false;
+                        setContent('Notice Updated');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const NoticeList(isAdded: true),
+                          ),
+                          (route) => false,
+                        );
 
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);})
-                          .catchError((onError) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }).catchError((onError) {
                         if (!mounted) return;
                         setState(() {
                           spinner = false;
-                          setContent('Something went Wrong. Please try again...');
+                          setContent(
+                              'Something went Wrong. Please try again...');
                         });
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          });
+                      });
                     }
                   },
                 ),
