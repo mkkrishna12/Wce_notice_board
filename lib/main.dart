@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
+import 'Screens/notices/add_notice.dart';
+
 //TODO implement snack bar to all notification except delete
 //TODO Add Stream Builder in place of get all function
 //TODO Add Personalised Ui and to show wha has seen the message
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const SplashScreen(),
+      home: const Material(child: AddNotice(),),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -50,7 +52,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   startTimer() {
-    var _duration = const Duration(milliseconds: 3000);
+    var _duration = const Duration(milliseconds: 2000);
     return Timer(_duration, navigate);
   }
 
@@ -103,7 +105,11 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset("assets/images/logo.png"),
-              const Text('Welcome'),
+              const Text('Welcome',style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),),
             ],
           ),
         ),
