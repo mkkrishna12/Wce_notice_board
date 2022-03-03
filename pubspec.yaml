@@ -23,6 +23,10 @@ dependencies:
   html: ^0.15.0
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
+  file_picker: ^4.5.0
+  path: ^1.8.0
+  firebase_storage: ^10.2.9
+  flutter_document_picker: ^4.0.1
 
 dev_dependencies:
   flutter_test:

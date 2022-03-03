@@ -5,7 +5,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
-
+import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
 // widget  to add notice and update notice for admin
 
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -36,7 +38,7 @@ class _AddNoticeState extends State<AddNotice> {
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
     from = (widget.notice == null) ? null : widget.notice.noticeRegard;
     dateNow = (widget.notice == null) ? null : widget.notice.noticeCreated;
-    firebaseUser = _firebaseAuth.currentUser;
+    firebaseUser = _firebaseAuth.currentUser ;
   }
 
   bool spinner = false;
