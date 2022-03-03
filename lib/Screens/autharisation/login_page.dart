@@ -1,18 +1,18 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
+
 import './../../styles/app_colors.dart';
 import './../../widgets/custom_button.dart';
 import './../../widgets/custom_formfield.dart';
-import '../../main.dart';         // To store prn and token in local we have used storage is flutter secure storage
+import '../../main.dart'; // To store prn and token in local we have used storage is flutter secure storage
 // this widget for Login of the user and admin
 
 class LoginPage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController(); //To get the email or the prn entered by the user
   final _passwordController =
       TextEditingController(); // to get the password by the user
-  SnackBar snackBar ;         // Snack to show the error or any message
+  SnackBar snackBar; // Snack to show the error or any message
   bool spinner = false; //Spinner will be handle by using this variable
   String selectedUser =
       'Student'; //This variable is used for the selection of user
@@ -43,23 +43,31 @@ class _LoginPageState extends State<LoginPage> {
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
   //To update the content in snackbar we used this function
-  void setContent(String content)
-  {
-    snackBar =  SnackBar(
+  void setContent(content, bool isTrue) {
+    snackBar = SnackBar(
       elevation: 6.0,
-      backgroundColor: const Color(0xFF97170E,),
+      backgroundColor: isTrue
+          ? Colors.green
+          : const Color(
+              0xFF97170E,
+            ),
       behavior: SnackBarBehavior.floating,
       content: Text(
         content,
-        style:const  TextStyle(color: Colors.white,),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
-    return ;
+    return;
   }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
-      progressIndicator: const CircularProgressIndicator(color: Colors.blue,),
+      progressIndicator: const CircularProgressIndicator(
+        color: Colors.blue,
+      ),
       // color: Colors.blue,
       inAsyncCall: spinner,
       child: Scaffold(
@@ -204,18 +212,18 @@ class _LoginPageState extends State<LoginPage> {
                         if (selectedUser == 'select user') {
                           setState(() {
                             spinner = false;
-                            setContent('Select Valid User');
+                            setContent('Select Valid User', false);
                           });
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
                         } else {
                           if (selectedUser == 'Admin') {
                             if (email.isEmpty || password.isEmpty) {
                               setState(() {
                                 spinner = false;
-                                setContent('All Fields are required');
+                                setContent('All Fields are required', false);
                               });
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                             } else {
                               _firebaseAuth
                                   .signInWithEmailAndPassword(
@@ -232,7 +240,12 @@ class _LoginPageState extends State<LoginPage> {
                                     //to check the user admin or not
                                     admin = element['Role'] == 'admin';
                                   });
+                                  // setState(() {
+                                  //   spinner = false;
+                                  //
+                                  // });
                                   setState(() {
+                                    setContent("Successfully Logged in", true);
                                     spinner = false;
                                     //if user student then redirect to year otherwise notice list to see or edit or add
                                     Navigator.pushAndRemoveUntil(
@@ -246,29 +259,35 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       (route) => false,
                                     );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   });
+
                                   //show successful login
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => PopUp(
-                                      toNavigate: (admin == true)
-                                          ? const NoticeList()
-                                          : const YearPageStudents(),
-                                      message: 'Successfully Logged in',
-                                      icon: FontAwesomeIcons.checkCircle,
-                                      state: true,
-                                      color: Colors.green,
-                                    ),
-                                  );
+                                  // showDialog(
+                                  //   context: context,
+                                  //   builder: (BuildContext context) => PopUp(
+                                  //     toNavigate: (admin == true)
+                                  //         ? const NoticeList()
+                                  //         : const YearPageStudents(),
+                                  //     message: 'Successfully Logged in',
+                                  //     icon: FontAwesomeIcons.checkCircle,
+                                  //     state: true,
+                                  //     color: Colors.green,
+                                  //   ),
+                                  // );
                                 });
                               }).catchError(
                                 (err) {
                                   if (err.code == 'wrong-password') {
                                     setState(() {
                                       spinner = false;
-                                      setContent('The Password provided is Wrong');
+                                      setContent(
+                                          'The Password provided is Wrong',
+                                          false);
                                     });
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
 
                                   // email already in use
@@ -276,9 +295,10 @@ class _LoginPageState extends State<LoginPage> {
                                   else if (err.code == 'user-not-found') {
                                     setState(() {
                                       spinner = false;
-                                      setContent('User Not Found');
+                                      setContent('User Not Found', false);
                                     });
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
 
                                   // **invalid-email**:
@@ -286,10 +306,10 @@ class _LoginPageState extends State<LoginPage> {
                                   else if (err.code == 'invalid-email') {
                                     setState(() {
                                       spinner = false;
-                                      setContent('Invalid Email');
+                                      setContent('Invalid Email', false);
                                     });
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
                                 },
                               );
@@ -308,10 +328,10 @@ class _LoginPageState extends State<LoginPage> {
                               if (userToken['error'] != null) {
                                 setState(() {
                                   spinner = false;
-                                  setContent(userToken['error']);
+                                  setContent(userToken['error'], false);
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               } else {
                                 http.post(
                                     Uri.parse(
