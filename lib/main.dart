@@ -133,6 +133,7 @@ class _SplashScreenState extends State<SplashScreen> {
       });
       // ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
+
     startTimer();
   }
 

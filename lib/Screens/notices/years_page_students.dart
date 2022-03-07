@@ -31,7 +31,7 @@ class _YearPageStudentsState extends State<YearPageStudents> {
             }),
           );
         },
-        title: Text(_items[index]),
+        title: Center(child: Text(_items[index])),
       ),
     );
   }
@@ -39,7 +39,9 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color(0xFFA0F0F8),
       appBar: AppBar(
+        backgroundColor: Colors.brown,
         title: const Text(
           'Select Years...',
           style: TextStyle(
