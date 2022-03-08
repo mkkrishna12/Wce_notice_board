@@ -19,19 +19,28 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   }
 
   Widget _getListItemTile(BuildContext context, int index) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              //add route
-              return NoticeForStudents(selectedYear: _items[index]);
-            }),
-          );
-        },
-        title: Text(_items[index]),
+    return Card(
+      // shape: ShapeBorder.lerp(10, 0.0, 0.0),
+      margin: EdgeInsets.fromLTRB(5,2,5,2),
+      color: Color(0xFFE7FBBE),
+      elevation: 6,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10)
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                //add route
+                return NoticeForStudents(selectedYear: _items[index]);
+              }),
+            );
+          },
+          title: Center(child: Text(_items[index])),
+        ),
       ),
     );
   }
@@ -40,14 +49,17 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Select Years...',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
+        title: const Center(
+          child: Text(
+            'Select Years...',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
+      backgroundColor: Color(0xFFF2F5C8),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

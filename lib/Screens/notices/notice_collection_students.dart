@@ -103,6 +103,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFEF1E6),
       appBar: AppBar(
         backgroundColor: Colors.brown,
         title: const Text(
@@ -113,52 +114,51 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
           ),
         ),
       ),
-      body: Container(
-        color: Colors.black26,
-        child: RefreshIndicator(
-          onRefresh: () {
-            return getVal();
-          },
-          child: (notes.isNotEmpty)
-              ? ListView.builder(
-                  itemBuilder: (_, index) {
-                    return Card(
-                      elevation: 5.0,
-                      child: ListTile(
-                        title: Text(
-                          notes[index].noticeTitle,
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                        subtitle: Text(
-                            'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return NoticeViewer(
-                                notice: notes[index],
-                              );
-                            }),
-                          );
-                        },
-                        //  change color when user see notification done
-                        trailing: CircleAvatar(
-                          backgroundColor: (notes[index].isSeen[prn] != null &&
-                                  notes[index].isSeen[prn] == true)
-                              ? Colors.white
-                              : Colors.blue,
-                          radius: 5.0,
+      body: RefreshIndicator(
+        onRefresh: () {
+          return getVal();
+        },
+        child: (notes.isNotEmpty)
+            ? ListView.builder(
+                itemBuilder: (_, index) {
+                  return Card(
+                    // color: Color(0xFFFFF0F0),
+                    elevation: 5.0,
+                    child: ListTile(
+                      title: Text(
+                        notes[index].noticeTitle,
+                        style: const TextStyle(
+
+                          fontSize: 15.0,
+                          color: Colors.black,
                         ),
                       ),
-                    );
-                  },
-                  itemCount: notes.length,
-                )
-              : const Center(child: Text('No Notice Available')),
-        ),
+                      subtitle: Text(
+                          'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return NoticeViewer(
+                              notice: notes[index],
+                            );
+                          }),
+                        );
+                      },
+                      //  change color when user see notification done
+                      trailing: CircleAvatar(
+                        backgroundColor: (notes[index].isSeen[prn] != null &&
+                                notes[index].isSeen[prn] == true)
+                            ? Colors.white
+                            : Colors.blue,
+                        radius: 5.0,
+                      ),
+                    ),
+                  );
+                },
+                itemCount: notes.length,
+              )
+            : const Center(child: Text('No Notice Available')),
       ),
     );
   }

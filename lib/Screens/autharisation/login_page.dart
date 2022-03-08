@@ -9,9 +9,9 @@ import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
 
+import '../../Custom_widget/custom_button.dart';
+import '../../Custom_widget/custom_formfield.dart';
 import './../../styles/app_colors.dart';
-import './../../widgets/custom_button.dart';
-import './../../widgets/custom_formfield.dart';
 import '../../main.dart'; // To store prn and token in local we have used storage is flutter secure storage
 // this widget for Login of the user and admin
 

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
+import '../../Custom_widget/custom_button.dart';
+import '../../Custom_widget/custom_formfield.dart';
+import '../../Custom_widget/custom_header.dart';
+import '../../Custom_widget/custom_richtext.dart';
 import './../../styles/app_colors.dart';
-import './../../widgets/custom_button.dart';
-import './../../widgets/custom_formfield.dart';
-import './../../widgets/custom_header.dart';
-import './../../widgets/custom_richtext.dart';
 import 'login_page.dart';
 
 class RegistrationScreen extends StatefulWidget {

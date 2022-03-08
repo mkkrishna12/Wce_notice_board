@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 const kTitleTextStyle = TextStyle(
   fontSize: 25,
   fontWeight: FontWeight.bold,
-  color: Colors.black,
+  color: Colors.white,
 );
 class Year {
   String s;     //years

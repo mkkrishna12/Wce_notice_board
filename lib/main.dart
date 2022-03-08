@@ -7,12 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
-import 'Screens/notices/add_notice.dart';
-
-//TODO implement snack bar to all notification except delete
-//TODO Add Stream Builder in place of get all function
-//TODO Add Personalised Ui and to show wha has seen the message
-//TODO we will see more
 const storage = FlutterSecureStorage();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const Material(child: AddNotice(),),
+      home: const Material(child: SplashScreen(),),
       debugShowCheckedModeBanner: false,
     );
   }

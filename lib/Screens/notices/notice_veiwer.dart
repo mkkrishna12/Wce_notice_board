@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Screens/notices/years_admin.dart';
-// import 'package:wce_notice_board/utils/../constants.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 
 import '../../main.dart';
@@ -24,7 +23,6 @@ class _NoticeViewerState extends State<NoticeViewer> {
   dynamic firebaseUser;
   dynamic userRole;
   void getCall() async {
-    // print(await storage.read(key: "username"));
     var prn = await storage.read(key: "username");
     if (prn != null && widget.notice.isSeen != null) {
       final Map<String, dynamic> isSeen = widget.notice.isSeen;
@@ -58,8 +56,9 @@ class _NoticeViewerState extends State<NoticeViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFFF0F0),
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color(0xFF980F58),
         title: const Center(
           child: Text(
             'Notice..',
