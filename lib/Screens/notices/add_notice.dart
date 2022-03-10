@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,11 +7,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:path/path.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
-import 'package:flutter_document_picker/flutter_document_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 // widget  to add notice and update notice for admin
 
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -36,6 +34,19 @@ class _AddNoticeState extends State<AddNotice> {
   String from; //Notice Regard
   DateTime dateNow = DateTime.now(); //end date of the notice
   SnackBar snackBar;
+  bool spinner = false;
+  String ans = "No file selected";
+  dynamic file;
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
+
+    final path = result.files.single.path;
+    setState(() {
+      file = File(path);
+      ans = basename(path);
+    });
+  }
 
   @override
   void initState() {
@@ -47,9 +58,6 @@ class _AddNoticeState extends State<AddNotice> {
     firebaseUser = _firebaseAuth.currentUser;
   }
 
-  bool spinner = false;
-  String ans = "No file selected";
-  FilePickerResult path;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,19 +136,7 @@ class _AddNoticeState extends State<AddNotice> {
                 style: ElevatedButton.styleFrom(
                   primary: Colors.greenAccent,
                 ),
-                onPressed: () async {
-
-                  setState(() async{
-                    //
-                    path =  await FilePicker.platform.pickFiles();
-                    setState(() {
-                      ans = path.files.first.name.toString();
-                    });
-
-                    // ans = file.path.toString();
-                    //firebase_storage.UploadTask task = await uploadFile(file);
-                  });
-                },
+                onPressed: selectFile,
               ),
               const SizedBox(
                 height: 10.0,
@@ -161,14 +157,14 @@ class _AddNoticeState extends State<AddNotice> {
                       : const Text(
                           'Update Notice',
                         ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (!mounted) return;
                     setState(() {
                       spinner = true;
                     });
                     final Map<String, dynamic> isSeen = {};
                     if (widget.notice == null) {
-                      if (path == null) {
+                      if (file == null) {
                         _fireStore.collection("Notices").add({
                           "FacultyId": firebaseUser.uid,
                           "NoticeTitle": title,
@@ -217,63 +213,65 @@ class _AddNoticeState extends State<AddNotice> {
                           ));
                         });
                       } else {
-                        FirebaseStorage.instance
-                            .ref('uploads/${path.files.first.name}')
-                            .putData(path.files.first.bytes)
-                            .then((fileid) {
-                              setState(() {
-                                ans = fileid.toString();
-                              });
-                          // _fireStore.collection("Notices").add({
-                          //   "FacultyId": firebaseUser.uid,
-                          //   "NoticeTitle": title,
-                          //   "Noticecontent": notice,
-                          //   "NoticeRegards": from,
-                          //   "NoticeCreated": (dateNow == null)
-                          //       ? FieldValue.serverTimestamp()
-                          //       : dateNow,
-                          //   "NoticeUpdated": FieldValue.serverTimestamp(),
-                          //   "NoticeEndDate": widget.endDate,
-                          //   "FirstYear": widget.years[0],
-                          //   "SecondYear": widget.years[1],
-                          //   "ThirdYear": widget.years[2],
-                          //   "LastYear": widget.years[3],
-                          //   "isSeen": isSeen,
-                          //   "isPersonalised": false,
-                          //   "isPersonalisedArray": [""]
-                          // }).then((value) {
-                          //   spinner = false;
-                          //   Navigator.pushAndRemoveUntil(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (BuildContext context) =>
-                          //           const NoticeList(isAdded: true),
-                          //     ),
-                          //     (route) => false,
-                          //   );
-                          //
-                          //   ScaffoldMessenger.of(context)
-                          //       .showSnackBar(const SnackBar(
-                          //     content: Text(
-                          //       'Notice Added',
-                          //     ),
-                          //   ));
-                          // }).catchError((onError) {
-                          //   if (!mounted) return;
-                          //   setState(() {
-                          //     spinner = false;
-                          //   });
-                          //
-                          //   ScaffoldMessenger.of(context)
-                          //       .showSnackBar(const SnackBar(
-                          //     content: Text(
-                          //       'Something went Wrong. Please try again...',
-                          //     ),
-                          //   ));
+                        final destination = 'Notice_files/$ans';
+                        final ref = FirebaseStorage.instance.ref(destination);
+                        ref.putFile(file).then((fileid) async {
+                          var url = await fileid.ref.getDownloadURL();
+                          // setState(() {
+                          //   ans = url.toString();
                           // });
+                          _fireStore.collection("Notices").add({
+                            "FacultyId": firebaseUser.uid,
+                            "NoticeTitle": title,
+                            "Noticecontent": notice,
+                            "NoticeRegards": from,
+                            "NoticeCreated": (dateNow == null)
+                                ? FieldValue.serverTimestamp()
+                                : dateNow,
+                            "NoticeUpdated": FieldValue.serverTimestamp(),
+                            "NoticeEndDate": widget.endDate,
+                            "FirstYear": widget.years[0],
+                            "SecondYear": widget.years[1],
+                            "ThirdYear": widget.years[2],
+                            "LastYear": widget.years[3],
+                            "isSeen": isSeen,
+                            "isPersonalised": false,
+                            "isPersonalisedArray": [""],
+                            "file_url": url,
+                          }).then((value) {
+                            spinner = false;
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const NoticeList(isAdded: true),
+                              ),
+                              (route) => false,
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                'Notice Added',
+                              ),
+                            ));
+                          }).catchError((onError) {
+                            if (!mounted) return;
+                            setState(() {
+                              spinner = false;
+                            });
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                'Something went Wrong. Please try again...',
+                              ),
+                            ));
+                          });
                         }).catchError((onError) {
                           if (!mounted) return;
                           setState(() {
+                            ans = onError.toString();
                             spinner = false;
                           });
 
@@ -347,18 +345,18 @@ class _AddNoticeState extends State<AddNotice> {
       ),
     );
   }
-
-  Future<firebase_storage.UploadTask> uploadFile(File file) async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      Uint8List fileBytes = result.files.first.bytes;
-      String fileName = result.files.first.name;
-
-      // Upload file
-      await FirebaseStorage.instance
-          .ref('uploads/$fileName')
-          .putData(fileBytes);
-    }
-  }
+  //
+  // Future<firebase_storage.UploadTask> uploadFile(File file) async {
+  //   FilePickerResult result = await FilePicker.platform.pickFiles();
+  //
+  //   if (result != null) {
+  //     Uint8List fileBytes = result.files.first.bytes;
+  //     String fileName = result.files.first.name;
+  //
+  //     // Upload file
+  //     await FirebaseStorage.instance
+  //         .ref('uploads/$fileName')
+  //         .putData(fileBytes);
+  //   }
+  // }
 }

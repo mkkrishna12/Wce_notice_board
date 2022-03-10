@@ -19,28 +19,19 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   }
 
   Widget _getListItemTile(BuildContext context, int index) {
-    return Card(
-      // shape: ShapeBorder.lerp(10, 0.0, 0.0),
-      margin: EdgeInsets.fromLTRB(5,2,5,2),
-      color: Color(0xFFE7FBBE),
-      elevation: 6,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10)
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        child: ListTile(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                //add route
-                return NoticeForStudents(selectedYear: _items[index]);
-              }),
-            );
-          },
-          title: Center(child: Text(_items[index])),
-        ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              //add route
+              return NoticeForStudents(selectedYear: _items[index]);
+            }),
+          );
+        },
+        title: Center(child: Text(_items[index])),
       ),
     );
   }
@@ -48,14 +39,14 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color(0xFFA0F0F8),
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Select Years...',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+        backgroundColor: Colors.brown,
+        title: const Text(
+          'Select Years...',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +25,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const Material(child: SplashScreen(),),
+      home: const Material(
+        child: SplashScreen(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -36,6 +39,12 @@ class MyApp extends StatelessWidget {
 //   2]latest
 //
 //  */
+
+extension ParseToString on ConnectivityResult {
+  String toValue() {
+    return toString().split('.').last;
+  }
+}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -50,12 +59,35 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(_duration, navigate);
   }
 
+  SnackBar snackBar; // Snack to show the error or any message
+  void setContent(content, bool isTrue) {
+    snackBar = SnackBar(
+      elevation: 6.0,
+      backgroundColor: isTrue
+          ? Colors.green
+          : const Color(
+              0xFF97170E,
+            ),
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        content,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+    return;
+  }
+
   void navigate() {
     Navigator.of(context).push(PageRouteBuilder(
         transitionDuration: const Duration(seconds: 3),
         pageBuilder: (_, __, ___) => const LoginPage()));
   }
 
+  ConnectivityResult _connectivityResult;
+  StreamSubscription _connectivitySubscription;
+  bool _isConnectionSuccessful;
   @override
   void initState() {
     // TODO: implement initState and also add for moodle user.
@@ -83,7 +115,71 @@ class _SplashScreenState extends State<SplashScreen> {
     // } else {
     //   startTimer();
     // }
+
+    _checkConnectivityState();
+    _connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      // print('Current connectivity status: $result');
+      await _checkConnectivityState();
+      setState(() {
+        // setContent('Current connectivity status: $result', true);
+        _connectivityResult = result;
+        _isConnectionSuccessful = true;
+      });
+      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+
     startTimer();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+
+    _connectivitySubscription.cancel();
+  }
+
+  Future<void> _checkConnectivityState() async {
+    final ConnectivityResult result = await Connectivity().checkConnectivity();
+
+    if (result == ConnectivityResult.wifi && _isConnectionSuccessful) {
+      setState(() {
+        setContent('Connected to a Wi-Fi network', true);
+      });
+    } else if (result == ConnectivityResult.mobile && _isConnectionSuccessful) {
+      setState(() {
+        setContent('Connected to a mobile network', true);
+      });
+    } else {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setContent(
+              'Not connected to any network , Please Connect and Try Again',
+              false);
+        });
+      }
+    }
+
+    setState(() {
+      _connectivityResult = result;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('https://www.google.com/');
+
+      setState(() {
+        _isConnectionSuccessful = response.isNotEmpty;
+      });
+    } on SocketException catch (e) {
+      print(e);
+      setState(() {
+        _isConnectionSuccessful = false;
+      });
+    }
   }
 
   @override
@@ -99,11 +195,14 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset("assets/images/logo.png"),
-              const Text('Welcome',style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-              ),),
+              const Text(
+                'Welcome',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
             ],
           ),
         ),

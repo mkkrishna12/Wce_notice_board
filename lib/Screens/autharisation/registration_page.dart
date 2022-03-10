@@ -12,7 +12,6 @@ import './../../styles/app_colors.dart';
 import 'login_page.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key key}) : super(key: key);
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -179,7 +178,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               });
                               showDialog(
                                 context: context,
-                                builder: (BuildContext context) => const PopUp(
+                                builder: (BuildContext context) =>  PopUp(
                                   toNavigate: RegistrationScreen(),
                                   message:
                                       'Registeration unsuccessful contact to admin',
@@ -198,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      const PopUp(
+                                       PopUp(
                                     toNavigate: RegistrationScreen(),
                                     message:
                                         'The password provided is too weak.',
@@ -246,7 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      const PopUp(
+                                       PopUp(
                                     toNavigate: RegistrationScreen(),
                                     message: 'invalid-email Try Again',
                                     icon: Icons.cancel,
