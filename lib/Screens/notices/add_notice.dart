@@ -55,7 +55,7 @@ class _AddNoticeState extends State<AddNotice> {
     super.initState();
     title = (widget.notice == null) ? null : widget.notice.noticeTitle;
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
-    from = (widget.notice == null) ? null : widget.notice.noticeRegard;
+    from = _firebaseAuth.currentUser.email.split('@')[0];
     dateNow = (widget.notice == null) ? null : widget.notice.noticeCreated;
     firebaseUser = _firebaseAuth.currentUser;
   }
