@@ -9,15 +9,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
+import 'Screens/notices/notice_collection.dart';
+import 'Screens/notices/years_page_students.dart';
+
+bool isLogged = false;
+bool isAdmin = false;
 const storage = FlutterSecureStorage();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  if (_firebaseAuth.currentUser != null) {
+    await _fireStore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((element) {
+      isLogged = true;
+      isAdmin = true;
+    });
+  } else {
+    var username = await storage.read(key: "username");
+    var token = await storage.read(key: "token");
+    // print(username);
+    if (username != null && token != null) {
+      isLogged = true;
+    } else {
+      isLogged = false;
+    }
+  }
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,10 +59,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const Material(
-        child: SplashScreen(),
+      home: Material(
+        child: (isLogged == true)
+            ? (isAdmin == true
+                ? const NoticeList(
+                    isAdded: false,
+                  )
+                : const YearPageStudents())
+            : const SplashScreen(),
       ),
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
     );
   }
 }
@@ -92,29 +132,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState and also add for moodle user.
     super.initState();
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-    final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    // if (_firebaseAuth.currentUser != null) {
-    //   _fireStore
-    //       .collection('users')
-    //       .doc(_firebaseAuth.currentUser.uid)
-    //       .get()
-    //       .then((element) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (BuildContext context) => (element['Role'] == 'admin')
-    //             ? const NoticeList(
-    //                 isAdded: false,
-    //               )
-    //             : const YearPageStudents(),
-    //       ),
-    //       (route) => false,
-    //     );
-    //   });
-    // } else {
-    //   startTimer();
-    // }
+    startTimer();
 
     _checkConnectivityState();
     _connectivitySubscription = Connectivity()

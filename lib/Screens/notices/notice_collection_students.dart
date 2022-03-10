@@ -4,6 +4,7 @@ import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 
+import '../../Custom_widget/bottom_navigation_bar.dart';
 import '../../main.dart';
 
 class NoticeForStudents extends StatefulWidget {
@@ -114,6 +115,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavigationWidget(),
       body: RefreshIndicator(
         onRefresh: () {
           return getVal();
@@ -128,7 +130,6 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                       title: Text(
                         notes[index].noticeTitle,
                         style: const TextStyle(
-
                           fontSize: 15.0,
                           color: Colors.black,
                         ),

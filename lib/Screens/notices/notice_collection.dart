@@ -8,6 +8,7 @@ import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notices/years_admin.dart';
 
+import '../../Custom_widget/bottom_navigation_bar.dart';
 import '../../main.dart';
 //TODO make same notice collection file for both admin and students - done
 
@@ -134,6 +135,7 @@ class _NoticeListState extends State<NoticeList> {
                 ),
               )
             : null,
+        bottomNavigationBar: const BottomNavigationWidget(),
         body: RefreshIndicator(
           onRefresh: getVal,
           child: ListView.builder(
