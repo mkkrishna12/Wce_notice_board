@@ -34,6 +34,7 @@ class _AddNoticeState extends State<AddNotice> {
   String title; //Title of the notice
   String notice; //Notice Content
   String from; //Notice Regard
+  dynamic url;
   DateTime dateNow = DateTime.now(); //end date of the notice
   SnackBar snackBar;
   bool spinner = false;
@@ -57,6 +58,7 @@ class _AddNoticeState extends State<AddNotice> {
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
     from = _firebaseAuth.currentUser.email.split('@')[0];
     dateNow = (widget.notice == null) ? null : widget.notice.noticeCreated;
+    url = (widget.notice.file_url == null) ? null : widget.notice.file_url;
     firebaseUser = _firebaseAuth.currentUser;
   }
 
@@ -184,7 +186,8 @@ class _AddNoticeState extends State<AddNotice> {
                           "LastYear": widget.years[3],
                           "isSeen": isSeen,
                           "isPersonalised": false,
-                          "isPersonalisedArray": [""]
+                          "isPersonalisedArray": [""],
+                          "file_url": null,
                         }).then((value) {
                           spinner = false;
                           Navigator.pushAndRemoveUntil(
@@ -219,7 +222,7 @@ class _AddNoticeState extends State<AddNotice> {
                         final destination = 'Notice_files/$ans';
                         final ref = FirebaseStorage.instance.ref(destination);
                         ref.putFile(file).then((fileid) async {
-                          var url = await fileid.ref.getDownloadURL();
+                          url = await fileid.ref.getDownloadURL();
                           // setState(() {
                           //   ans = url.toString();
                           // });
@@ -288,7 +291,12 @@ class _AddNoticeState extends State<AddNotice> {
                       }
                     } else {
                       //We will call this when we want to update the notice
-
+                      if (file != null) {
+                        final destination = 'Notice_files/$ans';
+                        final ref = FirebaseStorage.instance.ref(destination);
+                        await ref.putFile(file);
+                        url = await ref.getDownloadURL();
+                      }
                       _fireStore
                           .collection("Notices")
                           .doc(widget.notice.noticeId)
@@ -308,7 +316,8 @@ class _AddNoticeState extends State<AddNotice> {
                         "LastYear": widget.years[3],
                         "isSeen": isSeen,
                         "isPersonalised": false,
-                        "isPersonalisedArray": [""]
+                        "isPersonalisedArray": [""],
+                        "file_url": url,
                       }).then((value) {
                         spinner = false;
                         Navigator.pushAndRemoveUntil(

@@ -6,6 +6,7 @@ import 'package:wce_notice_board/Screens/notices/years_admin.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 
 import '../../Custom_widget/bottom_navigation_bar.dart';
+import '../../Custom_widget/pdf_preview.dart';
 import '../../main.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -160,6 +161,10 @@ class _NoticeViewerState extends State<NoticeViewer> {
                       ),
                     ),
                   ),
+                  (widget.notice.file_url != null)
+                      ? FileDownload(widget.notice.file_url)
+                      : Container()
+                  // FileDownload(),
                 ],
               ),
             ),

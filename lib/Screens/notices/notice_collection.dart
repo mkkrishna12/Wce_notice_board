@@ -73,6 +73,7 @@ class _NoticeListState extends State<NoticeList> {
               isSeen: element['isSeen'],
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
+              file_url: element.get('file_url'),
             );
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
               notes.add(mk);

@@ -13,20 +13,23 @@ class NoticeForListing {
   Map<String, dynamic> isSeen;
   bool isPersonalised;
   var isPersonalisedArray = [];
-  NoticeForListing(
-      {this.noticeEndDate,
-      this.noticeId,
-      this.noticeTitle,
-      this.noticeContent,
-      this.noticeCreated,
-      this.noticeUpdate,
-      this.noticeRegard,
-      this.FacultyId,
-      this.ty,
-      this.fy,
-      this.sy,
-      this.btech,
-      this.isPersonalised,
-      this.isPersonalisedArray,
-      this.isSeen});
+  String file_url;
+  NoticeForListing({
+    this.noticeEndDate,
+    this.noticeId,
+    this.noticeTitle,
+    this.noticeContent,
+    this.noticeCreated,
+    this.noticeUpdate,
+    this.noticeRegard,
+    this.FacultyId,
+    this.ty,
+    this.fy,
+    this.sy,
+    this.btech,
+    this.isPersonalised,
+    this.isPersonalisedArray,
+    this.isSeen,
+    this.file_url,
+  });
 }

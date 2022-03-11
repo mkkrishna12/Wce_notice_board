@@ -49,6 +49,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
               isSeen: element['isSeen'],
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
+              file_url: element['file_url'],
             );
             if (widget.selectedYear == 'First Year') {
               if (element['FirstYear'] == true) {
