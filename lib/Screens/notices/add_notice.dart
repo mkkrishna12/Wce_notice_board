@@ -58,7 +58,7 @@ class _AddNoticeState extends State<AddNotice> {
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
     from = _firebaseAuth.currentUser.email.split('@')[0];
     dateNow = (widget.notice == null) ? null : widget.notice.noticeCreated;
-    url = (widget.notice.file_url == null) ? null : widget.notice.file_url;
+    url = (widget.notice == null) ? null : widget.notice.file_url;
     firebaseUser = _firebaseAuth.currentUser;
   }
 

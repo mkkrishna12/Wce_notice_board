@@ -20,9 +20,19 @@ class _YearPageStudentsState extends State<YearPageStudents> {
 
   Widget _getListItemTile(BuildContext context, int index) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        onTap: () {
+      margin: const EdgeInsets.fromLTRB(30, 8, 30, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.teal,
+          onPrimary: Colors.white,
+          shadowColor: Colors.red,
+          elevation: 6,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            // side: BorderSide(color: Colors.red),
+          ),
+        ),
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
@@ -31,7 +41,11 @@ class _YearPageStudentsState extends State<YearPageStudents> {
             }),
           );
         },
-        title: Center(child: Text(_items[index])),
+        child: Center(
+          child: Text(
+            _items[index],
+          ),
+        ),
       ),
     );
   }
@@ -50,9 +64,10 @@ class _YearPageStudentsState extends State<YearPageStudents> {
           ),
         ),
       ),
-      backgroundColor: Color(0xFFF2F5C8),
+      backgroundColor: const Color(0xFFF2F5C8),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.,
         children: [
           ListView.builder(
             scrollDirection: Axis.vertical,

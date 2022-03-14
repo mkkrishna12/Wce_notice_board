@@ -58,7 +58,7 @@ class _NoticeViewerState extends State<NoticeViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF0F0),
+      backgroundColor: const Color(0xFFF5DEB3),
       appBar: AppBar(
         backgroundColor: const Color(0xFF980F58),
         title: const Center(
@@ -118,7 +118,7 @@ class _NoticeViewerState extends State<NoticeViewer> {
                         widget.notice.noticeTitle,
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 25,
+                          fontSize: 28,
                         ),
                       ),
                     ),
@@ -136,7 +136,7 @@ class _NoticeViewerState extends State<NoticeViewer> {
                             '${widget.notice.noticeCreated.day}/${widget.notice.noticeCreated.month}/${widget.notice.noticeCreated.year}',
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 10.0,
+                              fontSize: 13.0,
                             ),
                           ),
                         ),
@@ -147,6 +147,10 @@ class _NoticeViewerState extends State<NoticeViewer> {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       widget.notice.noticeContent,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
                   Container(

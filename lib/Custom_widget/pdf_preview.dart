@@ -24,7 +24,7 @@ class _FileDownloadState extends State<FileDownload> {
     var matches = regExp.allMatches(url);
 
     var match = matches.elementAt(0);
-    print("${Uri.decodeFull(match.group(2))}");
+    // print(Uri.decodeFull(match.group(2)));
     return Uri.decodeFull(match.group(2));
   }
 
@@ -34,7 +34,7 @@ class _FileDownloadState extends State<FileDownload> {
       margin: const EdgeInsets.only(top: 50),
       child: Column(
         children: [
-          Text("File URL: ${widget.fileUrl}"),
+          // Text("File URL: ${widget.fileUrl}"),
           // const Divider(),
           ElevatedButton(
             onPressed: () async {
@@ -81,10 +81,12 @@ class _FileDownloadState extends State<FileDownload> {
                   }
                 }
               } else {
-                print("No permission to read and write.");
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('No permission to read and write.'),
+                ));
               }
             },
-            child: const Text("Download File"),
+            child: const Text("Download Notice"),
           )
         ],
       ),
