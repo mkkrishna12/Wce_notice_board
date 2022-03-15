@@ -107,7 +107,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
     return Scaffold(
       backgroundColor: Color(0xFFFEF1E6),
       appBar: AppBar(
-        backgroundColor: Colors.brown,
+        backgroundColor: const Color(0xFF980F58),
         title: const Text(
           'Wce Notice Board',
           style: TextStyle(
@@ -129,7 +129,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                     elevation: 5.0,
                     child: ListTile(
                       title: Text(
-                        notes[index].noticeTitle,
+                        notes[index].noticeTitle.toString().toCapitalized(),
                         style: const TextStyle(
                           fontSize: 15.0,
                           color: Colors.black,

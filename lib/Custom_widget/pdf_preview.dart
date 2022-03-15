@@ -6,17 +6,36 @@ import 'package:permission_handler/permission_handler.dart';
 // void main() {
 //   runApp(const MaterialApp(home: FileDownload()));
 // }
+dynamic value = -1.0;
 
 class FileDownload extends StatefulWidget {
   FileDownload(this.fileUrl, {Key key}) : super(key: key);
   String fileUrl;
   @override
   State<FileDownload> createState() => _FileDownloadState();
+
+  static progressIndicator(value1) {
+    return (value1 == -1.0)
+        ? PreferredSize(
+            preferredSize: const Size.fromHeight(0),
+            child: Container(),
+          )
+        : PreferredSize(
+            preferredSize: const Size.fromHeight(10.0),
+            child: LinearProgressIndicator(
+              backgroundColor: Colors.grey,
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+              minHeight: 5,
+              value: value1,
+            ),
+          );
+  }
 }
 
 class _FileDownloadState extends State<FileDownload> {
-  // String fileurl;
   //you can save other file formats too.
+
   SnackBar snackBar;
   String getFileName(String url) {
     RegExp regExp = RegExp(r'.+(\/|%2F)(.+)\?.+');
@@ -37,6 +56,16 @@ class _FileDownloadState extends State<FileDownload> {
           // Text("File URL: ${widget.fileUrl}"),
           // const Divider(),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFFFF5F57),
+              onPrimary: Color(0xFFFF8470),
+              shadowColor: Colors.red,
+              elevation: 6,
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(18.0),
+              //   // side: BorderSide(color: Colors.red),
+              // ),
+            ),
             onPressed: () async {
               Map<Permission, PermissionStatus> statuses = await [
                 Permission.storage,
@@ -60,10 +89,9 @@ class _FileDownloadState extends State<FileDownload> {
                     await Dio().download(widget.fileUrl, savePath,
                         onReceiveProgress: (received, total) {
                       if (total != -1) {
-                        // print(
-                        //     (received / total * 100).toStringAsFixed(0) + "%");
-
-                        //you can build progressbar feature too
+                        // setState(() {
+                        //   NoticeViewer.pValue = total / 100;
+                        // });
                       }
                     });
                     // print("File is saved to download folder");
@@ -86,8 +114,11 @@ class _FileDownloadState extends State<FileDownload> {
                 ));
               }
             },
-            child: const Text("Download Notice"),
-          )
+            child: const Text(
+              "Download Notice",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
 import 'package:wce_notice_board/Screens/notices/years_admin.dart';
@@ -12,9 +13,18 @@ import '../../main.dart';
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
 class NoticeViewer extends StatefulWidget {
   final NoticeForListing notice;
-
+  static double pValue = -1.0;
   const NoticeViewer({Key key, this.notice}) : super(key: key);
 
   @override
@@ -41,6 +51,7 @@ class _NoticeViewerState extends State<NoticeViewer> {
     if (!mounted) return;
     super.initState();
     // print();
+    NoticeViewer.pValue = -1.0;
     if (_firebaseAuth.currentUser == null) {
       getCall();
       firebaseUser = null;
@@ -60,10 +71,11 @@ class _NoticeViewerState extends State<NoticeViewer> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5DEB3),
       appBar: AppBar(
+        bottom: FileDownload.progressIndicator(NoticeViewer.pValue),
         backgroundColor: const Color(0xFF980F58),
         title: const Center(
           child: Text(
-            'Notice..',
+            'NOTICE        ',
             style: kTitleTextStyle,
           ),
         ),
@@ -104,72 +116,92 @@ class _NoticeViewerState extends State<NoticeViewer> {
             boundaryMargin: const EdgeInsets.all(80),
             minScale: 1,
             maxScale: 4,
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                      bottom: 15,
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.notice.noticeTitle,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 28,
-                        ),
+            child: Card(
+              margin: const EdgeInsets.all(7.0),
+              elevation: 6.0,
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                        bottom: 15,
                       ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                          bottom: 5,
-                        ),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            '${widget.notice.noticeCreated.day}/${widget.notice.noticeCreated.month}/${widget.notice.noticeCreated.year}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 13.0,
-                            ),
+                      child: Center(
+                        child: Text(
+                          widget.notice.noticeTitle.toString().toCapitalized(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      widget.notice.noticeContent,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                      ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                            bottom: 5,
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              '${widget.notice.noticeCreated.day}/${widget.notice.noticeCreated.month}/${widget.notice.noticeCreated.year}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Regards \n${widget.notice.noticeRegard}',
+                        widget.notice.noticeContent.toString(),
                         style: const TextStyle(
                           color: Colors.black,
+                          fontSize: 15.0,
                         ),
                       ),
                     ),
-                  ),
-                  (widget.notice.file_url != null)
-                      ? FileDownload(widget.notice.file_url)
-                      : Container()
-                  // FileDownload(),
-                ],
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: const Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          'Regards',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          widget.notice.noticeRegard.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    (widget.notice.file_url != null)
+                        ? FileDownload(widget.notice.file_url)
+                        : Container()
+                    // FileDownload(),
+                  ],
+                ),
               ),
             ),
           ),

@@ -114,9 +114,10 @@ class _NoticeListState extends State<NoticeList> {
       inAsyncCall: spinner,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xFF980F58),
           title: const Center(
             child: Text(
-              'List of Notes',
+              'List of Notices',
             ),
           ),
         ),
@@ -173,7 +174,7 @@ class _NoticeListState extends State<NoticeList> {
                           elevation: 5.0,
                           child: ListTile(
                             title: Text(
-                              notes[index].noticeTitle,
+                              notes[index].noticeTitle.toCapitalized(),
                               // notes[index].noticeContent,
                               style: const TextStyle(
                                 fontSize: 15.0,

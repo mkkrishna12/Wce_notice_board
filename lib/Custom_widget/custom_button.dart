@@ -18,7 +18,11 @@ class AuthButton extends StatelessWidget {
         height: 50.0,
         margin: const EdgeInsets.only(left: 20, right: 20),
         decoration: const BoxDecoration(
-            color: Colors.teal,
+            // color: Colors.teal,
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFF5F57), Color(0xFFFF8470)]),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Center(
           child: Text(

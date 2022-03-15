@@ -78,6 +78,7 @@ class _YearPageState extends State<YearPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF980F58),
         title: const Text(
           'Select Years...',
           style: TextStyle(

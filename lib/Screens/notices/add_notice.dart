@@ -69,7 +69,7 @@ class _AddNoticeState extends State<AddNotice> {
         title: Text(
           (widget.notice == null) ? 'Create Notice..' : 'Update Notice..',
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: const Color(0xFF980F58),
       ),
       bottomNavigationBar: const BottomNavigationWidget(),
       body: ModalProgressHUD(

@@ -1,8 +1,9 @@
+import 'package:blurry/blurry.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 import 'package:wce_notice_board/main.dart';
 
+import '../Screens/autharisation/login_page.dart';
 import '../Screens/notices/notice_collection.dart';
 import '../Screens/notices/years_page_students.dart';
 
@@ -14,6 +15,29 @@ class BottomNavigationWidget extends StatefulWidget {
 }
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
+  void logOut() {
+    Blurry.warning(
+        title: 'LogOut',
+        description: 'Are You Sure You Want to Logout.',
+        confirmButtonText: 'Logout',
+        onConfirmButtonPressed: () async {
+          final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+          if (_firebaseAuth.currentUser != null) {
+            await _firebaseAuth.signOut();
+            await storage.delete(key: 'admin');
+          } else {
+            await storage.delete(key: 'username');
+            await storage.delete(key: 'token');
+          }
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => const LoginPage()),
+            (route) => false,
+          );
+        }).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -71,20 +95,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               IconData(0xe3b3, fontFamily: 'MaterialIcons'),
             ),
             onPressed: () async {
-              final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-              if (_firebaseAuth.currentUser != null) {
-                await _firebaseAuth.signOut();
-                await storage.delete(key: 'admin');
-              } else {
-                await storage.delete(key: 'username');
-                await storage.delete(key: 'token');
-              }
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => const LoginPage()),
-                (route) => false,
-              );
+              logOut();
             },
           ),
         ],
