@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
@@ -24,28 +23,47 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         children: <Widget>[
           IconButton(
               icon: const Icon(Icons.home),
-              onPressed: () {
+              onPressed: () async {
                 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-                final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
                 if (_firebaseAuth.currentUser != null) {
-                  _fireStore
-                      .collection('users')
-                      .doc(_firebaseAuth.currentUser.uid)
-                      .get()
-                      .then((element) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
+                  var admin = await storage.read(key: 'admin');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => (admin == 'true')
+                          ? const NoticeList(
+                              isAdded: false,
+                            )
+                          : const YearPageStudents(),
+                    ),
+                    (route) => false,
+                  );
+                  // await _fireStore
+                  //     .collection('users')
+                  //     .doc(_firebaseAuth.currentUser.uid)
+                  //     .get()
+                  //     .then((element) {
+                  //   Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (BuildContext context) =>
+                  //           (element['Role'] == 'admin')
+                  //               ? const NoticeList(
+                  //                   isAdded: false,
+                  //                 )
+                  //               : const YearPageStudents(),
+                  //     ),
+                  //     (route) => false,
+                  //   );
+                  // });
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            (element['Role'] == 'admin')
-                                ? const NoticeList(
-                                    isAdded: false,
-                                  )
-                                : const YearPageStudents(),
-                      ),
-                      (route) => false,
-                    );
-                  });
+                            const YearPageStudents()),
+                    (route) => false,
+                  );
                 }
               }),
           IconButton(
@@ -55,8 +73,8 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             onPressed: () async {
               final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
               if (_firebaseAuth.currentUser != null) {
-                print("done");
                 await _firebaseAuth.signOut();
+                await storage.delete(key: 'admin');
               } else {
                 await storage.delete(key: 'username');
                 await storage.delete(key: 'token');

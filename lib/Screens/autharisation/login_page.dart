@@ -236,6 +236,10 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   setContent("Successfully Logged in", true);
                                   spinner = false;
+                                  storage.write(
+                                    key: "admin",
+                                    value: 'true',
+                                  );
                                   //if user student then redirect to year otherwise notice list to see or edit or add
                                   Navigator.pushAndRemoveUntil(
                                     context,
@@ -315,7 +319,8 @@ class _LoginPageState extends State<LoginPage> {
                             if (userToken['error'] != null) {
                               setState(() {
                                 spinner = false;
-                                setContent(userToken['error'], false);
+                                // setContent(userToken['error'], false);
+                                setContent('Wrong Credentials', false);
                               });
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);

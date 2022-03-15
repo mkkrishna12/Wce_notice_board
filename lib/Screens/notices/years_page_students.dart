@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_students.dart';
+
+import '../../Custom_widget/bottom_navigation_bar.dart';
 //This page is for student so that they can select specific year for them to see notice
 
 class YearPageStudents extends StatefulWidget {
@@ -53,6 +55,8 @@ class _YearPageStudentsState extends State<YearPageStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: const BottomNavigationWidget(),
+
       // backgroundColor: Color(0xFFA0F0F8),
       appBar: AppBar(
         backgroundColor: Colors.brown,
