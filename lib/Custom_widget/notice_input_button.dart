@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
-//This is for taking input field for admin to add notice
+
+///This is for taking input field for admin to add notice
 
 class NoticeInput extends StatefulWidget {
+  const NoticeInput(
+      {Key key, this.hintText, this.onChanged, this.flex, this.initialValue})
+      : super(key: key);
+  final String hintText;
 
-   const NoticeInput({Key key, this.hintText, this.onChanged, this.flex,this.initialValue}) : super(key: key);
-  final String hintText;    //Text that will be shown in button
-  final Function onChanged; //This function for getting changes i.e text added by admin
-  final double flex;           // We will require more space for notice content
-  final String initialValue ; // if we are editing exiting then we have to show previous data
+  ///Text that will be shown in button
+  final Function onChanged;
+
+  ///This function for getting changes i.e text added by admin
+  final double flex;
+
+  /// We will require more space for notice content
+  final String initialValue;
+
+  /// if we are editing exiting then we have to show previous data
 
   @override
   _NoticeInputState createState() => _NoticeInputState();
@@ -25,8 +35,8 @@ class _NoticeInputState extends State<NoticeInput> {
 
   @override
   Widget build(BuildContext context) {
-          // we give the flex according to us
-    return Container(
+    // we give the flex according to us
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * widget.flex,
       child: Material(
@@ -51,7 +61,6 @@ class _NoticeInputState extends State<NoticeInput> {
             child: TextField(
               keyboardType: TextInputType.multiline,
               maxLines: 1000000,
-
               showCursor: true,
               textDirection: TextDirection.ltr,
               controller: _controller,

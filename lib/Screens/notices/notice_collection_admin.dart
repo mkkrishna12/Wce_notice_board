@@ -2,14 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
+import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
-import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
-import 'package:wce_notice_board/Screens/notices/years_admin.dart';
+import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 
-import '../../main.dart';
-//TODO make same notice collection file for both admin and students - done
 
 class NoticeList extends StatefulWidget {
   final String userType;
@@ -20,17 +18,13 @@ class NoticeList extends StatefulWidget {
 }
 
 class _NoticeListState extends State<NoticeList> {
-  dynamic unsubscribe;
   String selectedUser;
   bool spinner = false;
-  String head;
-  var cnt = 0;
   bool admin = false;
-  var prn;
-  List<NoticeForListing> notes = [];
-  Future<void> getVal() async {
-    prn = await storage.read(key: "username");
-    // notes = [];
+  List<NoticeForListing> notice = [];
+
+  Future<void> fectchNotice() async {
+
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     _fireStore
@@ -51,7 +45,7 @@ class _NoticeListState extends State<NoticeList> {
           .listen((QuerySnapshot value) {
         if (!mounted) return;
         setState(() {
-          notes = [];
+          notice = [];
           for (var element in value.docs) {
             if (element['NoticeCreated'] == null) break;
             DateTime val = element['NoticeCreated'].toDate();
@@ -74,7 +68,7 @@ class _NoticeListState extends State<NoticeList> {
               isPersonalisedArray: element['isPersonalisedArray'],
             );
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
-              notes.add(mk);
+              notice.add(mk);
             }
           }
           spinner = false;
@@ -99,22 +93,22 @@ class _NoticeListState extends State<NoticeList> {
   @override
   void initState() {
     super.initState();
-    notes = [];
+    notice = [];
     if (!widget.isAdded) {
-      getVal();
+      fectchNotice();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    getVal();
+    fectchNotice();
     return ModalProgressHUD(
       inAsyncCall: spinner,
       child: Scaffold(
         appBar: AppBar(
           title: const Center(
             child: Text(
-              'List of Notes',
+              'List of notice',
             ),
           ),
         ),
@@ -135,24 +129,24 @@ class _NoticeListState extends State<NoticeList> {
               )
             : null,
         body: RefreshIndicator(
-          onRefresh: getVal,
+          onRefresh: fectchNotice,
           child: ListView.builder(
               itemBuilder: (_, index) {
                 //TODO add functionality to delete notice to admin - done
-                return (notes.length != 0)
+                return (notice.length != 0)
                     ? Dismissible(
-                        key: ValueKey(notes[index].noticeTitle),
+                        key: ValueKey(notice[index].noticeTitle),
                         direction: DismissDirection.startToEnd,
                         onDismissed: (direction) {
                           if (!mounted) return;
                           setState(() {
-                            notes.removeAt(index);
+                            notice.removeAt(index);
                           });
                         },
                         confirmDismiss: (direction) async {
                           return await showDialog(
                             context: context,
-                            builder: (_) => NoteDelete(notes[index].noticeId),
+                            builder: (_) => NoteDelete(notice[index].noticeId),
                           );
                         },
                         background: Container(
@@ -170,22 +164,22 @@ class _NoticeListState extends State<NoticeList> {
                           elevation: 5.0,
                           child: ListTile(
                             title: Text(
-                              notes[index].noticeTitle,
-                              // notes[index].noticeContent,
+                              notice[index].noticeTitle,
+                              // notice[index].noticeContent,
                               style: const TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.black,
                               ),
                             ),
                             subtitle: Text(
-                                'Last edited : ${notes[index].noticeCreated.day}/${notes[index].noticeCreated.month}/${notes[index].noticeCreated.year}'),
+                                'Last edited : ${notice[index].noticeCreated.day}/${notice[index].noticeCreated.month}/${notice[index].noticeCreated.year}'),
                             onTap: () {
-                              // getVal();
+                              // fectchNotice();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
                                   return NoticeViewer(
-                                    notice: notes[index],
+                                    notice: notice[index],
                                   );
                                 }),
                               );
@@ -195,7 +189,7 @@ class _NoticeListState extends State<NoticeList> {
                       )
                     : const Center(child: Text('No Notice Available'));
               },
-              itemCount: notes.length),
+              itemCount: notice.length),
         ),
       ),
     );

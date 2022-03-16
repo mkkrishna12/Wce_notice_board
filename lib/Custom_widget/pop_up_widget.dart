@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
-//This page is for showing any alert or any error appeared while fetching data
+///This page is for showing any alert or any error appeared while fetching data
 class PopUp extends StatefulWidget {
-  final String message;      //The error or any warning
-  final IconData icon;       //right click or incorrect icon according msg will be sent
-  final bool state;          // we will according to this variable
-  final Color color;         //red for incorrect and green for correct
-  final Widget toNavigate;   //this is not require if we want navigate then we can use it for successful working
+  final String message;
+
+  ///The error or any warning
+  final IconData icon;
+
+  ///right click or incorrect icon according msg will be sent
+  final bool state;
+
+  /// we will according to this variable
+  final Color color;
+
+  ///red for incorrect and green for correct
+  final Widget toNavigate;
+
+  ///this is not require if we want navigate then we can use it for successful working
 
   @override
   const PopUp({
@@ -28,7 +38,9 @@ class _PopUpState extends State<PopUp> {
     return AlertDialog(
       content: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0), color: Colors.white,),
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.white,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,

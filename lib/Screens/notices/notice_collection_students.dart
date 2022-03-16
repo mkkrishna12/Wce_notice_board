@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
+import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/notices/notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
 
 import '../../main.dart';
 
@@ -128,7 +128,6 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                       title: Text(
                         notes[index].noticeTitle,
                         style: const TextStyle(
-
                           fontSize: 15.0,
                           color: Colors.black,
                         ),

@@ -6,15 +6,20 @@ const kTitleTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.white,
 );
-class Year {
-  String s;     //years
-  bool check;  //to check which year selected by the admin to show the notice
-  Year({this.s, this.check});
-}
-List<Year> yearsList = <Year>[
-  Year(s: 'First Year', check: false),
-  Year(s: 'second Year', check: false),
-  Year(s: 'Third year', check: false),
-  Year(s: 'Fourth Year', check: false),
-];
 
+class Year {
+  String year;
+
+  ///years
+  bool check;
+
+  ///to check which year selected by the admin to show the notice
+  Year({this.year, this.check});
+}
+
+List<Year> yearsList = <Year>[
+  Year(year: 'First Year', check: false),
+  Year(year: 'second Year', check: false),
+  Year(year: 'Third year', check: false),
+  Year(year: 'Fourth Year', check: false),
+];

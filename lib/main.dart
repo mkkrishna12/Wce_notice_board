@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,8 +7,11 @@ import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
 
 const storage = FlutterSecureStorage();
 void main() async {
+  /// initialize the firebase
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -33,13 +32,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//
-// /* Filters on List page for students side
-//   1] by date
-//   2]latest
-//
-//  */
-
 extension ParseToString on ConnectivityResult {
   String toValue() {
     return toString().split('.').last;
@@ -48,138 +40,76 @@ extension ParseToString on ConnectivityResult {
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  /// To set the splash screen timer
   startTimer() {
     var _duration = const Duration(milliseconds: 2000);
     return Timer(_duration, navigate);
   }
 
-  SnackBar snackBar; // Snack to show the error or any message
-  void setContent(content, bool isTrue) {
-    snackBar = SnackBar(
-      elevation: 6.0,
-      backgroundColor: isTrue
-          ? Colors.green
-          : const Color(
-              0xFF97170E,
-            ),
-      behavior: SnackBarBehavior.floating,
-      content: Text(
-        content,
-        style: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    );
-    return;
-  }
-
+  /// After splash screen we will redirected to this route
   void navigate() {
     Navigator.of(context).push(PageRouteBuilder(
         transitionDuration: const Duration(seconds: 3),
         pageBuilder: (_, __, ___) => const LoginPage()));
   }
-
-  ConnectivityResult _connectivityResult;
   StreamSubscription _connectivitySubscription;
   bool _isConnectionSuccessful;
   @override
   void initState() {
     // TODO: implement initState and also add for moodle user.
     super.initState();
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-    final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-    // if (_firebaseAuth.currentUser != null) {
-    //   _fireStore
-    //       .collection('users')
-    //       .doc(_firebaseAuth.currentUser.uid)
-    //       .get()
-    //       .then((element) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (BuildContext context) => (element['Role'] == 'admin')
-    //             ? const NoticeList(
-    //                 isAdded: false,
-    //               )
-    //             : const YearPageStudents(),
-    //       ),
-    //       (route) => false,
-    //     );
-    //   });
-    // } else {
-    //   startTimer();
-    // }
-
     _checkConnectivityState();
     _connectivitySubscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) async {
-      // print('Current connectivity status: $result');
       await _checkConnectivityState();
       setState(() {
-        // setContent('Current connectivity status: $result', true);
-        _connectivityResult = result;
         _isConnectionSuccessful = true;
       });
-      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
-
     startTimer();
   }
 
   @override
   dispose() {
     super.dispose();
-
     _connectivitySubscription.cancel();
   }
 
+  /// this function is used for the internet connection of internet for th application
   Future<void> _checkConnectivityState() async {
     final ConnectivityResult result = await Connectivity().checkConnectivity();
 
     if (result == ConnectivityResult.wifi && _isConnectionSuccessful) {
-      setState(() {
-        setContent('Connected to a Wi-Fi network', true);
-      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          'Connected to a Wi-fi network',
+        ),
+        backgroundColor: Colors.green,
+      ));
     } else if (result == ConnectivityResult.mobile && _isConnectionSuccessful) {
-      setState(() {
-        setContent('Connected to a mobile network', true);
-      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          'Connected to a mobile network',
+        ),
+        backgroundColor: Colors.green,
+      ));
     } else {
       if (result == ConnectivityResult.none) {
-        setState(() {
-          setContent(
-              'Not connected to any network , Please Connect and Try Again',
-              false);
-        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'Not connected to any network , Please Connect and Try Again',
+          ),
+          backgroundColor: Colors.red,
+        ));
       }
     }
 
-    setState(() {
-      _connectivityResult = result;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  Future<void> _tryConnection() async {
-    try {
-      final response = await InternetAddress.lookup('https://www.google.com/');
-
-      setState(() {
-        _isConnectionSuccessful = response.isNotEmpty;
-      });
-    } on SocketException catch (e) {
-      print(e);
-      setState(() {
-        _isConnectionSuccessful = false;
-      });
-    }
   }
 
   @override

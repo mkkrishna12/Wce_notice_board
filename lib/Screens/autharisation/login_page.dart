@@ -1,18 +1,18 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
+import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
-
 import '../../Custom_widget/custom_button.dart';
 import '../../Custom_widget/custom_formfield.dart';
-import '../../main.dart'; // To store prn and token in local we have used storage is flutter secure storage
-// this widget for Login of the user and admin
+import '../../main.dart';
+
+/// To store prn and token in local we have used storage is flutter secure storage
+/// this widget for Login of the user and admin
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -21,17 +21,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailController =
-      TextEditingController(); //To get the email or the prn entered by the user
-  final _passwordController =
-      TextEditingController(); // to get the password by the user
-  SnackBar snackBar; // Snack to show the error or any message
-  bool spinner = false; //Spinner will be handle by using this variable
-  String selectedUser =
-      'Student'; //This variable is used for the selection of user
-  bool admin = false; //To check the admin or not
+  final _emailController = TextEditingController();
+
+  ///To get the email or the prn entered by the user
+  final _passwordController = TextEditingController();
+
+  /// to get the password by the user
+  SnackBar snackBar;
+
+  /// Snack to show the error or any message
+  bool spinner = false;
+
+  ///Spinner will be handle by using this variable
+  String selectedUser = 'Student';
+
+  ///This variable is used for the selection of user
+  bool admin = false;
+
+  ///To check the admin or not
   List<String> userType = [
-    // 'select user',
+    /// 'select user',
     'Student',
     'Admin',
   ];
@@ -41,7 +50,8 @@ class _LoginPageState extends State<LoginPage> {
   bool obSecureController = true;
   String get email => _emailController.text.trim();
   String get password => _passwordController.text.trim();
-  //To update the content in snackbar we used this function
+
+  ///To update the content in snackbar we used this function
   void setContent(content, bool isTrue) {
     snackBar = SnackBar(
       elevation: 6.0,
@@ -71,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         // color: Colors.blue,
         inAsyncCall: spinner,
         child: Scaffold(
-          backgroundColor: Color(0xFF65C0E8),
+          backgroundColor: const Color(0xFF65C0E8),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,8 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(items),
                             );
                           }).toList(),
-                          // After selecting the desired option,it will
-                          // change button value to selected value
+
+                          /// After selecting the desired option,it will
+                          /// change button value to selected value
                           onChanged: (String newValue) {
                             setState(() {
                               selectedUser = newValue;
@@ -144,9 +155,6 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ],
                 ),
-                // Center(
-                //   child:,
-                // ),
                 const SizedBox(
                   height: 24,
                 ),
@@ -222,17 +230,15 @@ class _LoginPageState extends State<LoginPage> {
                                 .get()
                                 .then((element) {
                               setState(() {
-                                //to check the user admin or not
+                                ///to check the user admin or not
                                 admin = element['Role'] == 'admin';
                               });
-                              // setState(() {
-                              //   spinner = false;
-                              //
-                              // });
+
                               setState(() {
                                 setContent("Successfully Logged in", true);
                                 spinner = false;
-                                //if user student then redirect to year otherwise notice list to see or edit or add
+
+                                ///if user student then redirect to year otherwise notice list to see or edit or add
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -246,20 +252,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
                               });
-
-                              //show successful login
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (BuildContext context) => PopUp(
-                              //     toNavigate: (admin == true)
-                              //         ? const NoticeList()
-                              //         : const YearPageStudents(),
-                              //     message: 'Successfully Logged in',
-                              //     icon: FontAwesomeIcons.checkCircle,
-                              //     state: true,
-                              //     color: Colors.green,
-                              //   ),
-                              // );
                             });
                           }).catchError(
                             (err) {
@@ -273,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .showSnackBar(snackBar);
                               }
 
-                              // email already in use
+                              /// email already in use
 
                               else if (err.code == 'user-not-found') {
                                 setState(() {
@@ -284,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .showSnackBar(snackBar);
                               }
 
-                              // **invalid-email**:
+                              /// **invalid-email**:
 
                               else if (err.code == 'invalid-email') {
                                 setState(() {

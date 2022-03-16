@@ -11,7 +11,10 @@ import '../../Custom_widget/custom_richtext.dart';
 import './../../styles/app_colors.dart';
 import 'login_page.dart';
 
+///we can use this page when we want to register the user outside the institute in the application
+
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({Key key}) : super(key: key);
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -19,14 +22,24 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _mobile = TextEditingController();
+
   final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   bool spinner = false;
+
   String user = "User";
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  /// trim is used for trimming spaces in input
   String get mobile => _mobile.text.trim();
+
   String get email => _emailController.text.trim();
+
   String get password => _passwordController.text.trim();
 
   @override
@@ -124,16 +137,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           setState(() {
                             spinner = false;
                           });
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => const PopUp(
-                              toNavigate: LoginPage(),
-                              message: 'All Fields are Requried',
-                              icon: Icons.cancel,
-                              state: false,
-                              color: Colors.red,
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                              'All fields are required',
                             ),
-                          );
+                          ));
                         } else {
                           _firebaseAuth
                               .createUserWithEmailAndPassword(
@@ -176,15 +185,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               setState(() {
                                 spinner = false;
                               });
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>  PopUp(
-                                  toNavigate: RegistrationScreen(),
-                                  message:
-                                      'Registeration unsuccessful contact to admin',
-                                  icon: Icons.cancel,
-                                  state: false,
-                                  color: Colors.red,
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Registration unsuccessful contact to admin',
+                                  ),
                                 ),
                               );
                             });
@@ -194,21 +199,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 setState(() {
                                   spinner = false;
                                 });
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                       PopUp(
-                                    toNavigate: RegistrationScreen(),
-                                    message:
-                                        'The password provided is too weak.',
-                                    icon: Icons.cancel,
-                                    state: false,
-                                    color: Colors.red,
-                                  ),
-                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'The password provided is too weak.')));
                               }
 
-                              // email already in use
+                              /// email already in use
 
                               else if (err.code == 'email-already-in-use') {
                                 Navigator.push(
@@ -222,37 +219,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 setState(() {
                                   spinner = false;
                                 });
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      const PopUp(
-                                    toNavigate: LoginPage(),
-                                    message:
-                                        'The account already exists for that email.',
-                                    icon: Icons.cancel,
-                                    state: true,
-                                    color: Colors.red,
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text(
+                                    'The account already exists for that email.',
                                   ),
-                                );
+                                ));
                               }
 
-                              // **invalid-email**:
+                              /// **invalid-email**:
 
                               else if (err.code == 'invalid-email') {
                                 setState(() {
                                   spinner = false;
                                 });
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                       PopUp(
-                                    toNavigate: RegistrationScreen(),
-                                    message: 'invalid-email Try Again',
-                                    icon: Icons.cancel,
-                                    state: false,
-                                    color: Colors.red,
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text(
+                                    'invalid-email Try Again',
                                   ),
-                                );
+                                ));
                               }
                             },
                           );

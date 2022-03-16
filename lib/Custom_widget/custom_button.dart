@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import './../styles/app_colors.dart';
 import './../styles/text_styles.dart';
-
 class AuthButton extends StatelessWidget {
   final String text;
   final Function() onTap;

@@ -13,7 +13,8 @@ class CustomRichText extends StatelessWidget {
       @required this.text,
       @required this.onTap})
       : super(key: key);
-// "Don't already Have an account? "
+
+  /// "Don't already Have an account? "
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:path/path.dart';
-import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
+import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
-import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
+import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
 // widget  to add notice and update notice for admin
 
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -345,18 +345,4 @@ class _AddNoticeState extends State<AddNotice> {
       ),
     );
   }
-  //
-  // Future<firebase_storage.UploadTask> uploadFile(File file) async {
-  //   FilePickerResult result = await FilePicker.platform.pickFiles();
-  //
-  //   if (result != null) {
-  //     Uint8List fileBytes = result.files.first.bytes;
-  //     String fileName = result.files.first.name;
-  //
-  //     // Upload file
-  //     await FirebaseStorage.instance
-  //         .ref('uploads/$fileName')
-  //         .putData(fileBytes);
-  //   }
-  // }
 }

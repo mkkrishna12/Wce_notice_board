@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notes_for_listing.dart';
-import 'package:wce_notice_board/Screens/notices/add_notice.dart';
+import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
+import 'package:wce_notice_board/Screens/notices/add_update_notice.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 //On this page we can add and edit the year and the date for deleting the notice
 
 class YearPage extends StatefulWidget {
-  final NoticeForListing notice;
+  final NoticeForListing notice ;
 
   const YearPage({Key key, this.notice}) : super(key: key);
 
@@ -55,18 +55,18 @@ class _YearPageState extends State<YearPage> {
     super.initState();
     if (widget.notice != null) {
       yearsList = <Year>[
-        Year(s: 'First Year', check: widget.notice.fy),
-        Year(s: 'second Year', check: widget.notice.sy),
-        Year(s: 'Third year', check: widget.notice.ty),
-        Year(s: 'Fourth Year', check: widget.notice.btech),
+        Year(year: 'First Year', check: widget.notice.fy),
+        Year(year: 'second Year', check: widget.notice.sy),
+        Year(year: 'Third year', check: widget.notice.ty),
+        Year(year: 'Fourth Year', check: widget.notice.btech),
       ];
       selectedDate = widget.notice.noticeEndDate;
     } else {
       yearsList = <Year>[
-        Year(s: 'First Year', check: false),
-        Year(s: 'second Year', check: false),
-        Year(s: 'Third year', check: false),
-        Year(s: 'Fourth Year', check: false),
+        Year(year: 'First Year', check: false),
+        Year(year: 'second Year', check: false),
+        Year(year: 'Third year', check: false),
+        Year(year: 'Fourth Year', check: false),
       ];
     }
     // _selectDate(context);
@@ -94,7 +94,7 @@ class _YearPageState extends State<YearPage> {
             children: yearsList
                 .map(
                   (Year item) => CheckboxListTile(
-                    title: Text(item.s),
+                    title: Text(item.year),
                     value: item.check,
                     onChanged: (bool val) {
                       setState(() => item.check = val);
@@ -160,7 +160,14 @@ class _YearPageState extends State<YearPage> {
               style: ElevatedButton.styleFrom(
                 primary: Colors.greenAccent,
               ),
-              child: const Text(
+              child: (widget.notice == null) ?const Text(
+                'Add',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ): const Text(
                 'Update',
                 style: TextStyle(
                   fontSize: 20,

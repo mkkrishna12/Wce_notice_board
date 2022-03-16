@@ -1,11 +1,9 @@
-
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseApi {
-  // Function for upload the file in flutter
+  /// Function for upload the file in flutter
 
   static UploadTask uploadFile(String destination, File file) {
     try {
