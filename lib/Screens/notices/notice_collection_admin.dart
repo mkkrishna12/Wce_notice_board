@@ -8,6 +8,9 @@ import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 
+import '../../Custom_widget/bottom_navigation_bar.dart';
+import '../../main.dart';
+//TODO make same notice collection file for both admin and students - done
 
 class NoticeList extends StatefulWidget {
   final String userType;
@@ -66,6 +69,7 @@ class _NoticeListState extends State<NoticeList> {
               isSeen: element['isSeen'],
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
+              file_url: element.get('file_url'),
             );
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
               notice.add(mk);
@@ -106,9 +110,10 @@ class _NoticeListState extends State<NoticeList> {
       inAsyncCall: spinner,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xFF980F58),
           title: const Center(
             child: Text(
-              'List of notice',
+              'List of Notices',
             ),
           ),
         ),
@@ -128,6 +133,7 @@ class _NoticeListState extends State<NoticeList> {
                 ),
               )
             : null,
+        bottomNavigationBar: const BottomNavigationWidget(),
         body: RefreshIndicator(
           onRefresh: fectchNotice,
           child: ListView.builder(
@@ -164,7 +170,7 @@ class _NoticeListState extends State<NoticeList> {
                           elevation: 5.0,
                           child: ListTile(
                             title: Text(
-                              notice[index].noticeTitle,
+                              notice[index].noticeTitle.toCapitalized(),
                               // notice[index].noticeContent,
                               style: const TextStyle(
                                 fontSize: 15.0,

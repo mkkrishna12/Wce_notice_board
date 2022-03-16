@@ -4,6 +4,7 @@ import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
 
+import '../../Custom_widget/bottom_navigation_bar.dart';
 import '../../main.dart';
 
 class NoticeForStudents extends StatefulWidget {
@@ -48,6 +49,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
               isSeen: element['isSeen'],
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
+              file_url: element['file_url'],
             );
             if (widget.selectedYear == 'First Year') {
               if (element['FirstYear'] == true) {
@@ -105,7 +107,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
     return Scaffold(
       backgroundColor: Color(0xFFFEF1E6),
       appBar: AppBar(
-        backgroundColor: Colors.brown,
+        backgroundColor: const Color(0xFF980F58),
         title: const Text(
           'Wce Notice Board',
           style: TextStyle(
@@ -114,6 +116,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavigationWidget(),
       body: RefreshIndicator(
         onRefresh: () {
           return getVal();
@@ -126,7 +129,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                     elevation: 5.0,
                     child: ListTile(
                       title: Text(
-                        notes[index].noticeTitle,
+                        notes[index].noticeTitle.toString().toCapitalized(),
                         style: const TextStyle(
                           fontSize: 15.0,
                           color: Colors.black,

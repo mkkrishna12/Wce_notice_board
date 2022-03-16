@@ -28,6 +28,11 @@ dependencies:
   firebase_storage: ^10.2.9
   flutter_document_picker: ^4.0.1
   connectivity_plus: ^2.2.1
+  downloads_path_provider_28: ^0.1.2
+  permission_handler: ^8.3.0
+  dio: ^4.0.4
+  flutter_local_notifications: ^9.4.0
+  blurry: ^1.0.0
 
 dev_dependencies:
   flutter_test:

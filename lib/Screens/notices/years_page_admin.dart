@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Screens/notices/add_update_notice.dart';
 import 'package:wce_notice_board/utils/constants.dart';
+
+import '../../Custom_widget/bottom_navigation_bar.dart';
 //On this page we can add and edit the year and the date for deleting the notice
 
 class YearPage extends StatefulWidget {
@@ -76,6 +78,7 @@ class _YearPageState extends State<YearPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF980F58),
         title: const Text(
           'Select Years...',
           style: TextStyle(
@@ -84,6 +87,7 @@ class _YearPageState extends State<YearPage> {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavigationWidget(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
