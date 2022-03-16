@@ -59,7 +59,7 @@ class CustomFormField extends StatelessWidget {
                   hintText: hintText,
                   hintStyle: KTextStyle.textFieldHintStyle,
                   border: InputBorder.none,
-                  suffixIcon: suffixIcon),
+                  suffixIcon: suffixIcon,),
             ),
           ),
         )

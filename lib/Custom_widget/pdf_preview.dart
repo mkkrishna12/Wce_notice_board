@@ -17,19 +17,19 @@ class FileDownload extends StatefulWidget {
   static progressIndicator(value1) {
     return (value1 == -1.0)
         ? PreferredSize(
-            preferredSize: const Size.fromHeight(0),
-            child: Container(),
-          )
+      preferredSize: const Size.fromHeight(0),
+      child: Container(),
+    )
         : PreferredSize(
-            preferredSize: const Size.fromHeight(10.0),
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.grey,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Colors.deepOrange),
-              minHeight: 5,
-              value: value1,
-            ),
-          );
+      preferredSize: const Size.fromHeight(10.0),
+      child: LinearProgressIndicator(
+        backgroundColor: Colors.grey,
+        valueColor:
+        const AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+        minHeight: 5,
+        value: value1,
+      ),
+    );
   }
 }
 
@@ -57,23 +57,22 @@ class _FileDownloadState extends State<FileDownload> {
           // const Divider(),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color(0xFFFF5F57),
-              onPrimary: Color(0xFFFF8470),
+              primary: const Color(0xFFFF5F57),
+              onPrimary: const Color(0xFFFF8470),
               shadowColor: Colors.red,
               elevation: 6,
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(18.0),
-              //   // side: BorderSide(color: Colors.red),
-              // ),
+
             ),
             onPressed: () async {
               Map<Permission, PermissionStatus> statuses = await [
                 Permission.storage,
-                //add more permission to request here.
+                ///add more permission to request here.
               ].request();
 
               if (statuses[Permission.storage].isGranted) {
+
                 var dir = await DownloadsPathProvider.downloadsDirectory;
+
                 if (dir != null) {
                   String saveName = getFileName(widget.fileUrl);
                   String savePath = dir.path + "/$saveName";
@@ -88,12 +87,12 @@ class _FileDownloadState extends State<FileDownload> {
                     ));
                     await Dio().download(widget.fileUrl, savePath,
                         onReceiveProgress: (received, total) {
-                      if (total != -1) {
-                        // setState(() {
-                        //   NoticeViewer.pValue = total / 100;
-                        // });
-                      }
-                    });
+                          if (total != -1) {
+                            // setState(() {
+                            //   NoticeViewer.pValue = total / 100;
+                            // });
+                          }
+                        });
                     // print("File is saved to download folder");
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
@@ -107,6 +106,8 @@ class _FileDownloadState extends State<FileDownload> {
                       ),
                     ));
                   }
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('something wrong ')));
                 }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

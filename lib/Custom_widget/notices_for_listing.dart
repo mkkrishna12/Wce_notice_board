@@ -31,6 +31,7 @@ class NoticeForListing {
   Map<String, dynamic> isSeen;
   bool isPersonalised;
   var isPersonalisedArray = [];
+  String file_url;
   NoticeForListing({
     this.noticeEndDate,
     this.noticeId,
@@ -47,5 +48,6 @@ class NoticeForListing {
     this.isPersonalised,
     this.isPersonalisedArray,
     this.isSeen,
+    this.file_url,
   });
 }

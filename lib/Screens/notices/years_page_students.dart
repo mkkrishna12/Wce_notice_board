@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_students.dart';
 
-///This page is for student so that they can select specific year for them to see notice
 import '../../Custom_widget/bottom_navigation_bar.dart';
-//This page is for student so that they can select specific year for them to see notice
+
+///This page is for student so that they can select specific year for them to see notice
 
 class YearPageStudents extends StatefulWidget {
   const YearPageStudents({Key key}) : super(key: key);
@@ -13,12 +13,12 @@ class YearPageStudents extends StatefulWidget {
 }
 
 class _YearPageStudentsState extends State<YearPageStudents> {
-  List<String> _items = [];
+  List<String> selectedYears = [];
 
   @override
   void initState() {
     super.initState();
-    _items = <String>[
+    selectedYears = <String>[
       'First Year',
       'Second Year',
       'Third Year',
@@ -45,13 +45,13 @@ class _YearPageStudentsState extends State<YearPageStudents> {
             context,
             MaterialPageRoute(builder: (context) {
               //add route
-              return NoticeForStudents(selectedYear: _items[index]);
+              return NoticeForStudents(selectedYear: selectedYears[index]);
             }),
           );
         },
         child: Center(
           child: Text(
-            _items[index],
+            selectedYears[index],
           ),
         ),
       ),
@@ -82,7 +82,7 @@ class _YearPageStudentsState extends State<YearPageStudents> {
           ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: _items.length,
+            itemCount: selectedYears.length,
             itemBuilder: _getListItemTile,
           ),
         ],

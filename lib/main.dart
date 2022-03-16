@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
-
-import 'Screens/notices/notice_collection.dart';
+import 'Screens/notices/notice_collection_admin.dart';
 import 'Screens/notices/years_page_students.dart';
 
 bool isLogged = false;
@@ -39,37 +40,24 @@ void main() async {
       isLogged = false;
     }
   }
-  runApp(const MyApp());
+  runApp( MaterialApp(
+    title: 'Splash Screen',
+    theme: ThemeData(
+      primarySwatch: Colors.green,
+    ),
+    home: Material(
+      child: (isLogged == true)
+          ? (isAdmin == true
+          ? const NoticeList(
+        isAdded: false,
+      )
+          : const YearPageStudents())
+          : const SplashScreen(),
+    ),
+    debugShowCheckedModeBanner: true,
+  ));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Splash Screen',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: Material(
-        child: (isLogged == true)
-            ? (isAdmin == true
-                ? const NoticeList(
-                    isAdded: false,
-                  )
-                : const YearPageStudents())
-            : const SplashScreen(),
-      ),
-      debugShowCheckedModeBanner: true,
-    );
-  }
-}
 
 extension ParseToString on ConnectivityResult {
   String toValue() {

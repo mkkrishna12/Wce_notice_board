@@ -272,19 +272,6 @@ class _LoginPageState extends State<LoginPage> {
                                         .showSnackBar(snackBar);
                                   });
 
-                                  //show successful login
-                                  // showDialog(
-                                  //   context: context,
-                                  //   builder: (BuildContext context) => PopUp(
-                                  //     toNavigate: (admin == true)
-                                  //         ? const NoticeList()
-                                  //         : const YearPageStudents(),
-                                  //     message: 'Successfully Logged in',
-                                  //     icon: FontAwesomeIcons.checkCircle,
-                                  //     state: true,
-                                  //     color: Colors.green,
-                                  //   ),
-                                  // );
                                 });
                               }).catchError(
                                 (err) {
@@ -292,11 +279,11 @@ class _LoginPageState extends State<LoginPage> {
                                     setState(() {
                                       spinner = false;
                                       setContent(
-                                          'The Password provided is Wrong',
+                                          '',
                                           false);
                                     });
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                        .showSnackBar(SnackBar(content: Text('The Password provided is Wrong'),));
                                   }
 
                                   // email already in use

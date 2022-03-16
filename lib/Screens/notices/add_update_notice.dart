@@ -11,7 +11,6 @@ import 'package:path/path.dart';
 import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
-import 'package:wce_notice_board/Screens/notices/notice_collection.dart';
 
 import '../../Custom_widget/bottom_navigation_bar.dart';
 // widget  to add notice and update notice for admin

@@ -4,10 +4,11 @@ import 'package:wce_notice_board/Screens/notices/add_update_notice.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 
 import '../../Custom_widget/bottom_navigation_bar.dart';
-//On this page we can add and edit the year and the date for deleting the notice
+
+///On this page we can add and edit the year and the date for deleting the notice
 
 class YearPage extends StatefulWidget {
-  final NoticeForListing notice ;
+  final NoticeForListing notice;
 
   const YearPage({Key key, this.notice}) : super(key: key);
 
@@ -16,6 +17,7 @@ class YearPage extends StatefulWidget {
 }
 
 class _YearPageState extends State<YearPage> {
+
   DateTime selectedDate = DateTime.now();
 
   bool _decideWhichDayToEnable(DateTime day) {
@@ -33,6 +35,7 @@ class _YearPageState extends State<YearPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
+
     showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -164,21 +167,23 @@ class _YearPageState extends State<YearPage> {
               style: ElevatedButton.styleFrom(
                 primary: Colors.greenAccent,
               ),
-              child: (widget.notice == null) ?const Text(
-                'Add',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ): const Text(
-                'Update',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              child: (widget.notice == null)
+                  ? const Text(
+                      'Add',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text(
+                      'Update',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           )
         ],

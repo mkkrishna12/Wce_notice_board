@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wce_notice_board/main.dart';
 
 import '../Screens/autharisation/login_page.dart';
-import '../Screens/notices/notice_collection.dart';
+import '../Screens/notices/notice_collection_admin.dart';
 import '../Screens/notices/years_page_students.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
