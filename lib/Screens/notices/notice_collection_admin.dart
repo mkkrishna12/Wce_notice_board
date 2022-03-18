@@ -6,6 +6,7 @@ import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/notices/viewed_student_record.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 
 import '../../Custom_widget/bottom_navigation_bar.dart';
@@ -25,7 +26,27 @@ class _NoticeListState extends State<NoticeList> {
   bool spinner = false;
   bool admin = false;
   List<NoticeForListing> notice = [];
+  Future<String> StudentsList() async {
 
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+
+            backgroundColor: const Color(0xFFFEF1E6),
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Center(child: Text('Students list')),
+            content: Container(
+
+              width: MediaQuery.of(context).size.width,
+              child: VeiwStudents(),
+            ),
+          );
+        });
+  }
   Future<void> fectchNotice() async {
 
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -85,7 +106,7 @@ class _NoticeListState extends State<NoticeList> {
         context: context,
         builder: (BuildContext context) => const PopUp(
           toNavigate: null,
-          message: 'Somthing went wrong try after some time',
+          message: 'Something went wrong try after some time',
           icon: Icons.cancel,
           state: false,
           color: Colors.red,
@@ -169,6 +190,13 @@ class _NoticeListState extends State<NoticeList> {
                         child: Card(
                           elevation: 5.0,
                           child: ListTile(
+                            trailing: IconButton(
+                              iconSize: 20,
+                              icon: const Icon(IconData(0xe6bd, fontFamily: 'MaterialIcons',),color: Colors.grey,),
+                              onPressed: (){
+                                      StudentsList();
+                              },
+                            ),
                             title: Text(
                               notice[index].noticeTitle.toCapitalized(),
                               // notice[index].noticeContent,
@@ -177,6 +205,7 @@ class _NoticeListState extends State<NoticeList> {
                                 color: Colors.black,
                               ),
                             ),
+
                             subtitle: Text(
                                 'Last edited : ${notice[index].noticeCreated.day}/${notice[index].noticeCreated.month}/${notice[index].noticeCreated.year}'),
                             onTap: () {

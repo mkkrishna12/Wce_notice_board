@@ -18,7 +18,8 @@ class NoticeForStudents extends StatefulWidget {
 class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
   bool spinner = true;
-  var prn;
+  String  prn;
+
   Future<void> getVal() async {
     prn = await storage.read(key: "username");
     // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -105,7 +106,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFEF1E6),
+      backgroundColor: const Color(0xFFFEF1E6),
       appBar: AppBar(
         backgroundColor: const Color(0xFF980F58),
         title: const Text(
@@ -128,6 +129,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                     // color: Color(0xFFFFF0F0),
                     elevation: 5.0,
                     child: ListTile(
+
                       title: Text(
                         notes[index].noticeTitle.toString().toCapitalized(),
                         style: const TextStyle(
@@ -147,7 +149,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                           }),
                         );
                       },
-                      //  change color when user see notification done
+                     ///  change color when user see notification done
                       trailing: CircleAvatar(
                         backgroundColor: (notes[index].isSeen[prn] != null &&
                                 notes[index].isSeen[prn] == true)
