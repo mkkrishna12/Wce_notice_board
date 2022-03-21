@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:41448649028:android:b2168a897d2019be13e711",
         "android_client_info": {
-          "package_name": "com.example.wce_notice_board"
+          "package_name": "com.wce.wce_notice_board"
         }
       },
       "oauth_client": [
