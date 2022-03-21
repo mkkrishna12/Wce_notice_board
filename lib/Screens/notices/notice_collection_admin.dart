@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
-import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
+import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/viewed_student_record.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 
 import '../../Custom_widget/bottom_navigation_bar.dart';
-import '../../main.dart';
 //TODO make same notice collection file for both admin and students - done
 
 class NoticeList extends StatefulWidget {
@@ -26,13 +25,13 @@ class _NoticeListState extends State<NoticeList> {
   bool spinner = false;
   bool admin = false;
   List<NoticeForListing> notice = [];
-  Future<String> StudentsList() async {
-
+  Future<String> StudentsList(Map<String, dynamic> isSeen) async {
+    var lst = [];
+    isSeen.forEach((k, v) => lst.add(k));
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-
             backgroundColor: const Color(0xFFFEF1E6),
             elevation: 10,
             shape: RoundedRectangleBorder(
@@ -40,15 +39,14 @@ class _NoticeListState extends State<NoticeList> {
             ),
             title: const Center(child: Text('Students list')),
             content: Container(
-
               width: MediaQuery.of(context).size.width,
-              child: VeiwStudents(),
+              child: VeiwStudents(lst: lst),
             ),
           );
         });
   }
-  Future<void> fectchNotice() async {
 
+  Future<void> fectchNotice() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
     _fireStore
@@ -192,9 +190,15 @@ class _NoticeListState extends State<NoticeList> {
                           child: ListTile(
                             trailing: IconButton(
                               iconSize: 20,
-                              icon: const Icon(IconData(0xe6bd, fontFamily: 'MaterialIcons',),color: Colors.grey,),
-                              onPressed: (){
-                                      StudentsList();
+                              icon: const Icon(
+                                IconData(
+                                  0xe6bd,
+                                  fontFamily: 'MaterialIcons',
+                                ),
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                StudentsList(notice[index].isSeen);
                               },
                             ),
                             title: Text(
@@ -205,7 +209,6 @@ class _NoticeListState extends State<NoticeList> {
                                 color: Colors.black,
                               ),
                             ),
-
                             subtitle: Text(
                                 'Last edited : ${notice[index].noticeCreated.day}/${notice[index].noticeCreated.month}/${notice[index].noticeCreated.year}'),
                             onTap: () {

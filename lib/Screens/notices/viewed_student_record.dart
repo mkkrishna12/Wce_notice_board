@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class VeiwStudents extends StatefulWidget {
-  const VeiwStudents({Key key, this.noticeId}) : super(key: key);
+  const VeiwStudents({Key key, this.lst, this.noticeId}) : super(key: key);
   final String noticeId;
+  final List lst;
   @override
   State<VeiwStudents> createState() => _VeiwStudentsState();
 }
@@ -77,7 +78,7 @@ class _VeiwStudentsState extends State<VeiwStudents> {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.all(10.0),
-      itemCount: students.length,
+      itemCount: widget.lst.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
           child: Padding(
@@ -88,14 +89,13 @@ class _VeiwStudentsState extends State<VeiwStudents> {
               children: <Widget>[
                 Center(
                   child: Text(
-                    students[index],
+                    widget.lst[index],
                     style: const TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
