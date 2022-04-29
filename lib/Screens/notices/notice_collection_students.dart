@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
-import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
 
-import '../../Custom_widget/bottom_navigation_bar.dart';
 import '../../main.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/notes_for_listing.dart';
+import '../../widgets/pop_up_widget.dart';
 
 class NoticeForStudents extends StatefulWidget {
   final String selectedYear;

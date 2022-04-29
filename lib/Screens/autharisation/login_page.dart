@@ -7,10 +7,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
-import '../../Custom_widget/custom_button.dart';
-import '../../Custom_widget/custom_formfield.dart';
 import '../../main.dart';
-
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_formfield.dart';
 /// To store prn and token in local we have used storage is flutter secure storage
 /// this widget for Login of the user and admin
 
@@ -283,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                                           false);
                                     });
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(content: Text('The Password provided is Wrong'),));
+                                        .showSnackBar(const SnackBar(content: Text('The Password provided is Wrong'),));
                                   }
 
                                   // email already in use

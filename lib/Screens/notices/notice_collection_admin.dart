@@ -2,14 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
-import 'package:wce_notice_board/Custom_widget/pop_up_widget.dart';
 import 'package:wce_notice_board/Screens/notices/common_notice_veiwer.dart';
 import 'package:wce_notice_board/Screens/notices/notice_delete.dart';
 import 'package:wce_notice_board/Screens/notices/viewed_student_record.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 
-import '../../Custom_widget/bottom_navigation_bar.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/notes_for_listing.dart';
+import '../../widgets/pop_up_widget.dart';
+
 //TODO make same notice collection file for both admin and students - done
 
 class NoticeList extends StatefulWidget {
@@ -38,7 +39,7 @@ class _NoticeListState extends State<NoticeList> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: const Center(child: Text('Students list')),
-            content: Container(
+            content: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: VeiwStudents(lst: lst),
             ),
@@ -102,7 +103,7 @@ class _NoticeListState extends State<NoticeList> {
 
       showDialog(
         context: context,
-        builder: (BuildContext context) => const PopUp(
+        builder: (BuildContext context) =>  const PopUp(
           toNavigate: null,
           message: 'Something went wrong try after some time',
           icon: Icons.cancel,

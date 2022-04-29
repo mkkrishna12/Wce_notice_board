@@ -1,18 +1,17 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:path/path.dart';
-import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
-import 'package:wce_notice_board/Custom_widget/notice_input_button.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
 
-import '../../Custom_widget/bottom_navigation_bar.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/notes_for_listing.dart';
+import '../../widgets/notice_input_button.dart';
+
 // widget  to add notice and update notice for admin
 
 FirebaseAuth _firebaseAuth = FirebaseAuth.instance;

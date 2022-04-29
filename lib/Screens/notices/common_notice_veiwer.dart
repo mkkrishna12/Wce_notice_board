@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_admin.dart';
 import 'package:wce_notice_board/utils/constants.dart';
-
-import '../../Custom_widget/bottom_navigation_bar.dart';
-import '../../Custom_widget/pdf_preview.dart';
 import '../../main.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/notes_for_listing.dart';
+import '../../widgets/pdf_preview.dart';
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore _fireStore = FirebaseFirestore.instance;

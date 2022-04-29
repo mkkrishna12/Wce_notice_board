@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wce_notice_board/Custom_widget/notices_for_listing.dart';
 import 'package:wce_notice_board/Screens/notices/add_update_notice.dart';
 import 'package:wce_notice_board/utils/constants.dart';
 
-import '../../Custom_widget/bottom_navigation_bar.dart';
+import '../../widgets/bottom_navigation_bar.dart';
+import '../../widgets/notes_for_listing.dart';
+
 
 ///On this page we can add and edit the year and the date for deleting the notice
 
