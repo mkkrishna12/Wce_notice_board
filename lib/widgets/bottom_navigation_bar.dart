@@ -26,6 +26,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
           if (_firebaseAuth.currentUser != null) {
             await _firebaseAuth.signOut();
             await storage.delete(key: 'admin');
+            await storage.delete(key: 'data');
           } else {
             await storage.delete(key: 'username');
             await storage.delete(key: 'token');
@@ -37,6 +38,27 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             (route) => false,
           );
         }).show(context);
+  }
+
+  bool flg = false;
+  void getData() async {
+    var tmp = await storage.read(key: 'data');
+    if (tmp == null) {
+      setState(() {
+        flg = false;
+      });
+    } else {
+      setState(() {
+        flg = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
   }
 
   @override
@@ -91,47 +113,47 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   );
                 }
               }),
-          IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () async {
-                final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-                if (_firebaseAuth.currentUser != null) {
-                  var admin = await storage.read(key: 'admin');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => (admin == 'true')
-                          ?  ProfilePage()
-                          :  ProfilePage(),
-                    ),
-                  );
-                  // await _fireStore
-                  //     .collection('users')
-                  //     .doc(_firebaseAuth.currentUser.uid)
-                  //     .get()
-                  //     .then((element) {
-                  //   Navigator.pushAndRemoveUntil(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (BuildContext context) =>
-                  //           (element['Role'] == 'admin')
-                  //               ? const NoticeList(
-                  //                   isAdded: false,
-                  //                 )
-                  //               : const YearPageStudents(),
-                  //     ),
-                  //     (route) => false,
-                  //   );
-                  // });
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
+          if (flg == true)
+            IconButton(
+                icon: const Icon(Icons.person),
+                onPressed: () async {
+                  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                  if (_firebaseAuth.currentUser != null) {
+                    var admin = await storage.read(key: 'admin');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (BuildContext context) =>
-                         ProfilePage(),),
-                  );
-                }
-              }),
+                            (admin == 'true') ? ProfilePage() : ProfilePage(),
+                      ),
+                    );
+                    // await _fireStore
+                    //     .collection('users')
+                    //     .doc(_firebaseAuth.currentUser.uid)
+                    //     .get()
+                    //     .then((element) {
+                    //   Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (BuildContext context) =>
+                    //           (element['Role'] == 'admin')
+                    //               ? const NoticeList(
+                    //                   isAdded: false,
+                    //                 )
+                    //               : const YearPageStudents(),
+                    //     ),
+                    //     (route) => false,
+                    //   );
+                    // });
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ProfilePage(),
+                      ),
+                    );
+                  }
+                }),
           IconButton(
             icon: const Icon(
               IconData(0xe3b3, fontFamily: 'MaterialIcons'),

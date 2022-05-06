@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,11 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
 import 'package:wce_notice_board/Screens/notices/years_page_students.dart';
 import 'package:wce_notice_board/styles/text_styles.dart';
+
 import '../../main.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_formfield.dart';
+
 /// To store prn and token in local we have used storage is flutter secure storage
 /// this widget for Login of the user and admin
 
@@ -243,6 +246,23 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() {
                                     //to check the user admin or not
                                     admin = element['Role'] == 'admin';
+                                    var tmp = {
+                                      'image':
+                                          "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png",
+                                      'name': element.data()['name'],
+                                      'email': element.data()['email'],
+                                      'phoneNumber':
+                                          element.data()['phoneNumber'],
+                                      'designation':
+                                          element.data()['designation'],
+                                      'department':
+                                          element.data()['department'],
+                                      'otherrole': element.data()['otherrole'],
+                                    };
+                                    storage.write(
+                                      key: 'data',
+                                      value: json.encode(tmp),
+                                    );
                                   });
                                   // setState(() {
                                   //   spinner = false;
@@ -270,19 +290,19 @@ class _LoginPageState extends State<LoginPage> {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                   });
-
                                 });
                               }).catchError(
                                 (err) {
                                   if (err.code == 'wrong-password') {
                                     setState(() {
                                       spinner = false;
-                                      setContent(
-                                          '',
-                                          false);
+                                      setContent('', false);
                                     });
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(content: Text('The Password provided is Wrong'),));
+                                        .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          'The Password provided is Wrong'),
+                                    ));
                                   }
 
                                   // email already in use
