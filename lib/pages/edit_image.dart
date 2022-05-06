@@ -15,7 +15,6 @@ class EditImagePage extends StatefulWidget {
 
 class _EditImagePageState extends State<EditImagePage> {
   var user = UserData.myUser;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +51,8 @@ class _EditImagePageState extends State<EditImagePage> {
                       setState(
                           () => user = user.copy(imagePath: newImage.path));
                     },
-                    child: Image.network(user.image),
+                    child: Image.network(
+                        "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
                   ))),
           Padding(
               padding: const EdgeInsets.only(top: 40),

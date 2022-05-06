@@ -92,7 +92,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 }
               }),
           IconButton(
-              icon: const Icon(Icons.home),
+              icon: const Icon(Icons.person),
               onPressed: () async {
                 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
                 if (_firebaseAuth.currentUser != null) {
@@ -101,9 +101,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => (admin == 'true')
-                          ?  ProfilePage(
-
-                      )
+                          ?  ProfilePage()
                           :  ProfilePage(),
                     ),
                   );

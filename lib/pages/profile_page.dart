@@ -7,7 +7,6 @@ import '../user/user_data.dart';
 import 'edit_department.dart';
 import 'edit_designation.dart';
 import 'edit_email.dart';
-import 'edit_image.dart';
 import 'edit_name.dart';
 import 'edit_otherrole.dart';
 import 'edit_phone.dart';
@@ -21,6 +20,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String facultyName;
+  String facultyRole;
+  String age;
+  bool edit = false;
+  String title = "Edit";
   @override
   Widget build(BuildContext context) {
     final user = UserData.myUser;
@@ -53,29 +57,50 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const SizedBox(
-                  height: 5,
+                Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          alignment: Alignment(-.2, 0),
+                          image: NetworkImage(
+                              'https://louisville.edu/enrollmentmanagement/images/person-icon/image_view_fullscreen'),
+                          fit: BoxFit.cover),
+                    ),
+                    // child: DisplayImage(
+                    //   imagePath: user.image,
+                    //   onPressed: () {},
+                    // )),
                 ),
-                InkWell(
-                    onTap: () {
-                      navigateSecondPage(const EditImagePage());
-                    },
-                    child: DisplayImage(
-                      imagePath: user.image,
-                      onPressed: () {},
-                    )),
                 const SizedBox(
                   height: 25,
                 ),
-                buildUserInfoDisplay(user.name, 'Name', const EditNameFormPage(),),
-                buildUserInfoDisplay(user.phone, 'Phone', const EditPhoneFormPage(),),
-                buildUserInfoDisplay(user.email, 'Email ID', const EditEmailFormPage(),),
+                buildUserInfoDisplay(user.name, 'Name', const EditNameFormPage(),edit),
+                buildUserInfoDisplay(user.phone, 'Phone', const EditPhoneFormPage(),edit),
+                buildUserInfoDisplay(user.email, 'Email ID', const EditEmailFormPage(),edit),
                 buildUserInfoDisplay(
-                    user.department, 'Department', const EditDepartmentFormPage(),),
+                    user.department, 'Department', const EditDepartmentFormPage(),edit),
                 buildUserInfoDisplay(
-                    user.designation, 'Designation', const EditDesignationFormPage(),),
+                    user.designation, 'Designation', const EditDesignationFormPage(),edit),
                 buildUserInfoDisplay(
-                    user.otherrole, 'Other role', const EditOtherRoleFormPage(),),
+                    user.otherrole, 'Other role', const OtherRol(),edit),
+
+                ElevatedButton(
+                  child: Text(title),
+                  onPressed: () {
+                    setState(() {
+                      edit = !edit;
+                      title = (edit == true) ? "Submit" : "Edit";
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.greenAccent,
+                      elevation: 10,
+                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      textStyle: TextStyle(
+                          fontSize: 30,
+
+                          fontWeight: FontWeight.bold)),
+                ),
+
               ],
             ),
           ),
@@ -85,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // Widget builds the display item with the proper formatting to display the user's info
-  Widget buildUserInfoDisplay(String getValue, String title, Widget editPage) =>
+  Widget buildUserInfoDisplay(String getValue, String title, Widget editPage, bool edit) =>
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Column(
@@ -115,7 +140,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Expanded(
                         child: TextButton(
                             onPressed: () {
-                              navigateSecondPage(editPage);
+                              if(edit ) {
+                                navigateSecondPage(editPage);
+                              }
                             },
                             child: Text(
                               getValue,

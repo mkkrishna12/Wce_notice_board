@@ -18,7 +18,7 @@ class NoticeForStudents extends StatefulWidget {
 class _NoticeForStudentsState extends State<NoticeForStudents> {
   List<NoticeForListing> notes = [];
   bool spinner = true;
-  String  prn;
+  String  prn,sortby;
 
   Future<void> getVal() async {
     prn = await storage.read(key: "username");
@@ -91,10 +91,22 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
       );
     }
   }
-
+  var myMenuItems = <String>[
+    'HOD',
+    'Teacher',
+    'Class Teacher',
+    'Dcoe'
+  ];
+  void onSelect(item) {
+    setState(() {
+      
+      sortby = item;
+    });
+  }
   @override
   void initState() {
     super.initState();
+    // onSelect('')
     getVal();
   }
 
@@ -106,16 +118,29 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: const Color(0xFFFEF1E6),
       appBar: AppBar(
         backgroundColor: const Color(0xFF980F58),
-        title: const Text(
-          'Wce Notice Board',
+        title:  Text(
+          'Wce Notice Board $sortby',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
           ),
         ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+              onSelected: onSelect,
+              itemBuilder: (BuildContext context) {
+                return myMenuItems.map((String choice) {
+                  return PopupMenuItem<String>(
+                    child: Text(choice),
+                    value: choice,
+                  );
+                }).toList();
+              }),
+        ],
       ),
       bottomNavigationBar: const BottomNavigationWidget(),
       body: RefreshIndicator(
