@@ -3,8 +3,13 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
+# last known good working repository:
+#       Flutter 2.10.3 • channel stable • https://github.com/flutter/flutter.git
+#       Framework • revision 7e9793dee1 (9 weeks ago) • 2022-03-02 11:23:12 -0600
+#       Engine • revision bd539267b4
+#       Tools • Dart 2.16.1 • DevTools 2.9.2
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: ">=2.11.0 <3.0.0"
