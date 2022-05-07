@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ class _NoticeListState extends State<NoticeList> {
   bool spinner = false;
   bool admin = false;
   List<NoticeForListing> notice = [];
+  StreamSubscription<QuerySnapshot> _eventsSubscription;
+
   Future<String> StudentsList(Map<String, dynamic> isSeen) async {
     var lst = [];
     isSeen.forEach((k, v) => lst.add(k));
@@ -50,6 +54,9 @@ class _NoticeListState extends State<NoticeList> {
   Future<void> fectchNotice() async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+    if (_firebaseAuth.currentUser == null) {
+      return;
+    }
     _fireStore
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
@@ -62,13 +69,16 @@ class _NoticeListState extends State<NoticeList> {
     });
     if (!mounted) return;
     try {
-      _fireStore
-          .collection('Notices')
+      _eventsSubscription = _fireStore
+          .collection("Notices")
+          .where("FacultyId", isEqualTo: _firebaseAuth.currentUser.uid)
           .snapshots()
           .listen((QuerySnapshot value) {
         if (!mounted) return;
+
         setState(() {
           notice = [];
+          // print(value.docs.length);
           for (var element in value.docs) {
             if (element['NoticeCreated'] == null) break;
             DateTime val = element['NoticeCreated'].toDate();
@@ -90,7 +100,11 @@ class _NoticeListState extends State<NoticeList> {
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
               file_url: element.get('file_url'),
+              otherrole: element.data().toString().contains('otherrole')
+                  ? element['otherrole']
+                  : '',
             );
+            // print(mk);
             if (element['FacultyId'] == _firebaseAuth.currentUser.uid) {
               notice.add(mk);
             }
@@ -103,7 +117,7 @@ class _NoticeListState extends State<NoticeList> {
 
       showDialog(
         context: context,
-        builder: (BuildContext context) =>  const PopUp(
+        builder: (BuildContext context) => const PopUp(
           toNavigate: null,
           message: 'Something went wrong try after some time',
           icon: Icons.cancel,
@@ -121,6 +135,13 @@ class _NoticeListState extends State<NoticeList> {
     if (!widget.isAdded) {
       fectchNotice();
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _eventsSubscription.cancel();
+    super.dispose();
   }
 
   @override

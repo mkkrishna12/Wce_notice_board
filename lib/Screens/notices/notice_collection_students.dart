@@ -16,9 +16,9 @@ class NoticeForStudents extends StatefulWidget {
 }
 
 class _NoticeForStudentsState extends State<NoticeForStudents> {
-  List<NoticeForListing> notes = [];
+  List<NoticeForListing> notes = [], oNotes = [];
   bool spinner = true;
-  String  prn,sortby;
+  String prn, sortby;
 
   Future<void> getVal() async {
     prn = await storage.read(key: "username");
@@ -51,7 +51,11 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
               isPersonalised: element['isPersonalised'],
               isPersonalisedArray: element['isPersonalisedArray'],
               file_url: element['file_url'],
+              otherrole: element.data().toString().contains('otherrole')
+                  ? element['otherrole']
+                  : '',
             );
+            // print("Hello");
             if (widget.selectedYear == 'First Year') {
               if (element['FirstYear'] == true) {
                 notes.add(mk);
@@ -73,6 +77,7 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
               }
             }
           });
+          oNotes = notes;
           spinner = false;
         });
       });
@@ -91,18 +96,25 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
       );
     }
   }
-  var myMenuItems = <String>[
-    'HOD',
-    'Teacher',
-    'Class Teacher',
-    'Dcoe'
-  ];
+
+  var myMenuItems = <String>['None', 'HOD', 'Teacher', 'Class Teacher', 'Dcoe'];
   void onSelect(item) {
+    List<NoticeForListing> tmp = [];
+    if (item != null && item != 'None') {
+      oNotes.forEach((element) {
+        if (element.otherrole == item || element.otherrole == null) {
+          tmp.add(element);
+        }
+      });
+    } else {
+      tmp = oNotes;
+    }
     setState(() {
-      
+      notes = tmp;
       sortby = item;
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -118,12 +130,11 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: const Color(0xFFFEF1E6),
       appBar: AppBar(
         backgroundColor: const Color(0xFF980F58),
-        title:  Text(
-          'Wce Notice Board $sortby',
+        title: const Text(
+          'Wce Notice Board',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
@@ -154,7 +165,6 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                     // color: Color(0xFFFFF0F0),
                     elevation: 5.0,
                     child: ListTile(
-
                       title: Text(
                         notes[index].noticeTitle.toString().toCapitalized(),
                         style: const TextStyle(
@@ -174,7 +184,8 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
                           }),
                         );
                       },
-                     ///  change color when user see notification done
+
+                      ///  change color when user see notification done
                       trailing: CircleAvatar(
                         backgroundColor: (notes[index].isSeen[prn] != null &&
                                 notes[index].isSeen[prn] == true)

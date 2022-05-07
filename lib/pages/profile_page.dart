@@ -38,18 +38,22 @@ class _ProfilePageState extends State<ProfilePage> {
     print(data);
     if (data != null) {
       var tmp = json.decode(data);
-      user.name = tmp['name']==null?user.name:tmp['name'];
-      user.image = tmp['image']==null?user.image: tmp['image'];
-      user.email = tmp['email']==null?user.email: tmp['email'];
-      user.otherrole = tmp['otherrole']==null?user.otherrole: tmp['otherrole'];
-      user.designation = tmp['designation']==null?user.designation: tmp['designation'];
-      user.department = tmp['department']==null?user.department: tmp['department'];
-      user.phone = tmp['phoneNumber']==null?user.phone: tmp['phoneNumber'];
+      user.name = tmp['name'] == null ? user.name : tmp['name'];
+      user.image = tmp['image'] == null ? user.image : tmp['image'];
+      user.email = tmp['email'] == null ? user.email : tmp['email'];
+      user.otherrole =
+          tmp['otherrole'] == null ? user.otherrole : tmp['otherrole'];
+      user.designation =
+          tmp['designation'] == null ? user.designation : tmp['designation'];
+      user.department =
+          tmp['department'] == null ? user.department : tmp['department'];
+      user.phone = tmp['phoneNumber'] == null ? user.phone : tmp['phoneNumber'];
     }
     setState(() {
       spinner = false;
     });
   }
+
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   @override
@@ -95,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       image: DecorationImage(
                           alignment: Alignment(-.2, 0),
                           image: NetworkImage(
-                              'https://louisville.edu/enrollmentmanagement/images/person-icon/image_view_fullscreen'),
+                              'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
                           fit: BoxFit.cover),
                     ),
                     // child: DisplayImage(

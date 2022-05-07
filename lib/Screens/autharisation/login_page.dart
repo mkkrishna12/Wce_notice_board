@@ -281,8 +281,9 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             (admin == true)
-                                                ? const NoticeList(
-                                                    isAdded: false)
+                                                ?
+                                                // const RegistrationScreen()
+                                                const NoticeList(isAdded: false)
                                                 : const YearPageStudents(),
                                       ),
                                       (route) => false,

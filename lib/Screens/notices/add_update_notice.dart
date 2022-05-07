@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:path/path.dart';
 import 'package:wce_notice_board/Screens/notices/notice_collection_admin.dart';
+import 'package:wce_notice_board/main.dart';
 
 import '../../widgets/bottom_navigation_bar.dart';
 import '../../widgets/notes_for_listing.dart';
@@ -39,6 +42,7 @@ class _AddNoticeState extends State<AddNotice> {
   bool spinner = false;
   String ans = "No file selected";
   dynamic file;
+  var otherrole = "";
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) return;
@@ -50,9 +54,28 @@ class _AddNoticeState extends State<AddNotice> {
     });
   }
 
+  void getRole() async {
+    var data = await storage.read(key: 'data');
+    // print(data);
+    if (data != null) {
+      var tmp = json.decode(data);
+      // user.name = tmp['name']==null?user.name:tmp['name'];
+      // user.image = tmp['image']==null?user.image: tmp['image'];
+      // user.email = tmp['email']==null?user.email: tmp['email'];
+      otherrole = tmp['otherrole'] ?? "";
+      // user.designation = tmp['designation']==null?user.designation: tmp['designation'];
+      // user.department = tmp['department']==null?user.department: tmp['department'];
+      // user.phone = tmp['phoneNumber']==null?user.phone: tmp['phoneNumber'];
+    }
+    setState(() {
+      spinner = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getRole();
     title = (widget.notice == null) ? null : widget.notice.noticeTitle;
     notice = (widget.notice == null) ? null : widget.notice.noticeContent;
     from = _firebaseAuth.currentUser.email.split('@')[0];
@@ -187,6 +210,7 @@ class _AddNoticeState extends State<AddNotice> {
                           "isPersonalised": false,
                           "isPersonalisedArray": [""],
                           "file_url": null,
+                          "otherrole": otherrole,
                         }).then((value) {
                           spinner = false;
                           Navigator.pushAndRemoveUntil(
@@ -243,6 +267,7 @@ class _AddNoticeState extends State<AddNotice> {
                             "isPersonalised": false,
                             "isPersonalisedArray": [""],
                             "file_url": url,
+                            "otherrole": otherrole,
                           }).then((value) {
                             spinner = false;
                             Navigator.pushAndRemoveUntil(
@@ -317,6 +342,7 @@ class _AddNoticeState extends State<AddNotice> {
                         "isPersonalised": false,
                         "isPersonalisedArray": [""],
                         "file_url": url,
+                        "otherrole": otherrole,
                       }).then((value) {
                         spinner = false;
                         Navigator.pushAndRemoveUntil(

@@ -19,15 +19,12 @@ class NoteDelete extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: () {
-            _fireStore
-                .collection('Notices')
-                .doc(noticeId)
-                .delete()
-                .then((val) {
-              Navigator.of(context).pop(false);
+            _fireStore.collection('Notices').doc(noticeId).delete().then((val) {
+              Navigator.pop(context);
             }).catchError(
               (error) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(error.toString())));
               },
             );
           },

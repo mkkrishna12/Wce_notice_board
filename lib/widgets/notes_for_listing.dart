@@ -14,6 +14,7 @@ class NoticeForListing {
   bool isPersonalised;
   var isPersonalisedArray = [];
   String file_url;
+  String otherrole = "";
   NoticeForListing({
     this.noticeEndDate,
     this.noticeId,
@@ -31,5 +32,6 @@ class NoticeForListing {
     this.isPersonalisedArray,
     this.isSeen,
     this.file_url,
+    this.otherrole,
   });
 }
