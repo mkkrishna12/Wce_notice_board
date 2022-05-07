@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wce_notice_board/Screens/autharisation/login_page.dart';
+
 import 'Screens/notices/notice_collection_admin.dart';
 import 'Screens/notices/years_page_students.dart';
 
@@ -40,7 +42,7 @@ void main() async {
       isLogged = false;
     }
   }
-  runApp( MaterialApp(
+  runApp(MaterialApp(
     title: 'Splash Screen',
     theme: ThemeData(
       primarySwatch: Colors.green,
@@ -48,16 +50,15 @@ void main() async {
     home: Material(
       child: (isLogged == true)
           ? (isAdmin == true
-          ? const NoticeList(
-        isAdded: false,
-      )
-          : const YearPageStudents())
+              ? const NoticeList(
+                  isAdded: false,
+                )
+              : const YearPageStudents())
           : const SplashScreen(),
     ),
     debugShowCheckedModeBanner: true,
   ));
 }
-
 
 extension ParseToString on ConnectivityResult {
   String toValue() {
@@ -84,6 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
         transitionDuration: const Duration(seconds: 3),
         pageBuilder: (_, __, ___) => const LoginPage()));
   }
+
   StreamSubscription _connectivitySubscription;
   bool _isConnectionSuccessful;
   @override
@@ -114,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkConnectivityState() async {
     final ConnectivityResult result = await Connectivity().checkConnectivity();
 
-    if (result == ConnectivityResult.wifi && _isConnectionSuccessful) {
+    if (result == ConnectivityResult.wifi && _isConnectionSuccessful == true) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           'Connected to a Wi-fi network',
@@ -138,7 +140,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ));
       }
     }
-
   }
 
   @override

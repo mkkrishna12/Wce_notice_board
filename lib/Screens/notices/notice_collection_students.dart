@@ -97,7 +97,16 @@ class _NoticeForStudentsState extends State<NoticeForStudents> {
     }
   }
 
-  var myMenuItems = <String>['None', 'HOD', 'Teacher', 'Class Teacher', 'Dcoe'];
+  var myMenuItems = <String>[
+    'None',
+    "HOD",
+    "FY ClassTeacher",
+    "SY ClassTeacher",
+    "TY ClassTeacher",
+    "BTECH ClassTeacher",
+    "Teacher",
+    "DCOE",
+  ];
   void onSelect(item) {
     List<NoticeForListing> tmp = [];
     if (item != null && item != 'None') {
